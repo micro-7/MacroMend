@@ -2,6 +2,10 @@
 
 Things that are deliberately **not** part of the current build. Nothing here is started. Each item can become its own OpenSpec change (`/opsx:propose`) when the owner decides.
 
+## GitHub Release (chosen next step, signed with the owner's own key)
+
+Publish the APK on GitHub Releases before any Play Store work. Plan and steps are in `docs/status.md` (Open follow-ups). The Play Store release below stays a later step.
+
 ## Play Store release
 
 Everything needed is already prepared; only the owner's steps remain. Do this when ready to publish.
