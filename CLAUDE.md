@@ -22,3 +22,7 @@ After every /opsx:apply, before saying it's done: run `npx tsc --noEmit`, `npm t
 ## Commits
 
 Commit as the owner: `git config user.name "Mihir Tandon"` and `git config user.email "85353517+micro-7@users.noreply.github.com"`. Do not add `Co-Authored-By`, `Claude-Session` or any other Claude attribution to commit messages or pull requests.
+
+## Branches
+
+Push straight to `main`; do not create `claude/...` or other branches or pull requests unless asked. Every push to `main` builds the test APK.
