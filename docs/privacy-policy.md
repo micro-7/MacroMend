@@ -42,3 +42,4 @@ If this policy changes, the new version will be published at this address with a
 ## Contact
 
 Questions: open an issue at https://github.com/micro-7/MacroMend/issues.
+
