@@ -19,7 +19,7 @@
 ## 4. Test this phase
 
 - [x] 4.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 4.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 4.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK over the old one; your profile should still be there):
 1. Turn on airplane mode. Open Log, type "dah": curd and dal both appear. Type "xyzzy": "No foods found".

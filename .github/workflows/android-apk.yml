@@ -5,6 +5,11 @@ name: Android APK
 on:
   push:
     branches: [main]
+    # Planning notes and docs do not change the app, so they do not need a new APK.
+    paths-ignore:
+      - 'openspec/**'
+      - 'docs/**'
+      - '**/*.md'
   workflow_dispatch:
 
 concurrency:

@@ -25,7 +25,7 @@
 ## 5. Test this phase
 
 - [x] 5.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 5.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 5.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the APK from GitHub Actions over the old one; the old version never saved a profile, so onboarding shows on its own. To repeat the test later, clear the app's data in Android settings):
 1. Open the app: onboarding starts at "Goal". Pick Cut, tap Next.
