@@ -2,23 +2,23 @@
 
 ## 1. Core logic
 
-- [ ] 1.1 Implement `src/core/portions.ts` (`unitsFor`, `toGrams`, `nutrition`, `validateQty`, display rounding); verify unit tests for 2 roti → 80 g, 1 katori → 150 g, 150 g paneer → 398 kcal / 27.5 g, 0 and 51-unit rejection, 0.5 scoop
-- [ ] 1.2 Implement `src/core/summary.ts` (`summarize` with remaining floored at 0, `kcalOverBy`, `proteinMet`, groups by slot incl. "Other"); verify unit tests for every daily-summary scenario
-- [ ] 1.3 Implement `todayKey()` and `defaultSlotFor()` in `src/core/day.ts`; verify unit tests for each hour band and for custom slots
+- [x] 1.1 Implement `src/core/portions.ts` (`unitsFor`, `toGrams`, `nutrition`, `validateQty`, display rounding); verify unit tests for 2 roti → 80 g, 1 katori → 150 g, 150 g paneer → 398 kcal / 27.5 g, 0 and 51-unit rejection, 0.5 scoop
+- [x] 1.2 Implement `src/core/summary.ts` (`summarize` with remaining floored at 0, `kcalOverBy`, `proteinMet`, groups by slot incl. "Other"); verify unit tests for every daily-summary scenario
+- [x] 1.3 Implement `todayKey()` and `defaultSlotFor()` in `src/core/day.ts`; verify unit tests for each hour band and for custom slots
 
 ## 2. Storage
 
-- [ ] 2.1 Implement `src/db/logs.ts` (`logFood` snapshotting grams/kcal/protein, `updateLog` recomputing from the food, `deleteLog`, `listLogs(date)`); verify tests against the test database, including that editing a food row afterwards does not change an existing entry
+- [x] 2.1 Implement `src/db/logs.ts` (`logFood` snapshotting grams/kcal/protein, `updateLog` recomputing from the food, `deleteLog`, `listLogs(date)`); verify tests against the test database, including that editing a food row afterwards does not change an existing entry
 
 ## 3. Screens
 
-- [ ] 3.1 Log tab: search box with live results over names and aliases (all diet types), "No foods found" state; verify on the phone
-- [ ] 3.2 Log entry sheet: quantity input with fraction support, unit picker with gram hints, slot picker with time-based default, live kcal/protein preview, Save disabled for invalid quantity; verify `npx tsc --noEmit` passes
-- [ ] 3.3 Today tab: what's-left card (remaining, eaten/target, kcal-over warning, protein-met badge) and entries grouped by slot with totals; tap an entry to edit or delete; refresh on foreground and after writes; verify on the phone
+- [x] 3.1 Log tab: search box with live results over names and aliases (all diet types), "No foods found" state; verify on the phone
+- [x] 3.2 Log entry sheet: quantity input with fraction support, unit picker with gram hints, slot picker with time-based default, live kcal/protein preview, Save disabled for invalid quantity; verify `npx tsc --noEmit` passes
+- [x] 3.3 Today tab: what's-left card (remaining, eaten/target, kcal-over warning, protein-met badge) and entries grouped by slot with totals; tap an entry to edit or delete; refresh on foreground and after writes; verify on the phone
 
 ## 4. Test this phase
 
-- [ ] 4.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
+- [x] 4.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
 - [ ] 4.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK over the old one; your profile should still be there):

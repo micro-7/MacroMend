@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, View } from 'react-native';
+import { DayProvider } from '@/db/DayContext';
 import { DbProvider } from '@/db/DbContext';
 import { ProfileProvider, useProfile } from '@/db/ProfileContext';
 import { useAppDatabase } from '@/db/useAppDatabase';
@@ -15,6 +16,7 @@ function Routes() {
       <Stack.Protected guard={onboarded} redirectTo="/onboarding/goal">
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="manage" />
+        <Stack.Screen name="entry" options={{ presentation: 'modal', headerShown: true, title: 'Log food' }} />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />
@@ -38,8 +40,10 @@ export default function RootLayout() {
   return (
     <DbProvider value={state.db}>
       <ProfileProvider db={state.db}>
-        <StatusBar style="dark" />
-        <Routes />
+        <DayProvider db={state.db}>
+          <StatusBar style="dark" />
+          <Routes />
+        </DayProvider>
       </ProfileProvider>
     </DbProvider>
   );

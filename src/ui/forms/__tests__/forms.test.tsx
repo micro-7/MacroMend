@@ -22,13 +22,23 @@ const texts = (r: ReactTestRenderer): string =>
 const inputs = (r: ReactTestRenderer): ReactTestInstance[] =>
   r.root.findAll((n) => (n.type as unknown as string) === 'TextInput');
 
+const mounted: ReactTestRenderer[] = [];
+
 async function render(el: React.ReactElement): Promise<ReactTestRenderer> {
   let r!: ReactTestRenderer;
   await act(async () => {
     r = create(el);
   });
+  mounted.push(r);
   return r;
 }
+
+afterEach(async () => {
+  // Unmount so list timers do not keep running after the test ends.
+  await act(async () => {
+    mounted.splice(0).forEach((r) => r.unmount());
+  });
+});
 
 describe('SlotsEditor', () => {
   function Harness({ onSlots }: { onSlots: (s: Slot[]) => void }) {

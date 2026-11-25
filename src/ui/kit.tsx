@@ -191,3 +191,24 @@ const styles = StyleSheet.create({
   hint: { color: colors.muted, fontSize: 13, marginBottom: 12, lineHeight: 18 },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 8, marginBottom: 8 },
 });
+
+export function Chip({ label, hint, selected, onPress }: { label: string; hint?: string; selected: boolean; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={[chipStyles.chip, selected && chipStyles.on]}
+    >
+      <Text style={[chipStyles.text, selected && { color: '#fff' }]}>{label}</Text>
+      {hint ? <Text style={[chipStyles.hint, selected && { color: '#E6F2E6' }]}>{hint}</Text> : null}
+    </Pressable>
+  );
+}
+
+const chipStyles = StyleSheet.create({
+  chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  on: { backgroundColor: colors.primary, borderColor: colors.primary },
+  text: { color: colors.text, fontSize: 14 },
+  hint: { color: colors.muted, fontSize: 11 },
+});
