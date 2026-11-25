@@ -15,7 +15,7 @@
 ## 3. Test this phase
 
 - [x] 3.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 3.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 3.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK; make sure your usual foods include paneer, whey, roti and rice, and tick chicken too if you're vegetarian):
 1. Turn on airplane mode. With nothing logged today, tap "Fix my day": all your slots get suggestions, each with a protein food.
