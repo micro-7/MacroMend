@@ -31,8 +31,14 @@ export default function AiStep() {
 
   const load = useCallback(async () => setProviders(await listProviders(db)), [db]);
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+    listProviders(db).then((p) => {
+      if (!cancelled) setProviders(p);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [db]);
 
   const finish = async () => {
     const profile = buildProfile(draft);
@@ -61,7 +67,7 @@ export default function AiStep() {
       error={error}
     >
       <Hint>
-        Add a free key from Google Gemini, Groq or OpenRouter to log by typing, like "2 roti and dal" or "office mein 2 samosa kha liye". Your key
+        Add a free key from Google Gemini, Groq or OpenRouter to log by typing, like &quot;2 roti and dal&quot; or &quot;office mein 2 samosa kha liye&quot;. Your key
         stays on this phone. You can skip this and add it later in Settings; searching and picking foods always works.
       </Hint>
 

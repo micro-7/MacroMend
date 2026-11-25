@@ -34,7 +34,7 @@ export default function FoodScreen() {
   if (id && (!food || !isEditableFood(food))) {
     return (
       <SafeAreaView style={styles.safe}>
-        <Text style={styles.msg}>This food can't be edited here.</Text>
+        <Text style={styles.msg}>This food can&apos;t be edited here.</Text>
       </SafeAreaView>
     );
   }

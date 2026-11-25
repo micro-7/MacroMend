@@ -1,3 +1,6 @@
+import { Platform } from 'react-native';
+import { createRealDownloader, createRealEngine, getModelConfig, messageText, modelFolders, MAX_NEW_TOKENS } from '../engine';
+
 const mockDownload = jest.fn();
 const mockCreateSession = jest.fn();
 const MODEL = { modelPath: 'https://hf/gemma_4_e2b_xnnpack_8da4w.pte', tokenizerPath: 'https://hf/tokenizer.json', tokenizerConfigPath: 'https://hf/tokenizer_config.json' };
@@ -24,9 +27,6 @@ jest.mock('react-native-blob-util', () => ({
     },
   },
 }));
-
-import { Platform } from 'react-native';
-import { createRealDownloader, createRealEngine, getModelConfig, messageText, modelFolders, MAX_NEW_TOKENS } from '../engine';
 
 beforeAll(() => {
   jest.replaceProperty(Platform, 'OS', 'android');

@@ -35,7 +35,7 @@ export default function ProvidersScreen() {
         MacroMend tries these from top to bottom to understand what you type, and moves on if one runs out. Add your own free keys. If none works,
         you can still pick foods by hand.
       </Hint>
-      {rows.length === 0 ? <Text style={styles.empty}>No providers yet. Add one to type "2 roti and dal" instead of searching.</Text> : null}
+      {rows.length === 0 ? <Text style={styles.empty}>No providers yet. Add one to type &quot;2 roti and dal&quot; instead of searching.</Text> : null}
       {rows.map((p, i) => {
         const s = STATUS_TEXT[providerStatus(p)];
         return (

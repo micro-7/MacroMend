@@ -73,7 +73,7 @@ export function FoodForm({
         <View style={styles.switchRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.switchText}>Values checked</Text>
-            <Hint>Tick this once you have checked the numbers. Entries you log after that are no longer marked "est."</Hint>
+            <Hint>Tick this once you have checked the numbers. Entries you log after that are no longer marked &quot;est.&quot;</Hint>
           </View>
           <Switch value={checked} onValueChange={setChecked} trackColor={{ true: palette.brand, false: palette.cardHigh }} accessibilityLabel="Values checked" />
         </View>

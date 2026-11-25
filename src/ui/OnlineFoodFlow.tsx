@@ -56,13 +56,22 @@ export function OnlineFoodFlow({
   const [error, setError] = useState<string | null>(null);
   const runId = useRef(0);
 
-  // Start over each time the sheet opens, and search for the typed words.
+  // Start over each time the sheet opens or the words change (adjusting state while rendering, as React recommends)…
+  const openKey = visible ? query : null;
+  const [lastOpenKey, setLastOpenKey] = useState<string | null>(null);
+  if (openKey !== lastOpenKey) {
+    setLastOpenKey(openKey);
+    if (openKey !== null) {
+      setStep({ name: 'results' });
+      setSearch('loading');
+      setError(null);
+    }
+  }
+
+  // …and search for the typed words.
   useEffect(() => {
     if (!visible) return;
     const id = ++runId.current;
-    setStep({ name: 'results' });
-    setSearch('loading');
-    setError(null);
     services.search(query).then((r) => {
       if (runId.current === id) setSearch(r);
     });

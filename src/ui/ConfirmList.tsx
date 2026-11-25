@@ -44,7 +44,7 @@ export function ConfirmList({
               <>
                 <Text style={styles.name}>“{item.parsed.name}”</Text>
                 <Text style={styles.notFound}>Not found</Text>
-                <Text style={styles.heard}>It won't be logged until you pick a food or remove it.</Text>
+                <Text style={styles.heard}>It won&apos;t be logged until you pick a food or remove it.</Text>
                 <View style={{ marginTop: 8, gap: 8 }}>
                   <Button label="Search online" variant="secondary" onPress={() => onSearchOnline(item.key)} />
                   <Button label="Pick food" variant="secondary" onPress={() => onPickFood(item.key)} />
@@ -65,9 +65,9 @@ export function ConfirmList({
                     accessibilityLabel={`Quantity of ${food.name}`}
                   />
                 </View>
-                {item.quantityGuessed ? <Text style={styles.check}>Couldn't read the amount, so it starts at 1. Please check it.</Text> : null}
+                {item.quantityGuessed ? <Text style={styles.check}>Couldn&apos;t read the amount, so it starts at 1. Please check it.</Text> : null}
                 {!item.unitRecognized && item.parsed.unit.trim() !== '' ? (
-                  <Text style={styles.heard}>“{item.parsed.unit}” isn't a unit for this food, so {item.unit} is used.</Text>
+                  <Text style={styles.heard}>“{item.parsed.unit}” isn&apos;t a unit for this food, so {item.unit} is used.</Text>
                 ) : null}
                 <View style={styles.chips}>
                   {unitsFor(food).map((u) => (

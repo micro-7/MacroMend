@@ -9,7 +9,9 @@ import type { Downloader } from './downloadState';
 type Executorch = typeof import('react-native-executorch');
 type BlobUtil = typeof import('react-native-blob-util').default;
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- loaded only when the phone model is first used
 const loadExecutorch = (): Executorch => require('react-native-executorch');
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- same: keeps native code out of app start-up and tests
 const loadBlobUtil = (): BlobUtil => require('react-native-blob-util').default;
 
 /** Gemma 4 E2B, the XNNPACK export (it runs on every Android phone; the Vulkan one is an option if this is too slow). */

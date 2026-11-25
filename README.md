@@ -86,6 +86,7 @@ Leave them unset if you want to run the app on an x86_64 emulator.
 
 ```bash
 npx tsc --noEmit   # type check
+npm run lint       # ESLint (Expo's rules)
 npm test           # unit and screen tests (Jest)
 npx expo-doctor    # Expo dependency and config checks
 ```
@@ -149,7 +150,7 @@ Every feature is planned and built as an [OpenSpec](https://github.com/Fission-A
 
 | Workflow | When it runs | What it does |
 | --- | --- | --- |
-| Android APK (`android-apk.yml`) | Every push to `main` that changes the app, or by hand | Type check, tests, then a debug-signed release APK (artifact `macromend-apk`) |
+| Android APK (`android-apk.yml`) | Every push to `main` that changes the app, or by hand | Type check, lint, tests, then a debug-signed release APK (artifact `macromend-apk`) |
 | Create upload keystore (`android-keystore.yml`) | By hand, once | Creates the private signing key and its four secret values as a 1-day artifact |
 | Android release (`android-release.yml`) | Tags `v*`, or by hand | Signed Android App Bundle (`.aab`) for Google Play; needs the signing secrets |
 
@@ -175,4 +176,6 @@ The keystore and release workflows have not been run yet. Steps: `docs/release.m
 
 ## Licence
 
-No licence has been chosen yet, so all rights are reserved by the author. Open-source libraries used by the app keep their own licences (listed in the app under Settings → About).
+[MIT](LICENSE) © 2026 Mihir Tandon. You may use, copy, change and share the code, as long as the copyright notice and licence text are kept. The name "MacroMend" is not covered by the licence.
+
+Open-source libraries used by the app keep their own licences (listed in the app under Settings → About). Food data: see [Data sources](#data-sources).

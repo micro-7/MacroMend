@@ -15,7 +15,6 @@ export function useAppDatabase(): { state: AppDatabaseState; retry: () => void }
 
   useEffect(() => {
     let cancelled = false;
-    setState({ status: 'loading' });
     initDatabase(openExpoDb).then(
       (db) => {
         if (!cancelled) setState({ status: 'ready', db });
@@ -29,6 +28,9 @@ export function useAppDatabase(): { state: AppDatabaseState; retry: () => void }
     };
   }, [attempt]);
 
-  const retry = useCallback(() => setAttempt((n) => n + 1), []);
+  const retry = useCallback(() => {
+    setState({ status: 'loading' });
+    setAttempt((n) => n + 1);
+  }, []);
   return { state, retry };
 }

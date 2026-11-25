@@ -57,7 +57,7 @@ export default function LookupSettings() {
         <View style={styles.row}>
           <View style={{ flex: 1 }}>
             <Text style={styles.label}>Online food lookup</Text>
-            <Hint>When a food isn't in the table, search USDA and Open Food Facts for it. Only the food name is sent. Turn this off to stay fully offline.</Hint>
+            <Hint>When a food isn&apos;t in the table, search USDA and Open Food Facts for it. Only the food name is sent. Turn this off to stay fully offline.</Hint>
           </View>
           <Switch value={enabled} onValueChange={toggle} trackColor={{ true: palette.brand, false: palette.cardHigh }} accessibilityLabel="Online food lookup" />
         </View>

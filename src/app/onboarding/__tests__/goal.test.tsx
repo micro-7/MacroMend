@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { OnboardingDraftProvider, useOnboardingDraft } from '@/onboarding/OnboardingDraft';
 import GoalStep from '../goal';
@@ -8,11 +9,15 @@ const mockPush = jest.fn();
 jest.mock('expo-router', () => ({ useRouter: () => ({ push: mockPush, back: jest.fn() }) }));
 jest.mock('react-native-safe-area-context', () => ({ SafeAreaView: ({ children }: { children: unknown }) => children }));
 
-let draftRef!: ReturnType<typeof useOnboardingDraft>;
+const probe: { current: ReturnType<typeof useOnboardingDraft> | null } = { current: null };
 function Probe() {
-  draftRef = useOnboardingDraft();
+  const draft = useOnboardingDraft();
+  useEffect(() => {
+    probe.current = draft;
+  });
   return null;
 }
+const draftRef = new Proxy({} as ReturnType<typeof useOnboardingDraft>, { get: (_t, k) => (probe.current as never)[k] });
 
 function Harness({ show }: { show: boolean }) {
   return (

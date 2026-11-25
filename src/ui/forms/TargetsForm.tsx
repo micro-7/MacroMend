@@ -96,7 +96,7 @@ export function TargetsForm({
               </Text>
               {result.note ? <Text style={styles.cardNote}>{result.note}</Text> : null}
               <Hint>
-                A starting point, not medical advice. Tap "Type my own" to change the numbers.
+                A starting point, not medical advice. Tap &quot;Type my own&quot; to change the numbers.
               </Hint>
             </View>
           ) : null}

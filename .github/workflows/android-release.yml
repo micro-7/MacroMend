@@ -47,6 +47,7 @@ jobs:
       - name: Typecheck and test
         run: |
           npx tsc --noEmit
+          npm run lint
           npm test -- --ci
 
       - name: Generate native Android project

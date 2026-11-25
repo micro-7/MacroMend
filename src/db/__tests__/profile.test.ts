@@ -1,8 +1,7 @@
 import { DEFAULT_SLOTS } from '../../core/slots';
 import { seedCatalog } from '../foods';
-import { migrate } from '../migrations';
+import { MIGRATIONS, migrate } from '../migrations';
 import { MAX_NAME_LENGTH, completeOnboarding, getProfile, needsOnboarding, normalizeDisplayName, saveProfile, type Profile } from '../profile';
-import { MIGRATIONS } from '../migrations';
 import { memoryKeyStore } from '../../ai/keyStore';
 import { wipeAllData } from '../wipe';
 import { listStaples } from '../staples';

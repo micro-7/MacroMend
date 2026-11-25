@@ -1,5 +1,5 @@
 import { normalizeName } from '../../../core/text';
-import { ALL_FOODS, GLOBAL_FOODS, INDIAN_FOODS, USDA_FOODS } from '..';
+import { ALL_FOODS, INDIAN_FOODS, USDA_FOODS } from '..';
 
 const CATEGORIES = ['veg', 'egg', 'non-veg', 'vegan'];
 

@@ -4,7 +4,7 @@ import {
   SKIP_FOREVER, addProvider, clearSkip, deleteProvider, getProvider, isSkipped, listProviders, moveProvider,
   providerStatus, setSkip, updateProvider, type NewProvider,
 } from '../providers';
-import { completeOnboarding, getProfile } from '../profile';
+import { getProfile } from '../profile';
 import { DEFAULT_SLOTS } from '../../core/slots';
 import { createTestDb } from '../testDb';
 

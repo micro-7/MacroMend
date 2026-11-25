@@ -31,7 +31,7 @@ export default function TodayScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <HeroCard style={styles.hero}>
           <Title size="hero" style={{ color: palette.onBrand }}>Not sure *what* to *eat* next?</Title>
-          <Text style={styles.heroText}>We'll build the rest of your day from your usual foods, to fit what's left.</Text>
+          <Text style={styles.heroText}>We&apos;ll build the rest of your day from your usual foods, to fit what&apos;s left.</Text>
           <View style={{ marginTop: space.lg }}>
             <Button label="Fix my day" variant="light" onPress={() => router.push('/fix')} />
           </View>

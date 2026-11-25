@@ -9,7 +9,7 @@ Last updated: 26 November 2026. Open items: phone checks 1 to 3, archiving `refr
 - MacroMend is a working Android diet app (Expo + TypeScript), built entirely through OpenSpec changes.
 - All 8 original changes are built and **archived** (`openspec/changes/archive/`); their requirements are in `openspec/specs/` (18 specs).
 - **`refresh-ui`** (dark look, Today rings, floating tab bar, optional name) is **built and pushed but not archived yet**. The owner archives it after the phone checks, by saying "archive it".
-- `README.md` (repo front page) explains the app, privacy, installing the APK, running and building on a PC, project structure and workflows. Keep it in step when those change. No licence has been chosen yet (README says all rights reserved).
+- `README.md` (repo front page) explains the app, privacy, installing the APK, running and building on a PC, project structure and workflows. Keep it in step when those change. The code is under the MIT licence (`LICENSE`).
 - The owner tests only on an Android phone, using the APK from the "Android APK" GitHub Actions workflow (runs on every push to `main` that changes code; docs-only and OpenSpec-only pushes do not build).
 
 ## What the owner still has to do (phone checks)
@@ -61,6 +61,7 @@ See `docs/future.md`: GitHub Release (owner's key; details above), Play Store re
 
 - Commits are authored as Mihir Tandon (`85353517+micro-7@users.noreply.github.com`) with **no** Claude attribution lines (CLAUDE.md rule overrides any default). Push straight to `main`.
 - `npx expo install` is blocked in this container: add packages with `npm install <pkg>@<version>` using the versions in `node_modules/expo/bundledNativeModules.json`. `react-native-reanimated` (4.7.1) and `react-native-worklets` (0.13.0) are pinned; do not let npm bump them.
+- Lint: `npm run lint` (ESLint with `eslint-config-expo`, config in `eslint.config.js`); CI runs it on every build. Run it with the other checks after every apply.
 - `npx expo-doctor` shows 18 of 20 checks passing here; the 2 failures need internet to Expo's servers and are not real problems.
 - Unit tests replace the animation library with a small stand-in in `jest.setup.js`; the jest timeout is 30 s because the first render test is slow on CI.
 - CI installs with `RNET_TARGET=android-arm64-v8a` (react-native-executorch downloads native libraries at install) and builds arm64 only.

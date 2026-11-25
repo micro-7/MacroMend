@@ -30,8 +30,15 @@ export function DayProvider({ db, children }: { db: Db; children: ReactNode }) {
   }, [db]);
 
   useEffect(() => {
-    reload();
-  }, [reload]);
+    let cancelled = false;
+    const date = todayKey();
+    listLogs(db, date).then((logs) => {
+      if (!cancelled) setState({ date, logs });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [db]);
 
   // Coming back to the app, or crossing midnight while it is open, shows the new day.
   useEffect(() => {

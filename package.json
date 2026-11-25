@@ -1,6 +1,17 @@
 {
   "name": "macromend",
   "version": "1.0.0",
+  "description": "Offline-first calorie and protein tracker for Android, built for Indian food. Log by typing in English or Hinglish.",
+  "license": "MIT",
+  "author": "Mihir Tandon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micro-7/MacroMend.git"
+  },
+  "homepage": "https://github.com/micro-7/MacroMend#readme",
+  "bugs": {
+    "url": "https://github.com/micro-7/MacroMend/issues"
+  },
   "main": "expo-router/entry",
   "dependencies": {
     "@expo-google-fonts/instrument-serif": "^0.4.1",
@@ -40,6 +51,8 @@
     "@types/react": "~19.3.0",
     "@types/react-test-renderer": "^19.3.1",
     "better-sqlite3": "^13.2.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~58.0.4",
     "jest": "^30.5.2",
     "jest-expo": "~58.0.15",
     "react-test-renderer": "19.3.0",
@@ -52,6 +65,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
+    "lint": "expo lint",
     "licenses": "node scripts/gen-licenses.js",
     "eval:parse": "tsx scripts/eval-parse.ts"
   },

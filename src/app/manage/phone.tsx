@@ -103,7 +103,7 @@ export default function PhoneModelScreen() {
             />
           </View>
           {phone.phoneOnly && state.status !== 'ready' ? (
-            <Text style={styles.warn}>The phone model is not downloaded, so typed text can't be read. You can still pick foods by hand.</Text>
+            <Text style={styles.warn}>The phone model is not downloaded, so typed text can&apos;t be read. You can still pick foods by hand.</Text>
           ) : null}
           {cloudExhausted && state.status === 'ready' && !phone.phoneOnly ? (
             <Text style={styles.ok}>Using phone model until tomorrow (all your AI providers are out of quota today).</Text>

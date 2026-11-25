@@ -86,13 +86,13 @@ export function StaplesPicker({
   const header = (
     <View>
       <Hint>
-        Tick the foods you usually eat. "Fix my day" will build your meals from these. Showing {DIET_LABELS[dietType].toLowerCase()} foods
+        Tick the foods you usually eat. &quot;Fix my day&quot; will build your meals from these. Showing {DIET_LABELS[dietType].toLowerCase()} foods
         {showAll ? ' and everything else' : ''}.
       </Hint>
 
       {selected.length === 0 || !hasProtein || !hasCarb ? (
         <Text style={styles.warn}>
-          "Fix my day" needs at least one protein food (like paneer, dal or eggs) and one carb food (like roti or rice).
+          &quot;Fix my day&quot; needs at least one protein food (like paneer, dal or eggs) and one carb food (like roti or rice).
           {selected.length === 0 ? ' You can also add them later in Settings.' : ''}
         </Text>
       ) : null}

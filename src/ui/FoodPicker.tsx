@@ -25,9 +25,13 @@ export function FoodPicker({
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<FoodRow[]>([]);
 
-  useEffect(() => {
-    if (visible) setQuery(initialQuery);
-  }, [visible, initialQuery]);
+  // Start from the typed words each time the sheet opens (adjusting state while rendering, as React recommends).
+  const openKey = visible ? initialQuery : null;
+  const [lastOpenKey, setLastOpenKey] = useState(openKey);
+  if (openKey !== lastOpenKey) {
+    setLastOpenKey(openKey);
+    if (openKey !== null) setQuery(openKey);
+  }
 
   useEffect(() => {
     if (!visible) return;

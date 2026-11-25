@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AppState } from 'react-native';
 import type { PhoneDeps } from '../ai/chain';
-import { createPhoneParser, type PhoneParser } from '../ai/phoneModel';
+import { createPhoneParser, type PhoneEngine, type PhoneParser } from '../ai/phoneModel';
 import type { Db } from '../db/db';
 import { getSetting, setSetting } from '../db/settings';
 import { readDeviceFacts } from './deviceFacts';
@@ -9,7 +9,6 @@ import type { DeviceFacts } from './deviceSupport';
 import { PhoneModelDownloads, type DownloadState, type Downloader, type StartResult } from './downloadState';
 import { createRealDownloader, createRealEngine } from './engine';
 import { settingsStateStore } from './settingsStore';
-import type { PhoneEngine } from '../ai/phoneModel';
 
 export const PHONE_ONLY_KEY = 'phone_only';
 

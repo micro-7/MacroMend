@@ -23,8 +23,14 @@ export function ProfileProvider({ db, children }: { db: Db; children: ReactNode 
   }, [db]);
 
   useEffect(() => {
-    reload();
-  }, [reload]);
+    let cancelled = false;
+    getProfile(db).then((profile) => {
+      if (!cancelled) setState({ loaded: true, profile });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [db]);
 
   if (!state.loaded) {
     return (

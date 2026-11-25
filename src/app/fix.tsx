@@ -21,7 +21,8 @@ export default function FixMyDay() {
   const day = useDay();
   const [staples, setStaples] = useState<StapleInfo[] | null>(null);
   const [seed, setSeed] = useState(1);
-  const [swapped, setSwapped] = useState<Plan | null>(null);
+  // A swap is kept only while the plan it was made from is still current (no new log, shuffle or staples).
+  const [swapped, setSwapped] = useState<{ from: Plan; plan: Plan } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,11 +48,9 @@ export default function FixMyDay() {
   }, [profile, staples, day.logs, seed]);
 
   const base = useMemo(() => (input ? rebalance(input) : null), [input]);
-  // A swap is kept only until anything it was based on changes (a log, a shuffle, new staples).
-  useEffect(() => setSwapped(null), [base]);
 
   if (!profile || !input || !base) return null;
-  const plan = swapped ?? base;
+  const plan = swapped && swapped.from === base ? swapped.plan : base;
   const slotNames = Object.fromEntries(profile.slots.map((s) => [s.id, s.name]));
 
   const fail = (e: unknown) => Alert.alert("Couldn't log that", e instanceof Error ? e.message : String(e));
@@ -78,7 +77,7 @@ export default function FixMyDay() {
           remaining={{ kcal: input.remainingKcal, proteinG: input.remainingProteinG }}
           onSwap={(slotId, index) => {
             const next = swapItem(input, plan, slotId, index);
-            if (next) setSwapped(next);
+            if (next) setSwapped({ from: base, plan: next });
             else Alert.alert('Nothing to swap in', 'You have no other usual food of this kind that fits. Add more in Settings → Usual foods.');
           }}
           onLogItem={(slotId, item) => logItems(slotId, [item])}
