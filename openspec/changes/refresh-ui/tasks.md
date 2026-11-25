@@ -32,7 +32,7 @@
 ## 6. Test this phase
 
 - [x] 6.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 6.2 Push to main and verify the GitHub Actions APK build succeeds and the APK is no more than about 2 MB larger than before
+- [x] 6.2 Push to main and verify the GitHub Actions APK build succeeds and the APK is no more than about 2 MB larger than before
 
 Manual checks on your Android phone (install the new APK over the old one; your data should stay):
 1. Open the app in airplane mode: dark screens, serif headings and icons all show; no white flash at launch.
