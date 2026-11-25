@@ -12,19 +12,27 @@ import { isOnlineLookupEnabled } from '@/db/settings';
 import { listSavedFoods } from '@/db/userFoods';
 import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { isSupportedPhone } from '@/phone/deviceSupport';
+import { Feather } from '@expo/vector-icons';
+import { Card } from '@/ui/components';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
 import { palette } from '@/ui/theme';
 
-function Row({ label, value, onPress }: { label: string; value?: string; onPress?: () => void }) {
+type IconName = keyof typeof Feather.glyphMap;
+
+function Row({ label, value, icon, onPress }: { label: string; value?: string; icon: IconName; onPress?: () => void }) {
   const content = (
     <View style={styles.row}>
+      <View style={styles.iconWrap}>
+        <Feather name={icon} size={18} color={palette.brandBright} />
+      </View>
       <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value ?? (onPress ? '›' : '')}</Text>
+      <Text style={styles.value}>{value ?? ''}</Text>
+      {onPress ? <Feather name="chevron-right" size={18} color={palette.muted} /> : null}
     </View>
   );
   return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.8 }}>
       {content}
     </Pressable>
   ) : (
@@ -69,43 +77,47 @@ export default function SettingsScreen() {
     <Screen title="Settings">
       <ScrollView>
         <SectionTitle>Your setup</SectionTitle>
+        <Card style={styles.group}>
         <Row
+          icon="user"
           label="Profile & targets"
           value={profile ? `${profile.kcalTarget} kcal · ${profile.proteinTargetG} g` : undefined}
           onPress={() => router.push('/manage/profile')}
         />
-        <Row label="Diet" value={profile ? DIET_LABELS[profile.dietType] : undefined} />
-        <Row label="Meal slots" value={profile ? String(profile.slots.length) : undefined} onPress={() => router.push('/manage/slots')} />
-        <Row label="Usual foods" onPress={() => router.push('/manage/staples')} />
+        <Row icon="sliders" label="Diet" value={profile ? DIET_LABELS[profile.dietType] : undefined} />
+        <Row icon="clock" label="Meal slots" value={profile ? String(profile.slots.length) : undefined} onPress={() => router.push('/manage/slots')} />
+        <Row icon="heart" label="Usual foods" onPress={() => router.push('/manage/staples')} />
         <Row
+          icon="cpu"
           label="AI providers"
           value={providerCount === null ? undefined : providerCount === 0 ? 'None' : `${providerCount} on`}
           onPress={() => router.push('/manage/providers')}
         />
-        <Row label="Phone model" value={phoneValue} onPress={() => router.push('/manage/phone')} />
-        <Row label="My foods" value={savedFoods === null ? undefined : String(savedFoods)} onPress={() => router.push('/manage/foods')} />
+        <Row icon="smartphone" label="Phone model" value={phoneValue} onPress={() => router.push('/manage/phone')} />
+        <Row icon="book-open" label="My foods" value={savedFoods === null ? undefined : String(savedFoods)} onPress={() => router.push('/manage/foods')} />
         <Row
+          icon="search"
           label="Food lookup"
           value={lookupOn === null ? undefined : lookupOn ? 'On' : 'Off'}
           onPress={() => router.push('/manage/lookup')}
         />
+        </Card>
 
         <SectionTitle>About</SectionTitle>
-        <Row label="About MacroMend" value={Constants.expoConfig?.version ?? 'unknown'} onPress={() => router.push('/manage/about')} />
-        <Row label="Foods loaded" value={foods === null ? '…' : String(foods)} />
+        <Card style={styles.group}>
+        <Row icon="info" label="About MacroMend" value={Constants.expoConfig?.version ?? 'unknown'} onPress={() => router.push('/manage/about')} />
+        <Row icon="database" label="Foods loaded" value={foods === null ? '…' : String(foods)} />
+        </Card>
+        <View style={{ height: 120 }} />
       </ScrollView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 14,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: palette.border,
-  },
-  label: { fontSize: 16, color: palette.text },
-  value: { fontSize: 16, color: palette.muted },
+  group: { paddingVertical: 4, paddingHorizontal: 12 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 },
+  iconWrap: { width: 32, height: 32, borderRadius: 16, backgroundColor: palette.cardHigh, alignItems: 'center', justifyContent: 'center' },
+  label: { flex: 1, fontSize: 16, color: palette.text },
+  value: { fontSize: 15, color: palette.muted },
 });

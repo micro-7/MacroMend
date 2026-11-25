@@ -41,14 +41,3 @@ export const type = {
   small: { fontFamily: fonts.body, fontSize: 13 },
   number: { fontFamily: fonts.bold, fontSize: 26, fontVariant: ['tabular-nums'] as const },
 } as const;
-
-/**
- * Old names kept so screens that are not restyled yet keep compiling; each stage of the refresh moves screens
- * onto the role names above, and the last stage removes these.
- */
-export const colors = {
-  ...palette,
-  background: palette.bg,
-  surface: palette.card,
-  primary: palette.brand,
-} as const;

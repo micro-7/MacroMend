@@ -25,13 +25,13 @@
 
 ## 5. Settings, phone model and onboarding
 
-- [ ] 5.1 Restyle Settings (grouped cards with line icons per row) and every manage screen (profile, slots, usual foods, AI providers and editor, my foods, food, food lookup, About); verify existing tests pass and every screen renders without the old white background
-- [ ] 5.2 Restyle Phone model with a ProgressBar for the download, and Test phone model with a score card; verify a render test that the progress bar shows the percentage
-- [ ] 5.3 Restyle all onboarding steps and the error screen; remove the old colour aliases; verify `grep` finds no use of the old alias names and all onboarding tests pass
+- [x] 5.1 Restyle Settings (grouped cards with line icons per row) and every manage screen (profile, slots, usual foods, AI providers and editor, my foods, food, food lookup, About); verify existing tests pass and every screen renders without the old white background
+- [x] 5.2 Restyle Phone model with a ProgressBar for the download, and Test phone model with a score card; verify a render test that the progress bar shows the percentage
+- [x] 5.3 Restyle all onboarding steps and the error screen; remove the old colour aliases; verify `grep` finds no use of the old alias names and all onboarding tests pass
 
 ## 6. Test this phase
 
-- [ ] 6.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
+- [x] 6.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
 - [ ] 6.2 Push to main and verify the GitHub Actions APK build succeeds and the APK is no more than about 2 MB larger than before
 
 Manual checks on your Android phone (install the new APK over the old one; your data should stay):

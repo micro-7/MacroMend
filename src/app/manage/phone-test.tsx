@@ -8,6 +8,7 @@ import { DEFAULT_SLOTS } from '@/core/slots';
 import { useDb } from '@/db/DbContext';
 import { loadMatchData } from '@/db/foods';
 import { usePhoneModel } from '@/phone/PhoneModelContext';
+import { Card, ProgressBar } from '@/ui/components';
 import { Button, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
 import { palette } from '@/ui/theme';
@@ -65,9 +66,12 @@ export default function PhoneTestScreen() {
 
         {result ? (
           <View>
-            <Text style={styles.score} accessibilityLiveRegion="polite">
-              {result.correct} / {result.total} correct
-            </Text>
+            <Card style={styles.scoreCard}>
+              <Text style={styles.score} accessibilityLiveRegion="polite">
+                {result.correct} / {result.total} correct
+              </Text>
+              <ProgressBar value={result.total > 0 ? result.correct / result.total : 0} label="Score" />
+            </Card>
             {result.failures.length > 0 ? <SectionTitle>Missed</SectionTitle> : <Text style={styles.line}>Every sentence was understood.</Text>}
             {result.failures.map((f) => (
               <View key={f.text} style={styles.miss}>
@@ -90,7 +94,8 @@ export default function PhoneTestScreen() {
 const styles = StyleSheet.create({
   line: { fontSize: 16, color: palette.text, marginVertical: 6 },
   warn: { fontSize: 15, color: palette.warning, marginVertical: 10 },
-  score: { fontSize: 24, fontWeight: '700', color: palette.text, marginVertical: 12 },
+  scoreCard: { marginVertical: 12, gap: 10 },
+  score: { fontSize: 24, fontWeight: '700', color: palette.text, marginVertical: 0 },
   miss: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
   text: { fontSize: 15, color: palette.text, fontWeight: '600' },
   small: { fontSize: 13, color: palette.muted, marginTop: 2 },

@@ -7,6 +7,7 @@ import { allProvidersOutOfQuota, listProviders } from '@/db/providers';
 import { usePhoneModel } from '@/phone/PhoneModelContext';
 import { formatBytes, isSupportedPhone, MODEL_SIZE_BYTES, NEEDED_STORAGE_BYTES, UNSUPPORTED_MESSAGE } from '@/phone/deviceSupport';
 import { startWithMobileDataPrompt } from '@/phone/startDownload';
+import { ProgressBar } from '@/ui/components';
 import { Button, ErrorText, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
 import { palette } from '@/ui/theme';
@@ -62,6 +63,7 @@ export default function PhoneModelScreen() {
           {state.status === 'downloading' ? (
             <View accessibilityLiveRegion="polite">
               <Text style={styles.line}>Downloading… {Math.round(state.progress * 100)}%</Text>
+              <ProgressBar value={state.progress} label="Phone model download" />
               <Text style={styles.small}>Keep MacroMend open until it finishes.</Text>
               <Button label="Cancel download" variant="secondary" onPress={() => phone.cancel()} />
             </View>
