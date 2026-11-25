@@ -50,6 +50,14 @@ still open. It is tracked as a pre-release check in the `polish-and-release`
 change: compare these rows with IFCT 2017 and confirm whether its licence
 allows bundling the numbers before a public release.
 
+## Foods saved from online lookups
+
+Foods the user finds online or estimates are stored on the phone only, in the same food table, and are never part of the bundled catalog.
+They are marked by their source: `usda` or `openfoodfacts` (with their database id in `externalId`), `ai-estimated` for AI guesses
+(entries of these show "est." until the user checks the values) and `user` for foods typed in by hand. Their ids start with `ext-`,
+`ai-` or `user-`, and catalog updates never touch them. Open Food Facts data is under the ODbL licence and USDA FoodData Central is public
+domain; both are credited next to the results.
+
 ## Checks that run in `npm test`
 
 `src/data/foods/__tests__/catalog.test.ts` fails if any food has a duplicate

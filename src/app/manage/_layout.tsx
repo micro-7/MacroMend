@@ -9,6 +9,9 @@ export default function ManageLayout() {
       <Stack.Screen name="staples" options={{ title: 'Usual foods' }} />
       <Stack.Screen name="providers" options={{ title: 'AI providers' }} />
       <Stack.Screen name="provider" options={{ title: 'AI provider' }} />
+      <Stack.Screen name="foods" options={{ title: 'My foods' }} />
+      <Stack.Screen name="food" options={{ title: 'Food' }} />
+      <Stack.Screen name="lookup" options={{ title: 'Food lookup' }} />
     </Stack>
   );
 }

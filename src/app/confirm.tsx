@@ -12,6 +12,8 @@ import { useProfile } from '@/db/ProfileContext';
 import { ConfirmList } from '@/ui/ConfirmList';
 import { FoodPicker } from '@/ui/FoodPicker';
 import { Hint, StepScreen } from '@/ui/kit';
+import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';
+import { useLookupServices } from '@/lookup/useLookupServices';
 import { colors } from '@/ui/theme';
 
 const toConfirmFood = (f: FoodRow): ConfirmFood => ({
@@ -28,6 +30,8 @@ export default function ConfirmScreen() {
   const [items, setItems] = useState<ConfirmItem[]>(() => session?.items ?? []);
   const [foods, setFoods] = useState<Map<string, ConfirmFood>>(new Map());
   const [picking, setPicking] = useState<string | null>(null);
+  const [searching, setSearching] = useState<string | null>(null);
+  const services = useLookupServices();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -56,6 +60,7 @@ export default function ConfirmScreen() {
 
   const patch = (key: string, p: Partial<ConfirmItem>) => setItems((list) => list.map((i) => (i.key === key ? { ...i, ...p } : i)));
   const pickedItem = items.find((i) => i.key === picking);
+  const searchedItem = items.find((i) => i.key === searching);
 
   const switchTo = async (key: string, foodId: string) => {
     let food = foods.get(foodId);
@@ -124,7 +129,23 @@ export default function ConfirmScreen() {
         onChange={patch}
         onRemove={(key) => setItems((list) => list.filter((i) => i.key !== key))}
         onPickFood={setPicking}
+        onSearchOnline={setSearching}
         onSwitchFood={switchTo}
+      />
+      <OnlineFoodFlow
+        visible={searching !== null}
+        query={searchedItem?.parsed.name ?? ''}
+        services={services}
+        onClose={() => setSearching(null)}
+        onSaved={(f) => {
+          const key = searching;
+          setSearching(null);
+          if (key) {
+            const food = toConfirmFood(f);
+            setFoods((m) => new Map(m).set(food.id, food));
+            setItems((list) => list.map((i) => (i.key === key ? withFood(i, food) : i)));
+          }
+        }}
       />
       <FoodPicker
         visible={picking !== null}

@@ -34,7 +34,7 @@ async function render(raw: { name: string; qty?: number | string; unit?: string;
   let r!: ReactTestRenderer;
   await act(async () => {
     r = create(
-      <ConfirmList items={items} foods={foods} slots={DEFAULT_SLOTS} onChange={() => {}} onRemove={() => {}} onPickFood={() => {}} onSwitchFood={() => {}} {...handlers} />,
+      <ConfirmList items={items} foods={foods} slots={DEFAULT_SLOTS} onChange={() => {}} onRemove={() => {}} onPickFood={() => {}} onSearchOnline={() => {}} onSwitchFood={() => {}} {...handlers} />,
     );
   });
   mounted.push(r);
@@ -71,6 +71,17 @@ describe('ConfirmList', () => {
     expect(t).not.toContain('How much?');
   });
 
+  it('offers "Search online" for a Not found item', async () => {
+    const searched: string[] = [];
+    const r = await render([{ name: 'quinoa salad' }], { onSearchOnline: (k) => searched.push(k) });
+    await act(async () => press(r, 'button', 'Search online').props.onPress());
+    expect(searched).toEqual(['item-0']);
+  });
+
+  it('does not offer "Search online" for a food that was found', async () => {
+    expect(texts(await render([{ name: 'roti' }]))).not.toContain('Search online');
+  });
+
   it('lets the user change the amount, unit and meal, and remove an item', async () => {
     const calls: string[] = [];
     const r = await render([{ name: 'samosa', qty: 2 }], {
@@ -97,7 +108,7 @@ describe('ConfirmList', () => {
     const items = toConfirmItems(resolveItems([{ name: 'roti', qty: 2, unit: '', slot: '' }], index, units), 'lunch', ['lunch']);
     let r!: ReactTestRenderer;
     await act(async () => {
-      r = create(<ConfirmList items={[{ ...items[0], qtyText: '0' }]} foods={foods} slots={DEFAULT_SLOTS} onChange={() => {}} onRemove={() => {}} onPickFood={() => {}} onSwitchFood={() => {}} />);
+      r = create(<ConfirmList items={[{ ...items[0], qtyText: '0' }]} foods={foods} slots={DEFAULT_SLOTS} onChange={() => {}} onRemove={() => {}} onPickFood={() => {}} onSearchOnline={() => {}} onSwitchFood={() => {}} />);
     });
     mounted.push(r);
     expect(texts(r)).toContain('Enter a quantity above zero.');

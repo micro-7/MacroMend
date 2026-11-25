@@ -83,6 +83,13 @@ export const MIGRATIONS: string[] = [
     last_error TEXT
   );
   `,
+  // v3: simple app settings (for example whether online food lookup is on).
+  `
+  CREATE TABLE settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );
+  `,
 ];
 
 /**

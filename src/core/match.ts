@@ -4,6 +4,8 @@ export interface MatchFood {
   id: string;
   name: string;
   aliases: string[];
+  /** Higher wins a tie between equally good matches. Foods the user saved themselves rank above bundled ones. */
+  priority?: number;
 }
 
 interface IndexEntry {
@@ -13,6 +15,7 @@ interface IndexEntry {
   /** nameNorm with doubled vowels collapsed, so "daal" and "dal" meet. */
   collapsed: string;
   kind: 'name' | 'alias';
+  priority: number;
 }
 
 export type MatchIndex = IndexEntry[];
@@ -42,7 +45,7 @@ export function buildMatchIndex(foods: MatchFood[]): MatchIndex {
       const nameNorm = normalizeName(raw);
       if (!nameNorm || seen.has(nameNorm)) return;
       seen.add(nameNorm);
-      out.push({ foodId: f.id, foodName: f.name, nameNorm, collapsed: collapseVowels(nameNorm), kind });
+      out.push({ foodId: f.id, foodName: f.name, nameNorm, collapsed: collapseVowels(nameNorm), kind, priority: f.priority ?? 0 });
     };
     add(f.name, 'name');
     f.aliases.forEach((a) => add(a, 'alias'));
@@ -106,6 +109,7 @@ export function fuzzyLimit(length: number): number {
 
 const byQuality = (a: IndexEntry, b: IndexEntry) =>
   (a.kind === b.kind ? 0 : a.kind === 'name' ? -1 : 1) ||
+  b.priority - a.priority ||
   a.foodName.length - b.foodName.length ||
   (a.foodId < b.foodId ? -1 : 1);
 

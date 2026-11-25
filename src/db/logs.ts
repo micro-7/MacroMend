@@ -71,11 +71,11 @@ async function compute(db: Db, foodId: string, qty: number, unit: string) {
   const error = validateQty(qty, unit);
   if (error) throw new Error(error);
   const grams = toGrams(food, qty, unit);
-  return { grams, ...nutrition(food, grams) };
+  return { grams, source: food.source, ...nutrition(food, grams) };
 }
 
 /**
- * The one way to add a food to the log. Grams, kcal and protein are worked out from the food table
+ * The one way to add a food to the log. Entries of AI-estimated foods are always marked estimated. Grams, kcal and protein are worked out from the food table
  * now and stored, so later changes to a food never alter past entries.
  */
 export async function logFood(db: Db, input: NewLog, now: Date = new Date()): Promise<LogEntry> {
@@ -83,7 +83,8 @@ export async function logFood(db: Db, input: NewLog, now: Date = new Date()): Pr
   const r = await db.run(
     `INSERT INTO logs (date, slot, food_id, qty, unit, grams, kcal, protein_g, raw_text, estimated, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [input.date, input.slot, input.foodId, input.qty, input.unit, n.grams, n.kcal, n.proteinG, input.rawText ?? null, input.estimated ? 1 : 0, now.toISOString()],
+    [input.date, input.slot, input.foodId, input.qty, input.unit, n.grams, n.kcal, n.proteinG, input.rawText ?? null,
+     input.estimated || n.source === 'ai-estimated' ? 1 : 0, now.toISOString()],
   );
   const entry = await getLog(db, r.lastInsertRowId);
   if (!entry) throw new Error('Could not read back the saved entry.');

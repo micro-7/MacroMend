@@ -31,6 +31,10 @@ export interface RawFoodRow {
 }
 
 const BUNDLED_SOURCES = "('built-in','usda')";
+/** Foods saved from online lookups get ids starting with this, even when their source is "usda". */
+export const SAVED_ID_PREFIX = 'ext-';
+/** SQL for rows that ship with the app (and may be replaced by a catalog update). */
+const BUNDLED_ROWS = `source IN ${BUNDLED_SOURCES} AND id NOT LIKE '${SAVED_ID_PREFIX}%'`;
 
 export function toFoodRow(r: RawFoodRow): FoodRow {
   return {
@@ -47,7 +51,7 @@ export function toFoodRow(r: RawFoodRow): FoodRow {
   };
 }
 
-async function writeNames(db: Db, id: string, name: string, aliases: string[]): Promise<void> {
+export async function writeNames(db: Db, id: string, name: string, aliases: string[]): Promise<void> {
   await db.run('DELETE FROM food_names WHERE food_id = ?', [id]);
   const seen = new Set<string>();
   const add = async (raw: string, kind: 'name' | 'alias') => {
@@ -90,7 +94,7 @@ export async function seedCatalog(
       await writeNames(db, f.id, f.name, f.aliases);
     }
     const keep = new Set(foods.map((f) => f.id));
-    const bundled = await db.getAll<{ id: string }>(`SELECT id FROM foods WHERE source IN ${BUNDLED_SOURCES}`);
+    const bundled = await db.getAll<{ id: string }>(`SELECT id FROM foods WHERE ${BUNDLED_ROWS}`);
     for (const { id } of bundled) {
       if (keep.has(id)) continue;
       await db.run('DELETE FROM foods WHERE id = ?', [id]);
@@ -122,7 +126,8 @@ export async function findFoodByExactName(db: Db, input: string): Promise<FoodRo
   const row = await db.getFirst<RawFoodRow>(
     `SELECT f.* FROM food_names n JOIN foods f ON f.id = n.food_id
      WHERE n.name_norm = ?
-     ORDER BY CASE n.kind WHEN 'name' THEN 0 ELSE 1 END, f.id
+     ORDER BY CASE n.kind WHEN 'name' THEN 0 ELSE 1 END,
+              CASE WHEN f.id LIKE 'ext-%' OR f.id LIKE 'user-%' OR f.id LIKE 'ai-%' THEN 0 ELSE 1 END, f.id
      LIMIT 1`,
     [norm],
   );
@@ -144,7 +149,7 @@ export async function getFoodsByIds(db: Db, ids: string[]): Promise<FoodRow[]> {
 export async function loadMatchData(db: Db): Promise<{ index: MatchIndex; units: Map<string, { unit: string }> }> {
   const rows = await db.getAll<{ id: string; name: string; aliases: string; unit: string }>('SELECT id, name, aliases, unit FROM foods');
   return {
-    index: buildMatchIndex(rows.map((r) => ({ id: r.id, name: r.name, aliases: JSON.parse(r.aliases) as string[] }))),
+    index: buildMatchIndex(rows.map((r) => ({ id: r.id, name: r.name, aliases: JSON.parse(r.aliases) as string[], priority: /^(ext|user|ai)-/.test(r.id) ? 1 : 0 }))),
     units: new Map(rows.map((r) => [r.id, { unit: r.unit }])),
   };
 }

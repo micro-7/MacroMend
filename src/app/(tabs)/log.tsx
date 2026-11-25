@@ -14,6 +14,8 @@ import { loadMatchData, type FoodRow } from '@/db/foods';
 import { useProfile } from '@/db/ProfileContext';
 import { listStaples, searchFoods } from '@/db/staples';
 import { Button } from '@/ui/kit';
+import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';
+import { useLookupServices } from '@/lookup/useLookupServices';
 import { Screen } from '@/ui/Screen';
 import { colors } from '@/ui/theme';
 
@@ -26,6 +28,8 @@ export default function LogScreen() {
   const [results, setResults] = useState<FoodRow[]>([]);
   const [usual, setUsual] = useState<FoodRow[]>([]);
   const [busy, setBusy] = useState(false);
+  const [online, setOnline] = useState(false);
+  const services = useLookupServices();
   const [failure, setFailure] = useState<Extract<ChainResult, { ok: false }> | null>(null);
   const searching = query.trim() !== '';
 
@@ -103,7 +107,12 @@ export default function LogScreen() {
         <Text style={styles.empty}>Type a food name to find it, or describe a meal and tap "Log it with AI".</Text>
       ) : null}
       {searching ? <Text style={styles.section}>Pick a food</Text> : null}
-      {searching && results.length === 0 ? <Text style={styles.empty}>No foods found</Text> : null}
+      {searching && results.length === 0 ? (
+        <View>
+          <Text style={styles.empty}>No foods found</Text>
+          <Button label="Search online" variant="secondary" onPress={() => setOnline(true)} />
+        </View>
+      ) : null}
       <FlatList
         data={data}
         keyExtractor={(f) => f.id}
@@ -125,6 +134,16 @@ export default function LogScreen() {
           </Pressable>
         )}
         contentContainerStyle={{ paddingBottom: 24 }}
+      />
+      <OnlineFoodFlow
+        visible={online}
+        query={query.trim()}
+        services={services}
+        onClose={() => setOnline(false)}
+        onSaved={(f) => {
+          setOnline(false);
+          router.push({ pathname: '/entry', params: { foodId: f.id } });
+        }}
       />
     </Screen>
   );

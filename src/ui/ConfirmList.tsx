@@ -13,6 +13,7 @@ export function ConfirmList({
   onChange,
   onRemove,
   onPickFood,
+  onSearchOnline,
   onSwitchFood,
 }: {
   items: ConfirmItem[];
@@ -21,6 +22,8 @@ export function ConfirmList({
   onChange: (key: string, patch: Partial<Pick<ConfirmItem, 'qtyText' | 'unit' | 'slot'>>) => void;
   onRemove: (key: string) => void;
   onPickFood: (key: string) => void;
+  /** Look the food up in USDA and Open Food Facts (or ask the AI for an estimate). */
+  onSearchOnline: (key: string) => void;
   onSwitchFood: (key: string, foodId: string) => void;
 }) {
   return (
@@ -41,7 +44,8 @@ export function ConfirmList({
                 <Text style={styles.name}>“{item.parsed.name}”</Text>
                 <Text style={styles.notFound}>Not found</Text>
                 <Text style={styles.heard}>It won't be logged until you pick a food or remove it.</Text>
-                <View style={{ marginTop: 8 }}>
+                <View style={{ marginTop: 8, gap: 8 }}>
+                  <Button label="Search online" variant="secondary" onPress={() => onSearchOnline(item.key)} />
                   <Button label="Pick food" variant="secondary" onPress={() => onPickFood(item.key)} />
                 </View>
               </>

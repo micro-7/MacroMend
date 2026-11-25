@@ -7,6 +7,8 @@ import { useDb } from '@/db/DbContext';
 import { countFoods } from '@/db/foods';
 import { useProfile } from '@/db/ProfileContext';
 import { listProviders } from '@/db/providers';
+import { isOnlineLookupEnabled } from '@/db/settings';
+import { listSavedFoods } from '@/db/userFoods';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
 import { colors } from '@/ui/theme';
@@ -33,6 +35,8 @@ export default function SettingsScreen() {
   const { profile } = useProfile();
   const [foods, setFoods] = useState<number | null>(null);
   const [providerCount, setProviderCount] = useState<number | null>(null);
+  const [savedFoods, setSavedFoods] = useState<number | null>(null);
+  const [lookupOn, setLookupOn] = useState<boolean | null>(null);
 
   // Reload when the tab comes back into view, so counts reflect changes made in the screens it opened.
   useFocusEffect(
@@ -43,6 +47,12 @@ export default function SettingsScreen() {
       });
       listProviders(db).then((p) => {
         if (!cancelled) setProviderCount(p.filter((x) => x.enabled).length);
+      });
+      listSavedFoods(db).then((f) => {
+        if (!cancelled) setSavedFoods(f.length);
+      });
+      isOnlineLookupEnabled(db).then((on) => {
+        if (!cancelled) setLookupOn(on);
       });
       return () => {
         cancelled = true;
@@ -66,6 +76,12 @@ export default function SettingsScreen() {
           label="AI providers"
           value={providerCount === null ? undefined : providerCount === 0 ? 'None' : `${providerCount} on`}
           onPress={() => router.push('/manage/providers')}
+        />
+        <Row label="My foods" value={savedFoods === null ? undefined : String(savedFoods)} onPress={() => router.push('/manage/foods')} />
+        <Row
+          label="Food lookup"
+          value={lookupOn === null ? undefined : lookupOn ? 'On' : 'Off'}
+          onPress={() => router.push('/manage/lookup')}
         />
 
         <SectionTitle>About</SectionTitle>
