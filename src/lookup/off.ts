@@ -67,7 +67,10 @@ export async function searchOff(query: string, userAgent: string, opts: LookupOp
     const res = await fetchFn(url, { signal: controller.signal, headers: { 'User-Agent': userAgent } });
     const body = await res.text();
     if (res.status === 429) return { ok: false, error: 'rate_limit', message: 'Open Food Facts is busy. Try again in a moment.' };
-    if (!res.ok) return { ok: false, error: 'network', message: body.slice(0, 200) };
+    if (!res.ok) {
+      // Open Food Facts sometimes answers busy or blocked requests with a web page; never show that to the user.
+      return { ok: false, error: 'network', message: `Open Food Facts could not be searched right now (${res.status}). Try again in a minute.` };
+    }
     let json: unknown;
     try {
       json = JSON.parse(body);

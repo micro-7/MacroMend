@@ -1,5 +1,6 @@
 import { normalizeName } from '../core/text';
 import { searchOff } from './off';
+import { searchTermsFor } from './searchTerms';
 import type { LookupError, LookupOptions, LookupResponse, LookupResult } from './types';
 import { searchUsda } from './usda';
 
@@ -58,9 +59,10 @@ export async function searchOnline(query: string, deps: OnlineSearchDeps, cap = 
   if (!(await deps.isOnline())) return { ok: false, reason: 'offline', message: 'Online search needs internet.' };
 
   const opts = { fetchFn: deps.fetchFn, timeoutMs: deps.timeoutMs, limit: deps.limit };
+  const terms = searchTermsFor(query);
   const [usda, off]: [LookupResponse, LookupResponse] = await Promise.all([
-    searchUsda(query, deps.usdaKey, opts),
-    searchOff(query, deps.userAgent, opts),
+    searchUsda(terms, deps.usdaKey, opts),
+    searchOff(terms, deps.userAgent, opts),
   ]);
   if (!usda.ok && !off.ok) {
     const why = usda.message ?? off.message ?? 'Neither food database answered.';
@@ -68,6 +70,6 @@ export async function searchOnline(query: string, deps: OnlineSearchDeps, cap = 
   }
   const u = usda.ok ? usda.results : [];
   const o = off.ok ? off.results : [];
-  const results = looksBranded(query) ? interleave(o, u, cap) : interleave(u, o, cap);
+  const results = looksBranded(terms) ? interleave(o, u, cap) : interleave(u, o, cap);
   return { ok: true, results, usdaError: usda.ok ? undefined : usda.error, offError: off.ok ? undefined : off.error };
 }

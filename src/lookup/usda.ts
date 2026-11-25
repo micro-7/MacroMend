@@ -81,7 +81,7 @@ export async function searchUsda(query: string, apiKey: string | null, opts: Loo
     const body = await res.text();
     if (res.status === 429) return { ok: false, error: 'rate_limit', message: 'USDA limit reached. A free USDA key in Settings gives a much higher limit.' };
     if (res.status === 401 || res.status === 403) return { ok: false, error: 'auth', message: 'The USDA key was rejected.' };
-    if (!res.ok) return { ok: false, error: 'network', message: body.slice(0, 200) };
+    if (!res.ok) return { ok: false, error: 'network', message: `USDA could not be searched right now (${res.status}). Try again in a minute.` };
     let json: unknown;
     try {
       json = JSON.parse(body);
