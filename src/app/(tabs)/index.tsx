@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { greeting } from '@/core/greeting';
 import { formatKcal, formatProtein } from '@/core/portions';
 import { summarize } from '@/core/summary';

@@ -1,17 +1,18 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { Hint, StepScreen } from '@/ui/kit';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 import { useDb } from '@/db/DbContext';
 import { listProviders, moveProvider, providerStatus, type ProviderRow, type ProviderStatus } from '@/db/providers';
 
 const STATUS_TEXT: Record<ProviderStatus, { label: string; color: string }> = {
-  ok: { label: 'Ready', color: colors.primary },
-  disabled: { label: 'Off', color: colors.muted },
-  rate_limited: { label: 'Rate limited, back shortly', color: '#B26A00' },
-  out_of_quota: { label: 'Out of quota today', color: '#B26A00' },
-  key_rejected: { label: 'Key rejected', color: colors.danger },
+  ok: { label: 'Ready', color: palette.brandBright },
+  disabled: { label: 'Off', color: palette.muted },
+  rate_limited: { label: 'Rate limited, back shortly', color: palette.warning },
+  out_of_quota: { label: 'Out of quota today', color: palette.warning },
+  key_rejected: { label: 'Key rejected', color: palette.danger },
 };
 
 export default function ProvidersScreen() {
@@ -63,12 +64,12 @@ export default function ProvidersScreen() {
 }
 
 const styles = StyleSheet.create({
-  empty: { color: colors.muted, fontSize: 15, marginVertical: 12, lineHeight: 22 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  name: { fontSize: 16, color: colors.text, fontWeight: '600' },
-  model: { fontSize: 13, color: colors.muted, marginTop: 2 },
+  empty: { color: palette.muted, fontSize: 15, marginVertical: 12, lineHeight: 22 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  name: { fontSize: 16, color: palette.text, fontWeight: '600' },
+  model: { fontSize: 13, color: palette.muted, marginTop: 2 },
   status: { fontSize: 13, marginTop: 2 },
-  icon: { width: 38, height: 40, borderRadius: 10, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  iconText: { fontSize: 18, color: colors.text },
+  icon: { width: 38, height: 40, borderRadius: 10, backgroundColor: palette.card, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 18, color: palette.text },
   off: { opacity: 0.3 },
 });

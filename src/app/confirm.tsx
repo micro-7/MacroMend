@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Text } from 'react-native';
+import { Alert } from 'react-native';
+import { Text } from '@/ui/Text';
 import { splitReady, withFood, type ConfirmFood, type ConfirmItem } from '@/ai/confirm';
 import { useParseSession } from '@/ai/ParseSession';
 import { todayKey } from '@/core/day';
@@ -8,13 +9,14 @@ import { useDay } from '@/db/DayContext';
 import { useDb } from '@/db/DbContext';
 import { getFoodsByIds, type FoodRow } from '@/db/foods';
 import { logFood } from '@/db/logs';
+import { logHaptic } from '@/ui/haptics';
 import { useProfile } from '@/db/ProfileContext';
 import { ConfirmList } from '@/ui/ConfirmList';
 import { FoodPicker } from '@/ui/FoodPicker';
 import { Hint, StepScreen } from '@/ui/kit';
 import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';
 import { useLookupServices } from '@/lookup/useLookupServices';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 const toConfirmFood = (f: FoodRow): ConfirmFood => ({
   id: f.id, name: f.name, unit: f.unit, gramsPerUnit: f.gramsPerUnit, kcalPer100g: f.kcalPer100g, proteinPer100g: f.proteinPer100g,
@@ -53,7 +55,7 @@ export default function ConfirmScreen() {
   if (!session) {
     return (
       <StepScreen title="Nothing to check" onNext={() => router.back()} nextLabel="Close">
-        <Text style={{ color: colors.muted }}>There is nothing waiting to be logged.</Text>
+        <Text style={{ color: palette.muted }}>There is nothing waiting to be logged.</Text>
       </StepScreen>
     );
   }
@@ -87,6 +89,7 @@ export default function ConfirmScreen() {
         await logFood(db, { date: todayKey(), slot: r.item.slot, foodId: r.foodId, qty: r.qty, unit: r.unit, rawText: session.text });
       }
       await day.reload();
+      if (ready.length > 0) void logHaptic();
       if (pending.length === 0) {
         clear();
         router.dismissTo('/');
@@ -120,8 +123,8 @@ export default function ConfirmScreen() {
       error={error}
     >
       <Hint>Understood by: {session.understoodBy}. Nothing is saved until you tap Log. Calories and protein come from the food table.</Hint>
-      {note ? <Text style={{ color: colors.primary, marginBottom: 10 }}>{note}</Text> : null}
-      {items.length === 0 ? <Text style={{ color: colors.muted }}>Nothing left to log.</Text> : null}
+      {note ? <Text style={{ color: palette.brandBright, marginBottom: 10 }}>{note}</Text> : null}
+      {items.length === 0 ? <Text style={{ color: palette.muted }}>Nothing left to log.</Text> : null}
       <ConfirmList
         items={items}
         foods={foods}

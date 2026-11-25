@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View, type TextInputProps } from 'react-native';
+import { TextInput } from '@/ui/TextInput';
+import { Text } from '@/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Title } from './Title';
 import { fonts, palette, radius, space } from './theme';

@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import type { ConfirmFood, ConfirmItem } from '@/ai/confirm';
 import { previewEntry } from '@/core/entryDraft';
 import { unitHint, unitsFor } from '@/core/portions';
 import type { Slot } from '@/core/slots';
 import { Button, Chip, Field } from './kit';
-import { colors } from './theme';
+import { palette } from './theme';
 
 export function ConfirmList({
   items,
@@ -108,14 +109,14 @@ export function ConfirmList({
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 14, padding: 14, marginBottom: 12 },
-  cardWarn: { borderWidth: 1, borderColor: colors.danger },
-  name: { fontSize: 18, fontWeight: '700', color: colors.text },
-  heard: { fontSize: 13, color: colors.muted, marginTop: 2 },
-  check: { fontSize: 13, color: '#B26A00', marginTop: 4 },
-  notFound: { fontSize: 14, color: colors.danger, fontWeight: '700', marginTop: 2 },
-  sectionLabel: { fontSize: 13, color: colors.muted, marginTop: 10, marginBottom: 6 },
+  card: { backgroundColor: palette.card, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: StyleSheet.hairlineWidth, borderColor: palette.border },
+  cardWarn: { borderWidth: 1, borderColor: palette.danger },
+  name: { fontSize: 18, fontWeight: '700', color: palette.text },
+  heard: { fontSize: 13, color: palette.muted, marginTop: 2 },
+  check: { fontSize: 13, color: palette.warning, marginTop: 4 },
+  notFound: { fontSize: 14, color: palette.danger, fontWeight: '700', marginTop: 2 },
+  sectionLabel: { fontSize: 13, color: palette.muted, marginTop: 10, marginBottom: 6 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
-  preview: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 12 },
+  preview: { fontSize: 16, fontWeight: '700', color: palette.text, marginTop: 12 },
   actions: { flexDirection: 'row', gap: 8, marginTop: 10 },
 });

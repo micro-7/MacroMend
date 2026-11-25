@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors } from './theme';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
+import { palette } from './theme';
 
 export function ErrorScreen({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
@@ -14,9 +15,9 @@ export function ErrorScreen({ message, onRetry }: { message: string; onRetry: ()
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: colors.background },
-  title: { fontSize: 20, fontWeight: '700', color: colors.danger, textAlign: 'center' },
-  msg: { marginTop: 12, color: colors.muted, textAlign: 'center' },
-  button: { marginTop: 24, backgroundColor: colors.primary, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 10 },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+  wrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, backgroundColor: palette.bg },
+  title: { fontSize: 20, fontWeight: '700', color: palette.danger, textAlign: 'center' },
+  msg: { marginTop: 12, color: palette.muted, textAlign: 'center' },
+  button: { marginTop: 24, backgroundColor: palette.brand, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 10 },
+  buttonText: { color: palette.onBrand, fontWeight: '600', fontSize: 16 },
 });

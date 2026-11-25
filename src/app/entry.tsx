@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { defaultSlotFor, todayKey } from '@/core/day';
 import { previewEntry } from '@/core/entryDraft';
 import { unitHint, unitsFor } from '@/core/portions';
@@ -10,8 +11,9 @@ import { useDb } from '@/db/DbContext';
 import { getFoodById, type FoodRow } from '@/db/foods';
 import { deleteLog, getLog, logFood, updateLog } from '@/db/logs';
 import { useProfile } from '@/db/ProfileContext';
+import { logHaptic } from '@/ui/haptics';
 import { Button, Chip, Field, SectionTitle, StepScreen } from '@/ui/kit';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Log a food (opened with foodId) or edit/delete an existing entry (opened with logId). */
 export default function EntryScreen() {
@@ -64,7 +66,7 @@ export default function EntryScreen() {
   if (missing) {
     return (
       <StepScreen title="Not found" onNext={() => router.back()} nextLabel="Close">
-        <Text style={{ color: colors.muted }}>This food or entry is no longer available.</Text>
+        <Text style={{ color: palette.muted }}>This food or entry is no longer available.</Text>
       </StepScreen>
     );
   }
@@ -84,6 +86,7 @@ export default function EntryScreen() {
       } else {
         await logFood(db, { date: todayKey(), slot, foodId: food.id, qty: preview.qty, unit });
         await day.reload();
+        void logHaptic();
         router.dismissTo('/');
       }
     } catch (e) {
@@ -160,7 +163,7 @@ export default function EntryScreen() {
 
 const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  preview: { backgroundColor: colors.surface, borderRadius: 12, padding: 14, marginTop: 20 },
-  previewLabel: { color: colors.muted, fontSize: 13 },
-  previewText: { fontSize: 18, fontWeight: '700', color: colors.text, marginTop: 4 },
+  preview: { backgroundColor: palette.card, borderRadius: 16, padding: 16, marginTop: 20, borderWidth: StyleSheet.hairlineWidth, borderColor: palette.border },
+  previewLabel: { color: palette.muted, fontSize: 13 },
+  previewText: { fontSize: 18, fontWeight: '700', color: palette.text, marginTop: 4 },
 });

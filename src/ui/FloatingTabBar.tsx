@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { fonts, palette, radius, space } from './theme';
 
 const ICONS: Record<string, keyof typeof Feather.glyphMap> = { index: 'home', log: 'edit-3', settings: 'settings' };

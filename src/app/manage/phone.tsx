@@ -1,6 +1,7 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { useDb } from '@/db/DbContext';
 import { allProvidersOutOfQuota, listProviders } from '@/db/providers';
 import { usePhoneModel } from '@/phone/PhoneModelContext';
@@ -8,7 +9,7 @@ import { formatBytes, isSupportedPhone, MODEL_SIZE_BYTES, NEEDED_STORAGE_BYTES, 
 import { startWithMobileDataPrompt } from '@/phone/startDownload';
 import { Button, ErrorText, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Settings → Phone model: support, download, delete, and the "Always use phone model" switch. */
 export default function PhoneModelScreen() {
@@ -96,7 +97,7 @@ export default function PhoneModelScreen() {
               accessibilityLabel="Always use phone model"
               value={phone.phoneOnly}
               onValueChange={(v) => phone.setPhoneOnly(v)}
-              trackColor={{ true: colors.primary }}
+              trackColor={{ true: palette.brand, false: palette.cardHigh }}
             />
           </View>
           {phone.phoneOnly && state.status !== 'ready' ? (
@@ -112,10 +113,10 @@ export default function PhoneModelScreen() {
 }
 
 const styles = StyleSheet.create({
-  line: { fontSize: 16, color: colors.text, marginVertical: 6 },
-  small: { fontSize: 13, color: colors.muted, marginVertical: 4, lineHeight: 18 },
-  warn: { fontSize: 15, color: '#B26A00', marginVertical: 10, lineHeight: 22 },
-  ok: { fontSize: 15, color: colors.primary, marginVertical: 8 },
-  label: { fontSize: 16, color: colors.text, fontWeight: '600' },
+  line: { fontSize: 16, color: palette.text, marginVertical: 6 },
+  small: { fontSize: 13, color: palette.muted, marginVertical: 4, lineHeight: 18 },
+  warn: { fontSize: 15, color: palette.warning, marginVertical: 10, lineHeight: 22 },
+  ok: { fontSize: 15, color: palette.brandBright, marginVertical: 8 },
+  label: { fontSize: 16, color: palette.text, fontWeight: '600' },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8 },
 });

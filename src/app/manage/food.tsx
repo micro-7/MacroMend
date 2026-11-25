@@ -1,13 +1,14 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Text } from '@/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDb } from '@/db/DbContext';
 import { getFoodById, type FoodRow } from '@/db/foods';
 import { createFood, deleteFood, isEditableFood, updateFood } from '@/db/userFoods';
 import { EMPTY_FOOD_FORM, fromFood } from '@/lookup/foodForm';
 import { FoodForm } from '@/ui/forms/FoodForm';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Edit or delete a saved food (opened with `id`), or add one of your own (no `id`). */
 export default function FoodScreen() {
@@ -81,7 +82,7 @@ export default function FoodScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: palette.bg },
   scroll: { padding: 20, paddingBottom: 40 },
-  msg: { padding: 20, color: colors.muted, fontSize: 16 },
+  msg: { padding: 20, color: palette.muted, fontSize: 16 },
 });

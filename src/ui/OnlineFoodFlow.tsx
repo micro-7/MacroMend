@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { FoodCategory } from '@/core/diet';
 import { useDb } from '@/db/DbContext';
@@ -12,7 +13,7 @@ import type { LookupServices } from '@/lookup/services';
 import type { LookupResult } from '@/lookup/types';
 import { FoodForm } from './forms/FoodForm';
 import { Button, Chip, Hint } from './kit';
-import { colors } from './theme';
+import { palette } from './theme';
 
 type Step =
   | { name: 'results' }
@@ -98,7 +99,7 @@ export function OnlineFoodFlow({
     if (step.name === 'estimating') {
       return (
         <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
+          <ActivityIndicator color={palette.brandBright} />
           <Text style={styles.muted}>Asking your AI for an estimate…</Text>
         </View>
       );
@@ -163,7 +164,7 @@ export function OnlineFoodFlow({
         </View>
         {search === 'loading' ? (
           <View style={styles.center}>
-            <ActivityIndicator color={colors.primary} />
+            <ActivityIndicator color={palette.brandBright} />
             <Text style={styles.muted}>Searching USDA and Open Food Facts…</Text>
           </View>
         ) : !search.ok ? (
@@ -234,18 +235,18 @@ export function OnlineFoodFlow({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: palette.bg },
   pad: { padding: 16 },
   center: { alignItems: 'center', justifyContent: 'center', padding: 32, gap: 12 },
-  title: { fontSize: 20, fontWeight: '700', color: colors.text },
-  muted: { color: colors.muted, fontSize: 14, marginTop: 2 },
-  label: { fontSize: 15, fontWeight: '600', color: colors.text },
-  message: { fontSize: 16, color: colors.text, lineHeight: 23 },
-  error: { color: colors.danger, marginTop: 10 },
+  title: { fontSize: 20, fontWeight: '700', color: palette.text },
+  muted: { color: palette.muted, fontSize: 14, marginTop: 2 },
+  label: { fontSize: 15, fontWeight: '600', color: palette.text },
+  message: { fontSize: 16, color: palette.text, lineHeight: 23 },
+  error: { color: palette.danger, marginTop: 10 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
-  row: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  rowName: { fontSize: 16, color: colors.text },
-  source: { fontSize: 12, color: colors.primary, marginTop: 4, fontWeight: '600' },
-  attribution: { fontSize: 11, color: colors.muted, paddingHorizontal: 16, paddingBottom: 6 },
-  foot: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  row: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  rowName: { fontSize: 16, color: palette.text },
+  source: { fontSize: 12, color: palette.brandBright, marginTop: 4, fontWeight: '600' },
+  attribution: { fontSize: 11, color: palette.muted, paddingHorizontal: 16, paddingBottom: 6 },
+  foot: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: palette.border },
 });

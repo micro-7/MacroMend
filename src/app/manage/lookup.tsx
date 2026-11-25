@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { maskKey, secureKeyStore } from '@/ai/keyStore';
 import { useDb } from '@/db/DbContext';
@@ -7,7 +8,7 @@ import { isOnlineLookupEnabled, setOnlineLookupEnabled } from '@/db/settings';
 import { USDA_KEY_ID } from '@/lookup/services';
 import { Button, Field, Hint, SectionTitle } from '@/ui/kit';
 import { ATTRIBUTION } from '@/ui/OnlineFoodFlow';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 export default function LookupSettings() {
   const db = useDb();
@@ -58,7 +59,7 @@ export default function LookupSettings() {
             <Text style={styles.label}>Online food lookup</Text>
             <Hint>When a food isn't in the table, search USDA and Open Food Facts for it. Only the food name is sent. Turn this off to stay fully offline.</Hint>
           </View>
-          <Switch value={enabled} onValueChange={toggle} trackColor={{ true: colors.primary }} accessibilityLabel="Online food lookup" />
+          <Switch value={enabled} onValueChange={toggle} trackColor={{ true: palette.brand, false: palette.cardHigh }} accessibilityLabel="Online food lookup" />
         </View>
 
         <SectionTitle>USDA key (optional)</SectionTitle>
@@ -93,10 +94,10 @@ export default function LookupSettings() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: palette.bg },
   scroll: { padding: 20, paddingBottom: 40 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  label: { fontSize: 17, fontWeight: '600', color: colors.text },
-  link: { color: colors.primary, fontSize: 14, marginBottom: 10, textDecorationLine: 'underline' },
-  note: { color: colors.primary, marginTop: 10 },
+  label: { fontSize: 17, fontWeight: '600', color: palette.text },
+  link: { color: palette.brandBright, fontSize: 14, marginBottom: 10, textDecorationLine: 'underline' },
+  note: { color: palette.brandBright, marginTop: 10 },
 });

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { TextInput } from '@/ui/TextInput';
+import { Text } from '@/ui/Text';
 import { DIET_LABELS, allowedCategories, type DietType } from '@/core/diet';
 import { isProteinFood } from '@/core/foodRole';
 import { defaultUsualQty, validateUsualQty } from '@/core/staples';
@@ -9,7 +11,7 @@ import { getFoodsByIds, type FoodRow } from '@/db/foods';
 import { searchFoods } from '@/db/staples';
 import type { StapleDraft } from '@/onboarding/buildProfile';
 import { Hint, SectionTitle } from '../kit';
-import { colors } from '../theme';
+import { palette } from '../theme';
 
 function QtyRow({ item, onQty, onRemove }: { item: StapleDraft; onQty: (qty: string) => void; onRemove: () => void }) {
   const n = item.qty.trim() === '' ? NaN : Number(item.qty);
@@ -21,7 +23,7 @@ function QtyRow({ item, onQty, onRemove }: { item: StapleDraft; onQty: (qty: str
         {error ? <Text style={styles.err}>{error}</Text> : null}
       </View>
       <TextInput
-        style={[styles.qty, error ? { borderColor: colors.danger } : null]}
+        style={[styles.qty, error ? { borderColor: palette.danger } : null]}
         value={item.qty}
         onChangeText={onQty}
         keyboardType="decimal-pad"
@@ -29,7 +31,7 @@ function QtyRow({ item, onQty, onRemove }: { item: StapleDraft; onQty: (qty: str
       />
       <Text style={styles.unit}>{item.food.unit}</Text>
       <Pressable accessibilityLabel={`Remove ${item.food.name}`} onPress={onRemove} style={styles.x}>
-        <Text style={{ color: colors.danger, fontSize: 18 }}>✕</Text>
+        <Text style={{ color: palette.danger, fontSize: 18 }}>✕</Text>
       </Pressable>
     </View>
   );
@@ -105,7 +107,7 @@ export function StaplesPicker({
             onPress={() => toggle(f)}
             style={[styles.chip, selectedIds.has(f.id) && styles.chipOn]}
           >
-            <Text style={[styles.chipText, selectedIds.has(f.id) && { color: '#fff' }]}>{f.name}</Text>
+            <Text style={[styles.chipText, selectedIds.has(f.id) && { color: palette.onBrand }]}>{f.name}</Text>
           </Pressable>
         ))}
       </View>
@@ -130,14 +132,14 @@ export function StaplesPicker({
         value={query}
         onChangeText={setQuery}
         placeholder="Search, e.g. dahi, paneer, chicken"
-        placeholderTextColor={colors.muted}
+        placeholderTextColor={palette.muted}
         autoCorrect={false}
         autoCapitalize="none"
         accessibilityLabel="Search foods"
       />
       <View style={styles.switchRow}>
-        <Text style={{ color: colors.text, fontSize: 15 }}>Show all foods</Text>
-        <Switch value={showAll} onValueChange={setShowAll} trackColor={{ true: colors.primary }} />
+        <Text style={{ color: palette.text, fontSize: 15 }}>Show all foods</Text>
+        <Switch value={showAll} onValueChange={setShowAll} trackColor={{ true: palette.brand, false: palette.cardHigh }} />
       </View>
       {results.length === 0 ? <Text style={styles.empty}>No foods found.</Text> : null}
     </View>
@@ -174,23 +176,23 @@ export function StaplesPicker({
 }
 
 const styles = StyleSheet.create({
-  warn: { backgroundColor: '#FFF4E5', color: '#7A4A00', padding: 10, borderRadius: 10, fontSize: 13, lineHeight: 18, marginBottom: 8 },
+  warn: { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.warning, color: palette.warning, padding: 10, borderRadius: 10, fontSize: 13, lineHeight: 18, marginBottom: 8 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  chipOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { color: colors.text, fontSize: 14 },
+  chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 18, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.border },
+  chipOn: { backgroundColor: palette.brand, borderColor: palette.brand },
+  chipText: { color: palette.text, fontSize: 14 },
   selRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 6 },
-  qty: { width: 70, borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 6, fontSize: 16, textAlign: 'right', color: colors.text },
-  unit: { width: 48, color: colors.muted, fontSize: 14 },
+  qty: { width: 70, borderWidth: 1, borderColor: palette.border, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 6, fontSize: 16, textAlign: 'right', color: palette.text },
+  unit: { width: 48, color: palette.muted, fontSize: 14 },
   x: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
-  err: { color: colors.danger, fontSize: 12 },
-  search: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, color: colors.text, backgroundColor: '#fff' },
+  err: { color: palette.danger, fontSize: 12 },
+  search: { borderWidth: 1, borderColor: palette.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, color: palette.text, backgroundColor: palette.card },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8 },
-  empty: { color: colors.muted, paddingVertical: 12 },
-  resultRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  box: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: colors.muted, alignItems: 'center', justifyContent: 'center' },
-  boxOn: { backgroundColor: colors.primary, borderColor: colors.primary },
-  tick: { color: '#fff', fontSize: 14, fontWeight: '700' },
-  foodName: { fontSize: 16, color: colors.text },
-  sub: { fontSize: 12, color: colors.muted, marginTop: 2 },
+  empty: { color: palette.muted, paddingVertical: 12 },
+  resultRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  box: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: palette.muted, alignItems: 'center', justifyContent: 'center' },
+  boxOn: { backgroundColor: palette.brand, borderColor: palette.brand },
+  tick: { color: palette.onBrand, fontSize: 14, fontWeight: '700' },
+  foodName: { fontSize: 16, color: palette.text },
+  sub: { fontSize: 12, color: palette.muted, marginTop: 2 },
 });

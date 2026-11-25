@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { TextInput } from '@/ui/TextInput';
+import { Text } from '@/ui/Text';
 import { MAX_SLOTS, addSlot, moveSlot, removeSlot, renameSlot, type Slot } from '@/core/slots';
 import { Button, ErrorText, Field, Hint } from '../kit';
-import { colors } from '../theme';
+import { palette } from '../theme';
 
 function SlotRow({
   slot,
@@ -42,7 +44,7 @@ function SlotRow({
         <Text style={styles.iconText}>↓</Text>
       </Pressable>
       <Pressable accessibilityLabel="Remove meal" onPress={() => onRemove(slot.id)} style={styles.icon}>
-        <Text style={[styles.iconText, { color: colors.danger }]}>✕</Text>
+        <Text style={[styles.iconText, { color: palette.danger }]}>✕</Text>
       </Pressable>
     </View>
   );
@@ -108,15 +110,15 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: palette.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    color: colors.text,
-    backgroundColor: '#fff',
+    color: palette.text,
+    backgroundColor: palette.card,
   },
-  icon: { width: 38, height: 40, borderRadius: 10, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  iconText: { fontSize: 18, color: colors.text },
+  icon: { width: 38, height: 40, borderRadius: 10, backgroundColor: palette.card, alignItems: 'center', justifyContent: 'center' },
+  iconText: { fontSize: 18, color: palette.text },
   off: { opacity: 0.3 },
 });

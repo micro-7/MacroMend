@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import type { FoodCategory } from '@/core/diet';
 import { validateFoodForm, type FoodFormErrors, type FoodFormParsed, type FoodFormValues } from '@/lookup/foodForm';
 import { Button, Chip, ErrorText, Field, Hint } from '../kit';
-import { colors } from '../theme';
+import { palette } from '../theme';
 
 const CATEGORIES: { id: FoodCategory; label: string }[] = [
   { id: 'veg', label: 'Vegetarian' },
@@ -74,7 +75,7 @@ export function FoodForm({
             <Text style={styles.switchText}>Values checked</Text>
             <Hint>Tick this once you have checked the numbers. Entries you log after that are no longer marked "est."</Hint>
           </View>
-          <Switch value={checked} onValueChange={setChecked} trackColor={{ true: colors.primary }} accessibilityLabel="Values checked" />
+          <Switch value={checked} onValueChange={setChecked} trackColor={{ true: palette.brand, false: palette.cardHigh }} accessibilityLabel="Values checked" />
         </View>
       ) : null}
 
@@ -97,9 +98,9 @@ export function FoodForm({
 }
 
 const styles = StyleSheet.create({
-  banner: { backgroundColor: '#FFF4E5', color: '#7A4A00', padding: 10, borderRadius: 10, fontSize: 14, lineHeight: 20, marginBottom: 14, fontWeight: '600' },
-  label: { fontSize: 14, color: colors.muted, marginBottom: 6 },
+  banner: { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.warning, color: palette.warning, padding: 10, borderRadius: 10, fontSize: 14, lineHeight: 20, marginBottom: 14, fontWeight: '600' },
+  label: { fontSize: 14, color: palette.muted, marginBottom: 6 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 12 },
-  switchText: { fontSize: 16, color: colors.text },
+  switchText: { fontSize: 16, color: palette.text },
 });

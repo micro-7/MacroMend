@@ -1,7 +1,8 @@
 import Constants from 'expo-constants';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { DIET_LABELS } from '@/core/diet';
 import { useDb } from '@/db/DbContext';
 import { countFoods } from '@/db/foods';
@@ -13,7 +14,7 @@ import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { isSupportedPhone } from '@/phone/deviceSupport';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 function Row({ label, value, onPress }: { label: string; value?: string; onPress?: () => void }) {
   const content = (
@@ -103,8 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
+    borderBottomColor: palette.border,
   },
-  label: { fontSize: 16, color: colors.text },
-  value: { fontSize: 16, color: colors.muted },
+  label: { fontSize: 16, color: palette.text },
+  value: { fontSize: 16, color: palette.muted },
 });

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 import type { Db } from './db';
 import { getProfile, needsOnboarding, type Profile } from './profile';
 
@@ -28,8 +28,8 @@ export function ProfileProvider({ db, children }: { db: Db; children: ReactNode 
 
   if (!state.loaded) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.bg }}>
+        <ActivityIndicator size="large" color={palette.brandBright} />
       </View>
     );
   }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { SENTENCES } from '@/ai/__fixtures__/sentences';
 import { evaluate, type EvalResult } from '@/ai/evaluate';
 import { buildMatchIndex } from '@/core/match';
@@ -9,7 +10,7 @@ import { loadMatchData } from '@/db/foods';
 import { usePhoneModel } from '@/phone/PhoneModelContext';
 import { Button, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Runs the built-in sentences through the phone model and shows the score and every miss. */
 export default function PhoneTestScreen() {
@@ -87,10 +88,10 @@ export default function PhoneTestScreen() {
 }
 
 const styles = StyleSheet.create({
-  line: { fontSize: 16, color: colors.text, marginVertical: 6 },
-  warn: { fontSize: 15, color: '#B26A00', marginVertical: 10 },
-  score: { fontSize: 24, fontWeight: '700', color: colors.text, marginVertical: 12 },
-  miss: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  text: { fontSize: 15, color: colors.text, fontWeight: '600' },
-  small: { fontSize: 13, color: colors.muted, marginTop: 2 },
+  line: { fontSize: 16, color: palette.text, marginVertical: 6 },
+  warn: { fontSize: 15, color: palette.warning, marginVertical: 10 },
+  score: { fontSize: 24, fontWeight: '700', color: palette.text, marginVertical: 12 },
+  miss: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  text: { fontSize: 15, color: palette.text, fontWeight: '600' },
+  small: { fontSize: 13, color: palette.muted, marginTop: 2 },
 });

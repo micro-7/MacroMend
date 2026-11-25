@@ -7,6 +7,7 @@ import { summarize } from '@/core/summary';
 import { useDay } from '@/db/DayContext';
 import { useDb } from '@/db/DbContext';
 import { logFood } from '@/db/logs';
+import { logHaptic } from '@/ui/haptics';
 import { useProfile } from '@/db/ProfileContext';
 import { listStaples, toStapleInfo } from '@/db/staples';
 import { PlanView } from '@/ui/PlanView';
@@ -61,6 +62,7 @@ export default function FixMyDay() {
         await logFood(db, { date: todayKey(), slot: slotId, foodId: i.foodId, qty: i.qty, unit: i.unit });
       }
       await day.reload();
+      void logHaptic();
     } catch (e) {
       await day.reload();
       fail(e);

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { TextInput } from '@/ui/TextInput';
+import { Text } from '@/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDb } from '@/db/DbContext';
 import type { FoodRow } from '@/db/foods';
 import { searchFoods } from '@/db/staples';
 import { Button } from './kit';
-import { colors } from './theme';
+import { palette } from './theme';
 
 /** Search every food and pick one. Used when the AI's food was not found, or the user wants a different one. */
 export function FoodPicker({
@@ -47,7 +49,7 @@ export function FoodPicker({
             value={query}
             onChangeText={setQuery}
             placeholder="Search foods"
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={palette.muted}
             autoFocus
             autoCorrect={false}
             autoCapitalize="none"
@@ -75,12 +77,12 @@ export function FoodPicker({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: palette.bg },
   head: { padding: 16 },
-  search: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, color: colors.text, backgroundColor: '#fff' },
-  row: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  name: { fontSize: 16, color: colors.text },
-  sub: { fontSize: 12, color: colors.muted, marginTop: 2 },
-  empty: { color: colors.muted, padding: 16 },
+  search: { borderWidth: 1, borderColor: palette.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, color: palette.text, backgroundColor: palette.card },
+  row: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  name: { fontSize: 16, color: palette.text },
+  sub: { fontSize: 12, color: palette.muted, marginTop: 2 },
+  empty: { color: palette.muted, padding: 16 },
   foot: { padding: 16 },
 });

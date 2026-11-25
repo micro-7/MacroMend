@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { formatKcal, formatProtein } from '@/core/portions';
 import { mealProgress, type DaySummary } from '@/core/summary';
 import { Card, ProgressRing } from './components';

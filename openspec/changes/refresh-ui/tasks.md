@@ -20,8 +20,8 @@
 
 ## 4. Logging screens
 
-- [ ] 4.1 Restyle Log (search field, result cards, usual-food chips, AI button, failure and notice cards), the entry screen, confirm list and online food flow with the new components; add `logHaptic()` after every successful save; verify existing Log, ConfirmList and OnlineFoodFlow tests pass and a test that a save calls the haptic helper once
-- [ ] 4.2 Restyle Fix my day (PlanView meal cards, Swap/Log chips, Shuffle) and add `logHaptic()` on Log; verify existing PlanView tests pass
+- [x] 4.1 Restyle Log (search field, result cards, usual-food chips, AI button, failure and notice cards), the entry screen, confirm list and online food flow with the new components; add `logHaptic()` after every successful save; verify existing Log, ConfirmList and OnlineFoodFlow tests pass and a test that a save calls the haptic helper once
+- [x] 4.2 Restyle Fix my day (PlanView meal cards, Swap/Log chips, Shuffle) and add `logHaptic()` on Log; verify existing PlanView tests pass
 
 ## 5. Settings, phone model and onboarding
 

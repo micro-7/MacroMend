@@ -11,19 +11,20 @@ import { PhoneModelProvider } from '@/phone/PhoneModelContext';
 import { useAppDatabase } from '@/db/useAppDatabase';
 import { useAppFonts } from '@/ui/useAppFonts';
 import { ErrorScreen } from '@/ui/ErrorScreen';
-import { colors } from '@/ui/theme';
+import { darkHeader } from '@/ui/headerOptions';
+import { palette } from '@/ui/theme';
 
 function Routes() {
   const { onboarded } = useProfile();
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.bg } }}>
       {/* The app is only reachable once onboarding is finished; until then everything lands on step 1. */}
       <Stack.Protected guard={onboarded} redirectTo="/onboarding/goal">
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="manage" />
-        <Stack.Screen name="entry" options={{ presentation: 'modal', headerShown: true, title: 'Log food' }} />
-        <Stack.Screen name="fix" options={{ headerShown: true, title: 'Fix my day' }} />
-        <Stack.Screen name="confirm" options={{ presentation: 'modal', headerShown: true, title: 'Check and log' }} />
+        <Stack.Screen name="entry" options={{ presentation: 'modal', headerShown: true, ...darkHeader, title: 'Log food' }} />
+        <Stack.Screen name="fix" options={{ headerShown: true, ...darkHeader, title: 'Fix my day' }} />
+        <Stack.Screen name="confirm" options={{ presentation: 'modal', headerShown: true, ...darkHeader, title: 'Check and log' }} />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />
@@ -46,8 +47,8 @@ export default function RootLayout() {
   if (state.status === 'error') return <ErrorScreen message={state.message} onRetry={retry} />;
   if (state.status === 'loading') {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.bg }}>
+        <ActivityIndicator size="large" color={palette.brandBright} />
       </View>
     );
   }

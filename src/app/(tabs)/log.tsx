@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { TextInput } from '@/ui/TextInput';
+import { Text } from '@/ui/Text';
 import { runChain, type ChainResult } from '@/ai/chain';
 import { toConfirmItems } from '@/ai/confirm';
 import { explainFailure } from '@/ai/failureMessage';
@@ -13,12 +15,14 @@ import { useDb } from '@/db/DbContext';
 import { loadMatchData, type FoodRow } from '@/db/foods';
 import { useProfile } from '@/db/ProfileContext';
 import { listStaples, searchFoods } from '@/db/staples';
+import { Feather } from '@expo/vector-icons';
+import { EmptyState, SectionHeader } from '@/ui/components';
 import { Button } from '@/ui/kit';
 import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';
 import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { useLookupServices } from '@/lookup/useLookupServices';
 import { Screen } from '@/ui/Screen';
-import { colors } from '@/ui/theme';
+import { palette, radius } from '@/ui/theme';
 
 export default function LogScreen() {
   const router = useRouter();
@@ -93,7 +97,7 @@ export default function LogScreen() {
           setNotice(null);
         }}
         placeholder="Type what you ate, e.g. 2 roti and dal"
-        placeholderTextColor={colors.muted}
+        placeholderTextColor={palette.muted}
         autoCorrect={false}
         autoCapitalize="none"
         multiline
@@ -121,16 +125,15 @@ export default function LogScreen() {
         </View>
       ) : null}
 
-      {!searching && usual.length > 0 ? <Text style={styles.section}>Your usual foods</Text> : null}
+      {!searching && usual.length > 0 ? <SectionHeader title="Your usual foods" /> : null}
       {!searching && usual.length === 0 ? (
-        <Text style={styles.empty}>Type a food name to find it, or describe a meal and tap "Log it with AI".</Text>
+        <EmptyState message='Type a food name to find it, or describe a meal and tap "Log it with AI".' />
       ) : null}
-      {searching ? <Text style={styles.section}>Pick a food</Text> : null}
+      {searching ? <SectionHeader title="Pick a food" /> : null}
       {searching && results.length === 0 ? (
-        <View>
-          <Text style={styles.empty}>No foods found</Text>
+        <EmptyState message="No foods found">
           <Button label="Search online" variant="secondary" onPress={() => setOnline(true)} />
-        </View>
+        </EmptyState>
       ) : null}
       <FlatList
         data={data}
@@ -141,7 +144,7 @@ export default function LogScreen() {
             accessibilityRole="button"
             accessibilityLabel={`Log ${item.name}`}
             onPress={() => router.push({ pathname: '/entry', params: { foodId: item.id } })}
-            style={styles.row}
+            style={({ pressed }) => [styles.row, pressed && { opacity: 0.8 }]}
           >
             <View style={{ flex: 1 }}>
               <Text style={styles.name}>{item.name}</Text>
@@ -150,9 +153,10 @@ export default function LogScreen() {
                 {Math.round((item.kcalPer100g * item.gramsPerUnit) / (item.unit === 'g' ? 1 : 100))} kcal
               </Text>
             </View>
+            <Feather name="chevron-right" size={18} color={palette.muted} />
           </Pressable>
         )}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{ paddingBottom: 120, gap: 8 }}
       />
       <OnlineFoodFlow
         visible={online}
@@ -169,12 +173,22 @@ export default function LogScreen() {
 }
 
 const styles = StyleSheet.create({
-  search: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, color: colors.text, backgroundColor: '#fff', marginBottom: 8, minHeight: 48, maxHeight: 120 },
-  failure: { backgroundColor: '#FFF4E5', borderRadius: 10, padding: 12, marginTop: 10 },
-  failureText: { color: '#7A4A00', fontSize: 14, lineHeight: 20 },
-  section: { color: colors.muted, fontSize: 13, marginVertical: 8 },
-  empty: { color: colors.muted, fontSize: 15, paddingVertical: 12 },
-  row: { paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  name: { fontSize: 16, color: colors.text },
-  sub: { fontSize: 12, color: colors.muted, marginTop: 2 },
+  search: {
+    borderWidth: 1,
+    borderColor: palette.border,
+    borderRadius: radius.input,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: palette.text,
+    backgroundColor: palette.card,
+    marginBottom: 10,
+    minHeight: 52,
+    maxHeight: 120,
+  },
+  failure: { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.warning, borderRadius: radius.card, padding: 14, marginTop: 10 },
+  failureText: { color: palette.text, fontSize: 14, lineHeight: 20 },
+  row: { flexDirection: 'row', alignItems: 'center', backgroundColor: palette.card, borderRadius: radius.card, padding: 14, borderWidth: StyleSheet.hairlineWidth, borderColor: palette.border },
+  name: { fontSize: 16, color: palette.text },
+  sub: { fontSize: 12, color: palette.muted, marginTop: 2 },
 });

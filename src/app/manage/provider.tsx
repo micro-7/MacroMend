@@ -6,7 +6,7 @@ import { secureKeyStore } from '@/ai/keyStore';
 import { useDb } from '@/db/DbContext';
 import { getProvider, type ProviderRow } from '@/db/providers';
 import { ProviderEditor } from '@/ui/forms/ProviderEditor';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Add a provider, or edit the one named by the `id` route parameter. */
 export default function ProviderScreen() {
@@ -41,6 +41,6 @@ export default function ProviderScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: palette.bg },
   scroll: { padding: 20, paddingBottom: 40 },
 });

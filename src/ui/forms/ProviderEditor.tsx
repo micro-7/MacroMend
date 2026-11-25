@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Linking, StyleSheet, Switch, Text, View } from 'react-native';
+import { Linking, StyleSheet, Switch, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { secureKeyStore, maskKey, type KeyStore } from '@/ai/keyStore';
 import type { CallOptions } from '@/ai/openaiCompat';
 import { PRESETS, PRESET_KINDS } from '@/ai/presets';
@@ -10,7 +11,7 @@ import {
 import { useDb } from '@/db/DbContext';
 import { updateProvider, type ProviderRow } from '@/db/providers';
 import { Button, Chip, Field, Hint, SectionTitle } from '../kit';
-import { colors } from '../theme';
+import { palette } from '../theme';
 
 /**
  * Add a provider (pick a service, paste a key) or edit one (model, key, on/off, delete).
@@ -134,14 +135,14 @@ export function ProviderEditor({
 
       {editing ? (
         <View style={styles.switchRow}>
-          <Text style={{ fontSize: 16, color: colors.text }}>Use this provider</Text>
-          <Switch value={enabled} onValueChange={setEnabled} trackColor={{ true: colors.primary }} />
+          <Text style={{ fontSize: 16, color: palette.text }}>Use this provider</Text>
+          <Switch value={enabled} onValueChange={setEnabled} trackColor={{ true: palette.brand, false: palette.cardHigh }} />
         </View>
       ) : null}
 
       <Button label={test === 'running' ? 'Testing…' : 'Test'} variant="secondary" disabled={test === 'running' || busy} onPress={runTest} />
       {test && test !== 'running' ? (
-        <Text style={[styles.result, { color: test.ok ? colors.primary : colors.danger }]} accessibilityLiveRegion="polite">
+        <Text style={[styles.result, { color: test.ok ? palette.brandBright : palette.danger }]} accessibilityLiveRegion="polite">
           {test.ok ? 'OK: the key works and the model understood a test meal.' : test.message}
         </Text>
       ) : null}
@@ -159,7 +160,7 @@ export function ProviderEditor({
 
 const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  link: { color: colors.primary, fontSize: 14, marginBottom: 8, textDecorationLine: 'underline' },
+  link: { color: palette.brandBright, fontSize: 14, marginBottom: 8, textDecorationLine: 'underline' },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
-  result: { color: colors.danger, fontSize: 14, marginTop: 10, lineHeight: 20 },
+  result: { color: palette.danger, fontSize: 14, marginTop: 10, lineHeight: 20 },
 });

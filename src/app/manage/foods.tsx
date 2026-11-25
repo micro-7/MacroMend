@@ -1,11 +1,12 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { useDb } from '@/db/DbContext';
 import type { FoodRow } from '@/db/foods';
 import { listSavedFoods } from '@/db/userFoods';
 import { Hint, StepScreen } from '@/ui/kit';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 const SOURCE_TEXT: Record<FoodRow['source'], string> = {
   'built-in': 'Built in',
@@ -53,7 +54,7 @@ export default function MyFoodsScreen() {
             <Text style={styles.sub}>
               {Math.round(f.kcalPer100g)} kcal · {f.proteinPer100g} g protein per 100 g
             </Text>
-            <Text style={[styles.source, f.source === 'ai-estimated' && { color: '#B26A00' }]}>{SOURCE_TEXT[f.source]}</Text>
+            <Text style={[styles.source, f.source === 'ai-estimated' && { color: palette.warning }]}>{SOURCE_TEXT[f.source]}</Text>
           </View>
           <Text style={styles.chev}>›</Text>
         </Pressable>
@@ -63,10 +64,10 @@ export default function MyFoodsScreen() {
 }
 
 const styles = StyleSheet.create({
-  empty: { color: colors.muted, fontSize: 15, marginVertical: 12, lineHeight: 22 },
-  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  name: { fontSize: 16, color: colors.text, fontWeight: '600' },
-  sub: { fontSize: 13, color: colors.muted, marginTop: 2 },
-  source: { fontSize: 12, color: colors.primary, marginTop: 2, fontWeight: '600' },
-  chev: { fontSize: 22, color: colors.muted },
+  empty: { color: palette.muted, fontSize: 15, marginVertical: 12, lineHeight: 22 },
+  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  name: { fontSize: 16, color: palette.text, fontWeight: '600' },
+  sub: { fontSize: 13, color: palette.muted, marginTop: 2 },
+  source: { fontSize: 12, color: palette.brandBright, marginTop: 2, fontWeight: '600' },
+  chev: { fontSize: 22, color: palette.muted },
 });

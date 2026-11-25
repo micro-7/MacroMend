@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { useDb } from '@/db/DbContext';
 import { useProfile } from '@/db/ProfileContext';
 import { completeOnboarding } from '@/db/profile';
@@ -12,7 +13,7 @@ import { buildProfile, buildStaples } from '@/onboarding/buildProfile';
 import { useOnboardingDraft } from '@/onboarding/OnboardingDraft';
 import { ProviderEditor } from '@/ui/forms/ProviderEditor';
 import { Button, Hint, StepScreen } from '@/ui/kit';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 /** Optional last step: add a free AI key to log by typing. Skipping still finishes setup. */
 export default function AiStep() {
@@ -111,9 +112,9 @@ export default function AiStep() {
 }
 
 const styles = StyleSheet.create({
-  row: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  name: { fontSize: 16, color: colors.text, fontWeight: '600' },
-  model: { fontSize: 13, color: colors.muted },
-  phoneBox: { paddingVertical: 12, marginBottom: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  note: { fontSize: 13, color: colors.danger, marginTop: 6 },
+  row: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  name: { fontSize: 16, color: palette.text, fontWeight: '600' },
+  model: { fontSize: 13, color: palette.muted },
+  phoneBox: { paddingVertical: 12, marginBottom: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: palette.border },
+  note: { fontSize: 13, color: palette.danger, marginTop: 6 },
 });

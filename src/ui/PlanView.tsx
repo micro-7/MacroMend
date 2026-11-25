@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { formatKcal, formatProtein } from '@/core/portions';
 import type { Plan, PlanItem, PlanReason } from '@/core/rebalance';
 import { Button } from './kit';
-import { colors } from './theme';
+import { palette } from './theme';
 
 const MESSAGES: Record<PlanReason, string> = {
   kcal_reached: "You've reached today's calorie target, so there's nothing to fix.",
@@ -98,19 +99,19 @@ export function PlanView({
 }
 
 const styles = StyleSheet.create({
-  message: { fontSize: 16, color: colors.text, lineHeight: 23, marginBottom: 16 },
-  summary: { color: colors.muted, fontSize: 14, marginBottom: 12 },
-  card: { backgroundColor: colors.surface, borderRadius: 14, padding: 14, marginBottom: 12 },
-  slotName: { fontSize: 17, fontWeight: '700', color: colors.text, marginBottom: 6 },
+  message: { fontSize: 16, color: palette.text, lineHeight: 23, marginBottom: 16 },
+  summary: { color: palette.muted, fontSize: 14, marginBottom: 12 },
+  card: { backgroundColor: palette.card, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: StyleSheet.hairlineWidth, borderColor: palette.border },
+  slotName: { fontSize: 17, fontWeight: '700', color: palette.text, marginBottom: 6 },
   itemRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 8 },
-  itemName: { fontSize: 16, color: colors.text },
-  sub: { fontSize: 13, color: colors.muted },
-  small: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, backgroundColor: '#fff', borderWidth: 1, borderColor: colors.border },
-  smallText: { color: colors.primary, fontWeight: '600', fontSize: 14 },
+  itemName: { fontSize: 16, color: palette.text },
+  sub: { fontSize: 13, color: palette.muted },
+  small: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 999, backgroundColor: palette.cardHigh, borderWidth: 1, borderColor: palette.border },
+  smallText: { color: palette.brandBright, fontWeight: '600', fontSize: 14 },
   slotFoot: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
-  logAll: { paddingHorizontal: 14, paddingVertical: 9, borderRadius: 8, backgroundColor: colors.primary },
-  logAllText: { color: '#fff', fontWeight: '600', fontSize: 14 },
-  total: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 4 },
-  short: { color: colors.danger, fontSize: 14, marginTop: 4 },
-  hint: { color: colors.muted, fontSize: 12, marginTop: 8 },
+  logAll: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 999, backgroundColor: palette.brand },
+  logAllText: { color: palette.onBrand, fontWeight: '600', fontSize: 14 },
+  total: { fontSize: 16, fontWeight: '700', color: palette.text, marginTop: 4 },
+  short: { color: palette.danger, fontSize: 14, marginTop: 4 },
+  hint: { color: palette.muted, fontSize: 12, marginTop: 8 },
 });

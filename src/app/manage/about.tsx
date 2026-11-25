@@ -1,7 +1,8 @@
 import Constants from 'expo-constants';
 import * as WebBrowser from 'expo-web-browser';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import licenses from '@/data/licenses.json';
 import { PRIVACY_POINTS, DATA_SOURCES, PRIVACY_POLICY_URL } from '@/about/content';
 import { useParseSession } from '@/ai/ParseSession';
@@ -12,7 +13,7 @@ import { wipeAllData } from '@/db/wipe';
 import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { Button, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
-import { colors } from '@/ui/theme';
+import { palette } from '@/ui/theme';
 
 export function buildNumber(): string {
   const extra = Constants.expoConfig?.extra as { buildNumber?: number } | undefined;
@@ -98,10 +99,10 @@ export default function AboutScreen() {
 }
 
 const styles = StyleSheet.create({
-  name: { fontSize: 22, fontWeight: '700', color: colors.text },
-  line: { fontSize: 16, color: colors.muted, marginBottom: 8 },
-  point: { fontSize: 15, color: colors.text, lineHeight: 22, marginBottom: 6 },
-  sourceName: { fontSize: 16, color: colors.text, fontWeight: '600' },
-  small: { fontSize: 13, color: colors.muted, marginTop: 2, lineHeight: 18 },
-  error: { color: colors.danger, marginTop: 8 },
+  name: { fontSize: 22, fontWeight: '700', color: palette.text },
+  line: { fontSize: 16, color: palette.muted, marginBottom: 8 },
+  point: { fontSize: 15, color: palette.text, lineHeight: 22, marginBottom: 6 },
+  sourceName: { fontSize: 16, color: palette.text, fontWeight: '600' },
+  small: { fontSize: 13, color: palette.muted, marginTop: 2, lineHeight: 18 },
+  error: { color: palette.danger, marginTop: 8 },
 });

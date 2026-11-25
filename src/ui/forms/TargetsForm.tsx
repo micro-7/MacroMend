@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '@/ui/Text';
 import { ACTIVITIES, ACTIVITY_LABELS, type Goal, type Sex } from '@/core/targets';
 import type { TargetsDraft, TargetsResult } from '@/core/targetsDraft';
 import { Button, ErrorText, Field, Hint, OptionRow } from '../kit';
-import { colors } from '../theme';
+import { palette } from '../theme';
 
 export function TargetsForm({
   goal,
@@ -107,9 +108,9 @@ export function TargetsForm({
 
 const styles = StyleSheet.create({
   toggle: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  label: { fontSize: 14, color: colors.muted, marginBottom: 6 },
-  card: { backgroundColor: colors.surface, borderRadius: 12, padding: 14, marginTop: 8 },
-  cardTitle: { color: colors.muted, fontSize: 13 },
-  cardBig: { fontSize: 22, fontWeight: '700', color: colors.text, marginVertical: 4 },
-  cardNote: { color: colors.danger, fontSize: 13, marginBottom: 4 },
+  label: { fontSize: 14, color: palette.muted, marginBottom: 6 },
+  card: { backgroundColor: palette.card, borderRadius: 12, padding: 14, marginTop: 8 },
+  cardTitle: { color: palette.muted, fontSize: 13 },
+  cardBig: { fontSize: 22, fontWeight: '700', color: palette.text, marginVertical: 4 },
+  cardNote: { color: palette.danger, fontSize: 13, marginBottom: 4 },
 });
