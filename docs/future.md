@@ -29,3 +29,11 @@ The first reading after the phone model has been idle takes about a minute becau
 
 - Idea: show "Loading the phone model, the first reading can take about a minute" while it loads, and a "Load now" button in Settings → Phone model.
 - Idea: try the Vulkan (graphics chip) version of the model if the normal one is too slow on some phones.
+
+## Light theme or "follow the phone's setting"
+
+The refresh made the app dark only. Colours are one table of named roles (`src/ui/theme.ts`), so a light set with the same names plus a switch (or following Android's dark/light setting) is a small change. Not started.
+
+## Mascot on the Today hero card
+
+The reference design has a small friendly illustration on the green "Not sure what to eat next?" card. We kept the card clean. Could add one small bundled illustration (a smiling bowl or roti). Not started; the owner never decided.
