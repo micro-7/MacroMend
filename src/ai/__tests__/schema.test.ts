@@ -83,8 +83,8 @@ describe('prompt', () => {
     expect(p).toContain('"pre" (Pre-workout)');
   });
 
-  it('has six English/Hinglish examples and each example output is a valid reply', () => {
-    expect(FEW_SHOTS).toHaveLength(6);
+  it('has seven English/Hinglish examples and each example output is a valid reply', () => {
+    expect(FEW_SHOTS).toHaveLength(7);
     for (const e of FEW_SHOTS) {
       expect(buildSystemPrompt(slots)).toContain(e.input);
       expect(parseReply(e.output, [{ id: 'breakfast', name: 'Breakfast' }, { id: 'dinner', name: 'Dinner' }]).ok).toBe(true);

@@ -47,7 +47,7 @@ describe('phone parser', () => {
     await createPhoneParser(e).parse('x', ctx);
     const prompt = e.log.opened[0];
     for (const shot of FEW_SHOTS) expect(prompt).toContain(shot.input);
-    expect(FEW_SHOTS).toHaveLength(6);
+    expect(FEW_SHOTS).toHaveLength(7);
     expect(prompt).toContain('"breakfast" (Breakfast)');
     expect(prompt).toMatch(/JSON object only/);
     expect(prompt).toBe(buildPhoneSystemPrompt(ctx.slots));

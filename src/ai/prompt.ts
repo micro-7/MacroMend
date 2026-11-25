@@ -28,6 +28,10 @@ export const FEW_SHOTS: { input: string; output: string }[] = [
     output: '{"items":[{"name":"rajma","qty":"dedh","unit":"katori","slot":""},{"name":"rice","qty":1,"unit":"","slot":""}]}',
   },
   {
+    input: '2 panner paratha',
+    output: '{"items":[{"name":"paneer paratha","qty":2,"unit":"","slot":""}]}',
+  },
+  {
     input: 'dinner: 150 g paneer bhurji aur 2 chapati',
     output: '{"items":[{"name":"paneer bhurji","qty":150,"unit":"g","slot":"dinner"},{"name":"roti","qty":2,"unit":"","slot":"dinner"}]}',
   },
@@ -41,6 +45,7 @@ export function buildSystemPrompt(slots: ParseSlot[]): string {
     'Reply with ONLY one JSON object of this exact shape and nothing else: {"items":[{"name":"","qty":1,"unit":"","slot":""}]}',
     'Rules:',
     '- One item per food. Use a simple, singular English food name ("roti", "curd", "samosa", "rice"). Translate Hindi names ("dahi" is "curd", "anda" is "egg", "chawal" is "rice").',
+    '- Keep the whole food name, including words that say what kind it is ("paneer paratha" stays "paneer paratha", never just "paratha"; "butter chicken" never just "chicken"). Fix obvious spelling mistakes ("panner" is "paneer") but never drop words.',
     '- qty: the amount as a number. If it is written as a number word ("do", "teen", "aadha", "dedh", "half"), copy the word exactly as written. If no amount is given, use 1.',
     '- unit: the unit as written ("katori", "g", "scoop", "glass", "bowl", "piece"), or "" if none is given. Do not invent units.',
     `- slot: one of ${slotList} if the text says which meal it was, otherwise "".`,
