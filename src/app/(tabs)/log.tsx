@@ -15,7 +15,7 @@ import { useDb } from '@/db/DbContext';
 import { loadMatchData, type FoodRow } from '@/db/foods';
 import { useProfile } from '@/db/ProfileContext';
 import { listStaples, searchFoods } from '@/db/staples';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 import { EmptyState, SectionHeader } from '@/ui/components';
 import { Button } from '@/ui/kit';
 import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';

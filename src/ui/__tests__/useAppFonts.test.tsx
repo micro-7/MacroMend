@@ -5,8 +5,12 @@ import { useAppFonts } from '../useAppFonts';
 
 let mockFonts: [boolean, Error | null] = [false, null];
 jest.mock('expo-font', () => ({ useFonts: () => mockFonts }));
-jest.mock('@expo-google-fonts/instrument-serif', () => ({ InstrumentSerif_400Regular: 1, InstrumentSerif_400Regular_Italic: 2 }));
-jest.mock('@expo-google-fonts/inter', () => ({ Inter_400Regular: 1, Inter_500Medium: 2, Inter_600SemiBold: 3, Inter_700Bold: 4 }));
+jest.mock('@expo-google-fonts/instrument-serif/400Regular', () => ({ InstrumentSerif_400Regular: 1 }));
+jest.mock('@expo-google-fonts/instrument-serif/400Regular_Italic', () => ({ InstrumentSerif_400Regular_Italic: 2 }));
+jest.mock('@expo-google-fonts/inter/400Regular', () => ({ Inter_400Regular: 1 }));
+jest.mock('@expo-google-fonts/inter/500Medium', () => ({ Inter_500Medium: 2 }));
+jest.mock('@expo-google-fonts/inter/600SemiBold', () => ({ Inter_600SemiBold: 3 }));
+jest.mock('@expo-google-fonts/inter/700Bold', () => ({ Inter_700Bold: 4 }));
 
 function ready(timeoutMs?: number): boolean {
   let value = false;

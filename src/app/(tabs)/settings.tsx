@@ -12,7 +12,7 @@ import { isOnlineLookupEnabled } from '@/db/settings';
 import { listSavedFoods } from '@/db/userFoods';
 import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { isSupportedPhone } from '@/phone/deviceSupport';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 import { Card } from '@/ui/components';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
