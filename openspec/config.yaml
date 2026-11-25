@@ -1,5 +1,13 @@
 schema: spec-driven
 
+context: |
+  MacroMend is an Android-first Expo (TypeScript) diet app; docs/SPEC.md is the source plan.
+  The owner tests only on an Android phone using the debug-signed APK built by GitHub Actions, so every tasks.md ends with a "Test this phase" section: unit tests plus numbered manual checks on the phone.
+  AI only parses text into items; calories and protein come from the food table. Only foods found nowhere get an AI estimate, always marked "estimated".
+  Input may be English, Hinglish or mixed. Veg and non-veg are both supported; diet type only filters suggestions.
+  Offline-first on-phone SQLite, no backend, no login. Phone model is Gemma 4 E2B via react-native-executorch.
+  Each change builds only on the changes before it in the spec's change order.
+
 # Project context (optional)
 # Add only constraints that should guide OpenSpec artifacts and workflows.
 # Include constraints an agent cannot infer by reading the code.
