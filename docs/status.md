@@ -2,7 +2,7 @@
 
 **Read this first in a new session.** It says where MacroMend stands and what the owner still has to do. Update it at the end of every piece of work and commit it with the change.
 
-Last updated: 26 November 2026. Open items: phone checks 1 to 3 and archiving `refresh-ui` (below).
+Last updated: 26 November 2026. Open items: phone checks 1 to 3, archiving `refresh-ui`, and the SonarCloud follow-up (below).
 
 ## Where we are
 
@@ -20,6 +20,11 @@ Do these in order, with the newest APK:
 3. Anything that looks wrong on the new screens (hard-to-read text, cut-off cards, tab bar covering content): send a screenshot.
 
 4. **Archive `refresh-ui`** (the last open OpenSpec change). Do this only after steps 1 to 3 pass and the owner says "archive it". Run `openspec archive refresh-ui -y` (it merges the change's requirements into `openspec/specs/` and moves it to `openspec/changes/archive/`), then `openspec validate --specs --strict`, update this file, commit as the owner and push to `main`. Never archive without the owner's say-so.
+
+## Open follow-ups (not started)
+
+- **SonarCloud red cross on `main`.** An outside scanner (SonarCloud / SonarQube Cloud) is connected to the repo and its Quality Gate fails: **C Security Rating** and **D Reliability Rating** on new code (checked 26 November 2026). Our own GitHub Actions runs are all green, so this does not affect the APK. To fix: open https://sonarcloud.io/dashboard?id=micro-7_MacroMend (needs the owner's login), list the open issues, fix the real ones as a small OpenSpec change, and ignore or mark the false positives. Alternative: if the owner did not mean to connect it, remove it in GitHub repo Settings → GitHub Apps.
+- **Old Actions runs.** The Actions tab shows older failed and cancelled runs (early build problems; cancelled ones are normal). They are harmless and can be deleted by hand if the owner wants a clean list. There are no GitHub Releases or tags yet.
 
 ## Known limits
 
