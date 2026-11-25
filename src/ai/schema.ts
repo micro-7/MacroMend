@@ -9,7 +9,7 @@ const ItemSchema = z.object({
   slot: z.string().trim().max(40).nullish(),
 });
 
-const ReplySchema = z.object({ items: z.array(ItemSchema).min(1).max(20) });
+const ReplySchema = z.object({ items: z.array(ItemSchema).max(20) });
 
 /**
  * Find the first complete JSON object in a model reply, even inside a code fence or surrounded by

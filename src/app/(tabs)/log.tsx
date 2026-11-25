@@ -30,6 +30,7 @@ export default function LogScreen() {
   const [usual, setUsual] = useState<FoodRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [online, setOnline] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const services = useLookupServices();
   const phone = usePhoneModelOptional();
   const [failure, setFailure] = useState<Extract<ChainResult, { ok: false }> | null>(null);
@@ -61,6 +62,7 @@ export default function LogScreen() {
     if (!profile || !searching || busy) return;
     setBusy(true);
     setFailure(null);
+    setNotice(null);
     try {
       const slots = profile.slots.map((s) => ({ id: s.id, name: s.name }));
       const result = await runChain(
@@ -68,6 +70,7 @@ export default function LogScreen() {
         query.trim(), { slots },
       );
       if (!result.ok) return setFailure(result);
+      if (result.items.length === 0) return setNotice(`${result.label} couldn't find any food in that text. Check the spelling, or pick the food below.`);
       const { index, units } = await loadMatchData(db);
       const items = toConfirmItems(resolveItems(result.items, index, units), defaultSlotFor(new Date(), profile.slots).id, slots.map((s) => s.id));
       start({ text: query.trim(), understoodBy: result.label, items });
@@ -87,6 +90,7 @@ export default function LogScreen() {
         onChangeText={(t) => {
           setQuery(t);
           setFailure(null);
+          setNotice(null);
         }}
         placeholder="Type what you ate, e.g. 2 roti and dal"
         placeholderTextColor={colors.muted}
@@ -96,6 +100,11 @@ export default function LogScreen() {
         accessibilityLabel="Type what you ate or search foods"
       />
       <Button label={busy ? 'Reading…' : 'Log it with AI'} onPress={understand} disabled={!searching || busy} />
+      {notice ? (
+        <View style={styles.failure} accessibilityLiveRegion="polite">
+          <Text style={styles.failureText}>{notice}</Text>
+        </View>
+      ) : null}
       {failure ? (
         <View style={styles.failure} accessibilityLiveRegion="polite">
           <Text style={styles.failureText}>{explainFailure(failure)}</Text>

@@ -47,7 +47,6 @@ describe('parseReply', () => {
     ['not JSON', '{items: roti}'],
     ['wrong shape', '{"foods":[{"name":"roti"}]}'],
     ['items not a list', '{"items":"roti"}'],
-    ['no items', '{"items":[]}'],
     ['item without a name', '{"items":[{"qty":2}]}'],
     ['empty name', '{"items":[{"name":"  "}]}'],
     ['zero quantity', '{"items":[{"name":"roti","qty":0}]}'],
@@ -117,5 +116,11 @@ describe('presets', () => {
       expect(PRESETS[k].model).not.toBe('');
     }
     expect(PRESETS.custom.baseUrl).toBe('');
+  });
+});
+
+describe('parseReply: no food found', () => {
+  it('accepts an empty list as a valid answer meaning nothing was found', () => {
+    expect(parseReply('{"items":[]}', [])).toEqual({ ok: true, items: [] });
   });
 });
