@@ -31,10 +31,10 @@ These are common defaults, not medical advice; the screen says so and the user c
 
 **Staples quick picks.** A static list of food ids per diet type in `src/data/quickPicks.ts`, filtered to ids that exist in the catalog.
 
-**"Protein food" vs "carb food".** Needed for the staples warning and for `add-rebalance`. `src/core/foodRole.ts`: a food is a protein food when protein provides at least 25% of its kcal (protein × 4 ÷ kcal ≥ 0.25), otherwise a carb/other food. Derived, not stored, so catalog updates can't drift.
+**"Protein food" vs "carb food".** Needed for the staples warning and for `add-rebalance`. `src/core/foodRole.ts`: a food is a protein food when protein provides at least 20% of its kcal (protein × 4 ÷ kcal ≥ 0.2), otherwise a carb/other food. (First drafted as 25%, but dal is 24% in the food table, so 25% would have made it a carb; at 20% dal, curd, paneer, eggs and whey count as protein while roti, rice and oats do not.) Derived, not stored, so catalog updates can't drift.
 
 ## Risks / Trade-offs
 
 - [Formula defaults may not suit everyone (e.g. very high body fat)] → numbers are always editable; typed targets are the first option.
 - [Sex is binary in the formula] → users who prefer not to choose can type targets directly.
-- [25% protein-energy threshold misclassifies some foods (e.g. dal ≈ 27% → protein food)] → acceptable for v1; dal counting as protein is the expected Indian veg behaviour. Revisit if suggestions feel wrong.
+- [20% protein-energy threshold misclassifies some foods (e.g. milk at 21% and curd at 23% count as protein foods; rajma and chole at 17% do not)] → acceptable for v1; dal, curd and milk counting as protein is the expected Indian veg behaviour. Revisit if suggestions feel wrong.

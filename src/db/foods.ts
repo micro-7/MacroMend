@@ -16,7 +16,7 @@ export interface FoodRow {
   externalId: string | null;
 }
 
-interface RawFoodRow {
+export interface RawFoodRow {
   id: string;
   name: string;
   aliases: string;
@@ -31,7 +31,7 @@ interface RawFoodRow {
 
 const BUNDLED_SOURCES = "('built-in','usda')";
 
-function toFoodRow(r: RawFoodRow): FoodRow {
+export function toFoodRow(r: RawFoodRow): FoodRow {
   return {
     id: r.id,
     name: r.name,
@@ -126,4 +126,15 @@ export async function findFoodByExactName(db: Db, input: string): Promise<FoodRo
     [norm],
   );
   return row ? toFoodRow(row) : null;
+}
+
+/** Load several foods at once, keeping the order of `ids` and skipping ids that do not exist. */
+export async function getFoodsByIds(db: Db, ids: string[]): Promise<FoodRow[]> {
+  if (ids.length === 0) return [];
+  const rows = await db.getAll<RawFoodRow>(
+    `SELECT * FROM foods WHERE id IN (${ids.map(() => '?').join(',')})`,
+    ids,
+  );
+  const byId = new Map(rows.map((r) => [r.id, toFoodRow(r)]));
+  return ids.flatMap((id) => (byId.has(id) ? [byId.get(id)!] : []));
 }
