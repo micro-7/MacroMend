@@ -90,7 +90,7 @@ export default function SettingsScreen() {
         />
 
         <SectionTitle>About</SectionTitle>
-        <Row label="App version" value={Constants.expoConfig?.version ?? 'unknown'} />
+        <Row label="About MacroMend" value={Constants.expoConfig?.version ?? 'unknown'} onPress={() => router.push('/manage/about')} />
         <Row label="Foods loaded" value={foods === null ? '…' : String(foods)} />
       </ScrollView>
     </Screen>

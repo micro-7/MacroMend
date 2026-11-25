@@ -13,6 +13,7 @@ export default function ManageLayout() {
       <Stack.Screen name="food" options={{ title: 'Food' }} />
       <Stack.Screen name="phone" options={{ title: 'Phone model' }} />
       <Stack.Screen name="phone-test" options={{ title: 'Test phone model' }} />
+      <Stack.Screen name="about" options={{ title: 'About' }} />
       <Stack.Screen name="lookup" options={{ title: 'Food lookup' }} />
     </Stack>
   );

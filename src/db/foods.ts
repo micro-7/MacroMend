@@ -34,7 +34,7 @@ const BUNDLED_SOURCES = "('built-in','usda')";
 /** Foods saved from online lookups get ids starting with this, even when their source is "usda". */
 export const SAVED_ID_PREFIX = 'ext-';
 /** SQL for rows that ship with the app (and may be replaced by a catalog update). */
-const BUNDLED_ROWS = `source IN ${BUNDLED_SOURCES} AND id NOT LIKE '${SAVED_ID_PREFIX}%'`;
+export const BUNDLED_ROWS = `source IN ${BUNDLED_SOURCES} AND id NOT LIKE '${SAVED_ID_PREFIX}%'`;
 
 export function toFoodRow(r: RawFoodRow): FoodRow {
   return {

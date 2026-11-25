@@ -1,0 +1,9 @@
+# GitHub Pages publishes this folder so the privacy policy has a public web address.
+# Everything except the policy is kept off the site.
+title: MacroMend
+theme: jekyll-theme-minimal
+exclude:
+  - SPEC.md
+  - food-data-sources.md
+  - release.md
+  - play-store-listing.md

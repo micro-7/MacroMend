@@ -50,7 +50,7 @@ const ROWS: SeedRow[] = [
   // Plant protein
   ['tofu', 'tofu', 'soya paneer|bean curd|firm tofu', 'vegan', 'g', 1, 76, 8.1],
   ['tempeh', 'tempeh', '', 'vegan', 'g', 1, 192, 20],
-  ['seitan', 'seitan', 'wheat gluten', 'vegan', 'g', 1, 370, 75],
+  ['seitan', 'seitan', 'wheat meat|seitan cooked', 'vegan', 'g', 1, 125, 22],
   ['lentils', 'lentils', 'cooked lentils|boiled lentils', 'vegan', 'katori', 150, 116, 9],
   ['chickpeas', 'chickpeas', 'boiled chickpeas|kabuli chana|chana boiled|garbanzo beans', 'vegan', 'katori', 150, 164, 8.9],
   ['black-beans', 'black beans', 'cooked black beans', 'vegan', 'katori', 150, 132, 8.9],

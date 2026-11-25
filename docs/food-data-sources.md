@@ -45,10 +45,37 @@ food as eaten** (cooked where relevant). They are **not copied from IFCT 2017
 (NIN) or any other licensed table** and are **not individually cited**. Dish
 values (curries, biryani, street food) vary a lot between recipes.
 
-The spec's open question about the source and licence for the Indian table is
-still open. It is tracked as a pre-release check in the `polish-and-release`
-change: compare these rows with IFCT 2017 and confirm whether its licence
-allows bundling the numbers before a public release.
+See "Pre-release check" below for what was verified and the IFCT licence decision.
+
+## Pre-release check (polish-and-release, task 4.3)
+
+Done on 2026-11-25, catalog version 3.
+
+**IFCT 2017 licence decision: do not use IFCT numbers.** The book's copyright page (National Institute of
+Nutrition, ICMR) says the data may be reproduced "for personal use with full acknowledgment of the source", but
+that "no part of this publication can be stored or reproduced in any electronic format for creating a product
+without the prior written permission of the National Institute of Nutrition, Hyderabad." Bundling its numbers in
+an app is creating a product, and no written permission exists. So **no value in this app is copied from
+IFCT**, and none was changed to match IFCT. The About screen does not credit IFCT as a source. If the owner later
+wants IFCT-based values, write to NIN (contact on the book's copyright page: nin@ap.nic.in) and get a written
+yes first.
+
+**What was checked instead.** All 155 rows in `indian.ts` and all 72 rows in `global.ts` were reviewed against
+the real USDA FoodData Central rows in `usda.ts` (public domain) and standard USDA reference values for the same
+or the closest food (cooked rice, cooked lentils and beans, chicken, fish, eggs, dairy, oils, flours, fruit,
+vegetables, snacks). Dish values with no USDA equivalent (curries, sabzis, street food, sweets) were checked for
+plausibility only (energy density and protein per 100 g in line with their ingredients) and stay approximate.
+Rows that differ by more than about 10% from the reference were corrected:
+
+| Row | Was (kcal / protein) | Now | Why |
+| --- | --- | --- | --- |
+| `gl-seitan` | 370 / 75 | 125 / 22 | 370/75 is dry vital wheat gluten; prepared seitan is gluten plus about 2.5 parts water, so about a third of that (self-calculated) |
+| `in-sugarcane-juice` | 75 / 0.2 | 60 / 0.2 | Sources range from about 40 to 73 kcal per 100 g; set to a middle value |
+
+Everything else was within about 10% of its reference. Home-cooked dishes still vary a lot by recipe, so check
+the numbers for foods you eat often (the app lets you edit any saved food).
+
+**Catalog test.** `src/data/foods/__tests__/catalog.test.ts` passes (see "Checks that run in `npm test`").
 
 ## Foods saved from online lookups
 

@@ -40,6 +40,9 @@ jobs:
           RNET_TARGET: android-arm64-v8a
           RNET_NO_X86_64: '1'
 
+      - name: Update licence list
+        run: npm run licenses
+
       - name: Typecheck
         run: npx tsc --noEmit
 
@@ -48,6 +51,8 @@ jobs:
 
       - name: Generate native Android project
         run: npx expo prebuild --platform android --clean --no-install
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
 
       - name: Build release APK (debug-signed)
         working-directory: android

@@ -160,7 +160,7 @@ const ROWS: SeedRow[] = [
   ['chai', 'chai', 'tea|masala chai|milk tea|cutting chai|tea with milk', 'veg', 'cup', 150, 50, 1.4],
   ['coffee-milk', 'coffee with milk', 'milk coffee|filter coffee|cappuccino', 'veg', 'cup', 150, 45, 1.5],
   ['coffee-black', 'black coffee', 'coffee|americano', 'vegan', 'cup', 240, 1, 0.1],
-  ['sugarcane-juice', 'sugarcane juice', 'ganne ka ras', 'vegan', 'glass', 250, 75, 0.2],
+  ['sugarcane-juice', 'sugarcane juice', 'ganne ka ras', 'vegan', 'glass', 250, 60, 0.2],
   ['nimbu-pani', 'nimbu pani', 'lemon water|shikanji|lemonade', 'vegan', 'glass', 250, 35, 0.1],
   ['protein-shake', 'protein shake', 'whey shake|whey with milk', 'veg', 'glass', 300, 110, 13],
   // Dry fruits, seeds, oils

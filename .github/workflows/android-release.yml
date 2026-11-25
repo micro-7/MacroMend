@@ -1,0 +1,83 @@
+name: Android release
+
+# Builds the signed Android App Bundle (.aab) you upload to Google Play.
+# Runs when you push a version tag such as v1.0.0 (see docs/release.md), or by hand from the Actions tab.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Check signing secrets
+        env:
+          B64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_B64 }}
+          PASS: ${{ secrets.ANDROID_UPLOAD_STORE_PASSWORD }}
+          ALIAS: ${{ secrets.ANDROID_UPLOAD_KEY_ALIAS }}
+          KEYPASS: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
+        run: |
+          for v in B64 PASS ALIAS KEYPASS; do
+            if [ -z "${!v}" ]; then echo "::error::A signing secret is missing. Follow docs/release.md step 2."; exit 1; fi
+          done
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          RNET_TARGET: android-arm64-v8a
+          RNET_NO_X86_64: '1'
+
+      - name: Update licence list
+        run: npm run licenses
+
+      - name: Typecheck and test
+        run: |
+          npx tsc --noEmit
+          npm test -- --ci
+
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --clean --no-install
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
+
+      - name: Decode upload keystore
+        env:
+          B64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_B64 }}
+        run: echo "$B64" | base64 -d > "$RUNNER_TEMP/upload-keystore.jks"
+
+      - name: Build signed bundle
+        working-directory: android
+        env:
+          MACROMEND_UPLOAD_STORE_FILE: ${{ runner.temp }}/upload-keystore.jks
+          MACROMEND_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_STORE_PASSWORD }}
+          MACROMEND_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_UPLOAD_KEY_ALIAS }}
+          MACROMEND_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
+        run: >
+          ./gradlew bundleRelease --no-daemon
+          -PreactNativeArchitectures=arm64-v8a
+          -PMACROMEND_UPLOAD_STORE_FILE="$MACROMEND_UPLOAD_STORE_FILE"
+          -PMACROMEND_UPLOAD_STORE_PASSWORD="$MACROMEND_UPLOAD_STORE_PASSWORD"
+          -PMACROMEND_UPLOAD_KEY_ALIAS="$MACROMEND_UPLOAD_KEY_ALIAS"
+          -PMACROMEND_UPLOAD_KEY_PASSWORD="$MACROMEND_UPLOAD_KEY_PASSWORD"
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: macromend-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 30
