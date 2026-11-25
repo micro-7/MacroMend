@@ -1,0 +1,45 @@
+# Project status
+
+**Read this first in a new session.** It says where MacroMend stands and what the owner still has to do. Update it at the end of every piece of work and commit it with the change.
+
+Last updated: 26 November 2026.
+
+## Where we are
+
+- MacroMend is a working Android diet app (Expo + TypeScript), built entirely through OpenSpec changes.
+- All 8 original changes are built and **archived** (`openspec/changes/archive/`); their requirements are in `openspec/specs/` (18 specs).
+- **`refresh-ui`** (dark look, Today rings, floating tab bar, optional name) is **built and pushed but not archived yet**. The owner archives it after the phone checks, by saying "archive it".
+- The owner tests only on an Android phone, using the APK from the "Android APK" GitHub Actions workflow (runs on every push to `main` that changes code; docs-only and OpenSpec-only pushes do not build).
+
+## What the owner still has to do (phone checks)
+
+Do these in order, with the newest APK:
+
+1. **Test phone model, Run again** (Settings → Phone model → Test phone model). Last score was 26 / 30; fixes for the 4 misses were made since. Send the score and the missed sentences. Do this before step 2, because step 2 deletes the model.
+2. **Delete all my data** (Settings → About) and confirm. Check: onboarding starts in the new dark look; the first step asks "What should we call you? (optional)" and continues when it is left empty; Back keeps the typed name; AI providers are empty; the phone model is gone; searching "roti" on Log still finds it. After this the owner has to redo onboarding, add the AI key again and download the phone model again.
+3. Anything that looks wrong on the new screens (hard-to-read text, cut-off cards, tab bar covering content): send a screenshot.
+
+When these pass, archive `refresh-ui`: `openspec archive refresh-ui -y` (only when the owner says so).
+
+## Known limits
+
+- Open Food Facts limits anonymous searches, so packaged-brand search often fails ("could not be searched right now"). USDA search works with the owner's own free key (Settings → Food lookup).
+- The phone model needs about a minute for the first reading after it has been idle (it is loading); later readings are quick.
+- Calorie values for curries and street food are approximate (no USDA match). IFCT 2017 numbers are deliberately **not** used (licence needs written permission); see `docs/food-data-sources.md`.
+
+## Future work (not started, owner decides)
+
+See `docs/future.md`: Play Store release (steps in `docs/release.md`, listing text in `docs/play-store-listing.md`), Open Food Facts backup search, phone model "Load now" button.
+
+## How a new session should start
+
+1. Read `CLAUDE.md`, `AGENTS.md`, this file and `docs/future.md`.
+2. Run `openspec list` to see active changes, and read `openspec/specs/` for how the app behaves.
+3. Work only through OpenSpec changes (`/opsx:propose`, then `/opsx:apply`); never archive without the owner's say-so.
+4. After every apply: `npx tsc --noEmit`, `npm test`, `npx expo-doctor`; commit as the owner (no Claude attribution) and push to `main`; give a short report and a numbered phone checklist.
+
+## Things that live outside this repo
+
+- The owner's API keys (Groq, USDA, etc.): only on the owner's phone.
+- Play Store signing secrets: GitHub repository secrets (not created yet; steps in `docs/release.md`).
+- GitHub Pages serves `docs/privacy-policy.md` at https://micro-7.github.io/MacroMend/privacy-policy.

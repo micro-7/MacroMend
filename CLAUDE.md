@@ -6,6 +6,8 @@ The owner works only from an Android phone: Claude runs every command, and testi
 
 @AGENTS.md
 
+**Start every new session by reading `docs/status.md`** (where the project stands and what the owner still has to do), then `docs/future.md`. Update `docs/status.md` at the end of each piece of work.
+
 ## Core rules (apply to every phase)
 
 - AI only parses text into `{"items":[{"name","qty","unit","slot"}]}`. Calories and protein always come from the food table; only foods found nowhere get an AI estimate, always marked "estimated".
