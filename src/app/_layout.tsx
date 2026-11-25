@@ -17,6 +17,7 @@ function Routes() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="manage" />
         <Stack.Screen name="entry" options={{ presentation: 'modal', headerShown: true, title: 'Log food' }} />
+        <Stack.Screen name="fix" options={{ headerShown: true, title: 'Fix my day' }} />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />

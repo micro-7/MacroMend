@@ -5,6 +5,7 @@ import { summarize } from '@/core/summary';
 import { useDay } from '@/db/DayContext';
 import { useProfile } from '@/db/ProfileContext';
 import { Screen } from '@/ui/Screen';
+import { Button } from '@/ui/kit';
 import { WhatsLeftCard } from '@/ui/WhatsLeftCard';
 import { colors } from '@/ui/theme';
 
@@ -23,6 +24,9 @@ export default function TodayScreen() {
     <Screen title="Today">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <WhatsLeftCard summary={summary} targets={targets} />
+        <View style={{ marginBottom: 16 }}>
+          <Button label="Fix my day" onPress={() => router.push('/fix')} />
+        </View>
         {summary.groups.map((g) => (
           <View key={g.slotId} style={styles.group}>
             <View style={styles.groupHead}>

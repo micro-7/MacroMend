@@ -26,6 +26,14 @@ Builds on `add-onboarding` (staples with usual quantity, `allowedCategories`, `f
 6. Final pass: if total kcal exceeds remaining kcal, step down the last-added carb portions until it fits.
 Alternative: integer programming for an optimal plan; rejected as heavy, hard to explain and unnecessary for 2–4 items per slot.
 
+**What counts as a suggestable food.** Besides the diet filter, `isMealFood` skips staples that are not meals on their own: more than 500 kcal per 100 g (oil, ghee, butter, nuts) or sugar-like (under 0.5 g protein and over 300 kcal per 100 g, such as sugar, jaggery, honey). They stay in the user's staples and in logging; they are just not suggested.
+
+**Tight calories.** When protein alone would use most of the calories (remaining protein × 4 > 80% of remaining kcal), protein foods are tried from most to least protein-dense instead of in the seeded rotation. A slot's kcal budget is the unspent calories divided by the slots still to fill, so what one slot does not use flows to the next; a second protein food only gets 60% of what is left, so carbs still have room. The plan also reports `too_few_kcal` when not even the smallest portion fits anywhere.
+
+**Swap and shuffle.** Swap picks the next allowed staple of the same kind (by id order) that is not already in the slot and that fits the old item's calories plus the unspent calories; protein swaps aim for the old item's protein, carb swaps for its calories. Shuffle tries following seeds until the plan differs, and keeps the current plan if none does. A swapped plan is kept only until a log, a shuffle or a staples change recomputes the base plan.
+
+**Logging a single item closes its meal.** An open slot means "nothing logged today", so logging one item from a suggestion makes that meal no longer open and its other suggested items disappear. The screen says so; logging the whole meal is the one-tap path.
+
 **Portion steps.** `piece/scoop/slice` (and any non-gram default unit): step 1 unit, minimum 1. `g`/`ml` foods: step 25 g, minimum 50 g. Cap: 2 × usual quantity (in the staple's unit), and never below one step.
 
 **Seeded randomness.** A small seeded PRNG (mulberry32) drives rotation order; Shuffle bumps the seed. Swap replaces one item with the next allowed staple of the same role not already in that slot and recomputes only that slot.

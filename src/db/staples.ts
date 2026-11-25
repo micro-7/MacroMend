@@ -1,4 +1,5 @@
 import type { FoodCategory } from '../core/diet';
+import type { StapleInfo } from '../core/rebalance';
 import { normalizeName } from '../core/text';
 import type { Db } from './db';
 import { toFoodRow, type FoodRow, type RawFoodRow } from './foods';
@@ -81,4 +82,18 @@ export async function searchFoods(db: Db, query: string, opts: SearchOptions = {
   const sql = `SELECT f.* FROM foods f ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY ${order} LIMIT ?`;
   const rows = await db.getAll<RawFoodRow>(sql, [...params, ...orderParams, limit]);
   return rows.map(toFoodRow);
+}
+
+/** The facts the suggestion engine needs about a staple. */
+export function toStapleInfo(s: Staple): StapleInfo {
+  return {
+    foodId: s.food.id,
+    name: s.food.name,
+    category: s.food.category,
+    unit: s.food.unit,
+    gramsPerUnit: s.food.gramsPerUnit,
+    kcalPer100g: s.food.kcalPer100g,
+    proteinPer100g: s.food.proteinPer100g,
+    usualQty: s.usualQty,
+  };
 }
