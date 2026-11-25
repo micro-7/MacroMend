@@ -18,3 +18,7 @@ The owner works only from an Android phone: Claude runs every command, and testi
 ## After every apply
 
 After every /opsx:apply, before saying it's done: run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`, and fix everything that fails. Commit and push, then give me a short report and a numbered checklist to test on my phone after installing the APK from GitHub Actions. Never archive; I do that.
+
+## Commits
+
+Commit as the owner: `git config user.name "Mihir Tandon"` and `git config user.email "85353517+micro-7@users.noreply.github.com"`. Do not add `Co-Authored-By`, `Claude-Session` or any other Claude attribution to commit messages or pull requests.
