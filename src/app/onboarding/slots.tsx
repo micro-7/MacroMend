@@ -8,7 +8,7 @@ export default function SlotsStep() {
   const { draft, update } = useOnboardingDraft();
   return (
     <StepScreen
-      step="Step 4 of 5"
+      step="Step 4 of 6"
       title="Your meals"
       onBack={() => router.back()}
       onNext={() => router.push('/onboarding/staples')}

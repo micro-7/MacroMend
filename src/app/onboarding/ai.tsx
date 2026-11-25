@@ -1,0 +1,88 @@
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useDb } from '@/db/DbContext';
+import { useProfile } from '@/db/ProfileContext';
+import { completeOnboarding } from '@/db/profile';
+import { listProviders, type ProviderRow } from '@/db/providers';
+import { buildProfile, buildStaples } from '@/onboarding/buildProfile';
+import { useOnboardingDraft } from '@/onboarding/OnboardingDraft';
+import { ProviderEditor } from '@/ui/forms/ProviderEditor';
+import { Button, Hint, StepScreen } from '@/ui/kit';
+import { colors } from '@/ui/theme';
+
+/** Optional last step: add a free AI key to log by typing. Skipping still finishes setup. */
+export default function AiStep() {
+  const router = useRouter();
+  const db = useDb();
+  const { reload } = useProfile();
+  const { draft } = useOnboardingDraft();
+  const [providers, setProviders] = useState<ProviderRow[]>([]);
+  const [adding, setAdding] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => setProviders(await listProviders(db)), [db]);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const finish = async () => {
+    const profile = buildProfile(draft);
+    if (!profile.ok) return setError(profile.error);
+    const staples = buildStaples(draft.staples);
+    if (!staples.ok) return setError(staples.error);
+    setSaving(true);
+    setError(null);
+    try {
+      await completeOnboarding(db, profile.value, staples.value);
+      await reload(); // the route guard in the root layout then moves to the tabs
+    } catch (e) {
+      setError(`Couldn't save: ${e instanceof Error ? e.message : String(e)}`);
+      setSaving(false);
+    }
+  };
+
+  return (
+    <StepScreen
+      step="Step 6 of 6"
+      title="AI setup (optional)"
+      onBack={() => router.back()}
+      onNext={finish}
+      nextLabel={saving ? 'Saving…' : providers.length > 0 ? 'Finish' : "Skip, I'll log manually"}
+      nextDisabled={saving || adding}
+      error={error}
+    >
+      <Hint>
+        Add a free key from Google Gemini, Groq or OpenRouter to log by typing, like "2 roti and dal" or "office mein 2 samosa kha liye". Your key
+        stays on this phone. You can skip this and add it later in Settings; searching and picking foods always works.
+      </Hint>
+
+      {providers.map((p) => (
+        <View key={p.id} style={styles.row}>
+          <Text style={styles.name}>{p.label}</Text>
+          <Text style={styles.model}>{p.model}</Text>
+        </View>
+      ))}
+
+      {adding ? (
+        <ProviderEditor
+          onDone={async () => {
+            setAdding(false);
+            await load();
+          }}
+        />
+      ) : (
+        <View style={{ marginTop: 8 }}>
+          <Button label={providers.length > 0 ? 'Add another provider' : 'Add a provider'} variant="secondary" onPress={() => setAdding(true)} />
+        </View>
+      )}
+    </StepScreen>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+  name: { fontSize: 16, color: colors.text, fontWeight: '600' },
+  model: { fontSize: 13, color: colors.muted },
+});

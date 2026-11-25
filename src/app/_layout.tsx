@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, View } from 'react-native';
+import { ParseSessionProvider } from '@/ai/ParseSession';
 import { DayProvider } from '@/db/DayContext';
 import { DbProvider } from '@/db/DbContext';
 import { ProfileProvider, useProfile } from '@/db/ProfileContext';
@@ -18,6 +19,7 @@ function Routes() {
         <Stack.Screen name="manage" />
         <Stack.Screen name="entry" options={{ presentation: 'modal', headerShown: true, title: 'Log food' }} />
         <Stack.Screen name="fix" options={{ headerShown: true, title: 'Fix my day' }} />
+        <Stack.Screen name="confirm" options={{ presentation: 'modal', headerShown: true, title: 'Check and log' }} />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />
@@ -42,8 +44,10 @@ export default function RootLayout() {
     <DbProvider value={state.db}>
       <ProfileProvider db={state.db}>
         <DayProvider db={state.db}>
-          <StatusBar style="dark" />
-          <Routes />
+          <ParseSessionProvider>
+            <StatusBar style="dark" />
+            <Routes />
+          </ParseSessionProvider>
         </DayProvider>
       </ProfileProvider>
     </DbProvider>

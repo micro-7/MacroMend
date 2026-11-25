@@ -8,7 +8,7 @@ export default function DietStep() {
   const { draft, update } = useOnboardingDraft();
   return (
     <StepScreen
-      step="Step 3 of 5"
+      step="Step 3 of 6"
       title="Your diet"
       onBack={() => router.back()}
       onNext={() => router.push('/onboarding/slots')}

@@ -24,3 +24,8 @@ export function defaultSlotFor(now: Date, slots: Slot[]): Slot {
   const wanted = mealForHour(now.getHours());
   return slots.find((s) => s.id === wanted) ?? slots[0];
 }
+
+/** The start of the next local day, when daily limits reset. */
+export function nextLocalMidnight(now: Date = new Date()): Date {
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+}

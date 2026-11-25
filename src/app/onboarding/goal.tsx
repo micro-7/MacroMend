@@ -8,7 +8,7 @@ export default function GoalStep() {
   const { draft, update } = useOnboardingDraft();
   return (
     <StepScreen
-      step="Step 1 of 5"
+      step="Step 1 of 6"
       title="What's your goal?"
       onNext={() => router.push('/onboarding/targets')}
       nextDisabled={!draft.goal}

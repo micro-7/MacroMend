@@ -14,7 +14,7 @@ export default function TargetsStep() {
 
   return (
     <StepScreen
-      step="Step 2 of 5"
+      step="Step 2 of 6"
       title="Daily targets"
       onBack={() => router.back()}
       onNext={() => {

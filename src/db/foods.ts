@@ -1,3 +1,4 @@
+import { buildMatchIndex, type MatchIndex } from '../core/match';
 import { normalizeName } from '../core/text';
 import { ALL_FOODS, CATALOG_VERSION } from '../data/foods';
 import type { FoodSeed } from '../data/foods';
@@ -137,4 +138,13 @@ export async function getFoodsByIds(db: Db, ids: string[]): Promise<FoodRow[]> {
   );
   const byId = new Map(rows.map((r) => [r.id, toFoodRow(r)]));
   return ids.flatMap((id) => (byId.has(id) ? [byId.get(id)!] : []));
+}
+
+/** Everything the text matcher needs, read from the food table: the name index and each food's own unit. */
+export async function loadMatchData(db: Db): Promise<{ index: MatchIndex; units: Map<string, { unit: string }> }> {
+  const rows = await db.getAll<{ id: string; name: string; aliases: string; unit: string }>('SELECT id, name, aliases, unit FROM foods');
+  return {
+    index: buildMatchIndex(rows.map((r) => ({ id: r.id, name: r.name, aliases: JSON.parse(r.aliases) as string[] }))),
+    units: new Map(rows.map((r) => [r.id, { unit: r.unit }])),
+  };
 }

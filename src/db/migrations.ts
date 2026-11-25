@@ -68,6 +68,21 @@ export const MIGRATIONS: string[] = [
     value TEXT NOT NULL
   );
   `,
+  // v2: cloud AI providers. Their keys are NOT stored here; they live in the phone's secure storage.
+  `
+  CREATE TABLE providers (
+    id TEXT PRIMARY KEY,
+    kind TEXT NOT NULL CHECK (kind IN ('gemini','groq','openrouter','custom')),
+    label TEXT NOT NULL,
+    base_url TEXT NOT NULL,
+    model TEXT NOT NULL,
+    position INTEGER NOT NULL,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    skip_until TEXT,
+    skip_reason TEXT,
+    last_error TEXT
+  );
+  `,
 ];
 
 /**

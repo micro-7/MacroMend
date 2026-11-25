@@ -1,11 +1,12 @@
 import Constants from 'expo-constants';
-import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { DIET_LABELS } from '@/core/diet';
 import { useDb } from '@/db/DbContext';
 import { countFoods } from '@/db/foods';
 import { useProfile } from '@/db/ProfileContext';
+import { listProviders } from '@/db/providers';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
 import { colors } from '@/ui/theme';
@@ -31,16 +32,23 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { profile } = useProfile();
   const [foods, setFoods] = useState<number | null>(null);
+  const [providerCount, setProviderCount] = useState<number | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    countFoods(db).then((n) => {
-      if (!cancelled) setFoods(n);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [db]);
+  // Reload when the tab comes back into view, so counts reflect changes made in the screens it opened.
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      countFoods(db).then((n) => {
+        if (!cancelled) setFoods(n);
+      });
+      listProviders(db).then((p) => {
+        if (!cancelled) setProviderCount(p.filter((x) => x.enabled).length);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [db]),
+  );
 
   return (
     <Screen title="Settings">
@@ -54,6 +62,11 @@ export default function SettingsScreen() {
         <Row label="Diet" value={profile ? DIET_LABELS[profile.dietType] : undefined} />
         <Row label="Meal slots" value={profile ? String(profile.slots.length) : undefined} onPress={() => router.push('/manage/slots')} />
         <Row label="Usual foods" onPress={() => router.push('/manage/staples')} />
+        <Row
+          label="AI providers"
+          value={providerCount === null ? undefined : providerCount === 0 ? 'None' : `${providerCount} on`}
+          onPress={() => router.push('/manage/providers')}
+        />
 
         <SectionTitle>About</SectionTitle>
         <Row label="App version" value={Constants.expoConfig?.version ?? 'unknown'} />
