@@ -47,7 +47,7 @@ describe('phone parser', () => {
     await createPhoneParser(e).parse('x', ctx);
     const prompt = e.log.opened[0];
     for (const shot of FEW_SHOTS) expect(prompt).toContain(shot.input);
-    expect(FEW_SHOTS).toHaveLength(7);
+    expect(FEW_SHOTS).toHaveLength(10);
     expect(prompt).toContain('"breakfast" (Breakfast)');
     expect(prompt).toMatch(/JSON object only/);
     expect(prompt).toBe(buildPhoneSystemPrompt(ctx.slots));
@@ -211,5 +211,52 @@ describe('unloading', () => {
     } finally {
       jest.useRealTimers();
     }
+  });
+});
+
+describe('phone parser: model still busy', () => {
+  const slots = [{ id: 'lunch', name: 'Lunch' }];
+
+  it('tries again when the model says it is in use, then succeeds', async () => {
+    let calls = 0;
+    const session = {
+      send: async () => {
+        if (++calls < 3) throw new Error('execute: Model is currently in use');
+        return '{"items":[{"name":"roti","qty":2,"unit":"","slot":""}]}';
+      },
+      stop: () => {},
+      usageRatio: () => 0,
+      dispose: () => {},
+    };
+    const sleeps: number[] = [];
+    const parser = createPhoneParser({ openSession: async () => session }, { sleep: async (ms) => void sleeps.push(ms) });
+    expect(await parser.parse('2 roti', { slots })).toMatchObject({ ok: true });
+    expect(calls).toBe(3);
+    expect(sleeps).toHaveLength(2);
+  });
+
+  it('waits for the old session to finish closing before opening a new one', async () => {
+    const order: string[] = [];
+    let n = 0;
+    const engine = {
+      openSession: async () => {
+        const id = ++n;
+        order.push(`open${id}`);
+        return {
+          send: async () => '{"items":[{"name":"roti","qty":1,"unit":"","slot":""}]}',
+          stop: () => {},
+          usageRatio: () => 0,
+          dispose: async () => {
+            order.push(`closing${id}`);
+            await new Promise((r) => setTimeout(r, 20));
+            order.push(`closed${id}`);
+          },
+        };
+      },
+    };
+    const parser = createPhoneParser(engine, { maxTurns: 1 });
+    await parser.parse('a', { slots });
+    await parser.parse('b', { slots });
+    expect(order).toEqual(['open1', 'closing1', 'closed1', 'open2']);
   });
 });

@@ -32,6 +32,18 @@ export const FEW_SHOTS: { input: string; output: string }[] = [
     output: '{"items":[{"name":"paneer paratha","qty":2,"unit":"","slot":""}]}',
   },
   {
+    input: 'ek glass nimbu pani pi li',
+    output: '{"items":[{"name":"nimbu pani","qty":"ek","unit":"glass","slot":""}]}',
+  },
+  {
+    input: 'half bowl lemon rice',
+    output: '{"items":[{"name":"lemon rice","qty":"half","unit":"bowl","slot":""}]}',
+  },
+  {
+    input: 'sawa glass lassi',
+    output: '{"items":[{"name":"lassi","qty":"sawa","unit":"glass","slot":""}]}',
+  },
+  {
     input: 'dinner: 150 g paneer bhurji aur 2 chapati',
     output: '{"items":[{"name":"paneer bhurji","qty":150,"unit":"g","slot":"dinner"},{"name":"roti","qty":2,"unit":"","slot":"dinner"}]}',
   },
@@ -44,7 +56,8 @@ export function buildSystemPrompt(slots: ParseSlot[]): string {
     'You turn a short description of food someone ate into JSON. The text may be English, Hinglish (Hindi written in English letters) or a mix. Always reply in English JSON.',
     'Reply with ONLY one JSON object of this exact shape and nothing else: {"items":[{"name":"","qty":1,"unit":"","slot":""}]}',
     'Rules:',
-    '- One item per food. Use a simple, singular English food name ("roti", "curd", "samosa", "rice"). Translate Hindi names ("dahi" is "curd", "anda" is "egg", "chawal" is "rice").',
+    '- One item per food. Use a simple, singular English food name ("roti", "curd", "samosa", "rice"). Translate Hindi names that have a simple English word ("dahi" is "curd", "anda" is "egg", "chawal" is "rice"), but keep names of dishes and drinks that have no simple English word ("chaas", "lassi", "nimbu pani", "kadhi", "khichdi") as they are. Never turn one food into a different one.',
+    '- A dish named with two foods is ONE item ("curd rice", "lemon rice", "egg curry", "paneer paratha"). Only split when the text lists separate foods ("dal aur rice", "roti and dal").',
     '- Keep the whole food name, including words that say what kind it is ("paneer paratha" stays "paneer paratha", never just "paratha"; "butter chicken" never just "chicken"). Fix obvious spelling mistakes ("panner" is "paneer") but never drop words.',
     '- qty: the amount as a number. If it is written as a number word ("do", "teen", "aadha", "dedh", "half"), copy the word exactly as written. If no amount is given, use 1.',
     '- unit: the unit as written ("katori", "g", "scoop", "glass", "bowl", "piece"), or "" if none is given. Do not invent units.',

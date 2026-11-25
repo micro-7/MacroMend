@@ -10,8 +10,8 @@ export interface PhoneSession {
   stop(): void;
   /** How full the model's memory of the conversation is, 0 to 1. */
   usageRatio(): number;
-  /** Free the model's memory. */
-  dispose(): void;
+  /** Free the model's memory. May finish later; the parser waits for it before opening another session. */
+  dispose(): void | Promise<void>;
 }
 
 /** Loads the model. The real one uses react-native-executorch; tests use a fake. */
@@ -27,7 +27,14 @@ export const MAX_CONTEXT_USAGE = 0.6;
 /** Free the model's memory after this long without use. */
 export const IDLE_UNLOAD_MS = 5 * 60_000;
 
+/** How long to wait between tries when the model says it is still busy, and how many times to try. */
+export const BUSY_RETRY_MS = 300;
+export const BUSY_RETRIES = 10;
+const isBusy = (e: unknown) => e instanceof Error && /in use|busy/i.test(e.message);
+
 export interface PhoneParserOptions {
+  /** Test hook: wait this many ms. */
+  sleep?: (ms: number) => Promise<void>;
   timeoutMs?: number;
   idleMs?: number;
   maxTurns?: number;
@@ -71,6 +78,9 @@ export function createPhoneParser(engine: PhoneEngine, options: PhoneParserOptio
     clear: (h) => clearTimeout(h as ReturnType<typeof setTimeout>),
   };
 
+  const sleep = options.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
+  /** The previous session may still be shutting down; the next one must not start until it has. */
+  let closing: Promise<void> = Promise.resolve();
   let session: PhoneSession | null = null;
   let sessionSlots = '';
   let turns = 0;
@@ -88,10 +98,26 @@ export function createPhoneParser(engine: PhoneEngine, options: PhoneParserOptio
     session = null;
     turns = 0;
     sessionSlots = '';
+    if (!s) return;
+    // Start freeing right away; only the next session has to wait for it to finish.
+    let done: Promise<void>;
     try {
-      s?.dispose();
+      done = Promise.resolve(s.dispose()).catch(() => undefined);
     } catch {
-      // Already gone; nothing more to free.
+      done = Promise.resolve(); // Already gone; nothing more to free.
+    }
+    closing = Promise.all([closing, done]).then(() => undefined);
+  };
+
+  /** Send one line, trying again a few times if the model reports it is still busy with something else. */
+  const sendWithRetry = async (current: PhoneSession, line: string): Promise<string> => {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        return await current.send(line);
+      } catch (e) {
+        if (!isBusy(e) || attempt >= BUSY_RETRIES) throw e;
+        await sleep(BUSY_RETRY_MS);
+      }
     }
   };
 
@@ -101,6 +127,7 @@ export function createPhoneParser(engine: PhoneEngine, options: PhoneParserOptio
     try {
       if (!session || sessionSlots !== key || turns >= maxTurns || session.usageRatio() >= maxUsage) {
         unload();
+        await closing;
         session = await engine.openSession(buildPhoneSystemPrompt(ctx.slots));
         sessionSlots = key;
       }
@@ -114,7 +141,7 @@ export function createPhoneParser(engine: PhoneEngine, options: PhoneParserOptio
     let timer: unknown = null;
     try {
       const reply = await Promise.race([
-        current.send(`Input: ${text.trim()}`),
+        sendWithRetry(current, `Input: ${text.trim()}`),
         new Promise<never>((_, reject) => {
           timer = timers.set(() => {
             try {
