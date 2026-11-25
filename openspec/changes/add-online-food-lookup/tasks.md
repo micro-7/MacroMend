@@ -21,7 +21,7 @@
 ## 4. Test this phase
 
 - [x] 4.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 4.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 4.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK; keep at least one AI provider from the last phase):
 1. Log tab: type "1 scoop muscleblaze whey" and tap "Log it with AI". On the check screen the whey shows as Not found: tap "Search online". Open Food Facts products appear with kcal/protein per 100 g, and the Open Food Facts credit is at the bottom.
