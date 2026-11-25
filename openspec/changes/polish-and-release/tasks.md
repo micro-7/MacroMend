@@ -24,7 +24,7 @@
 ## 5. Test this phase
 
 - [x] 5.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 5.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 5.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK):
 1. The home-screen icon and splash screen show the new MacroMend design; with themed icons on (Android 13+), the monochrome icon is used.
