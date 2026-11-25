@@ -60,3 +60,9 @@ export function summarize<T extends SummaryLog>(
     groups,
   };
 }
+
+/** How many of the user's meal slots have at least one entry today (entries under "Other" do not count). */
+export function mealProgress(groups: Pick<SlotGroup<unknown>, 'slotId' | 'entries'>[]): { logged: number; total: number } {
+  const slots = groups.filter((g) => g.slotId !== OTHER_SLOT_ID);
+  return { logged: slots.filter((g) => g.entries.length > 0).length, total: slots.length };
+}

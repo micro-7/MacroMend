@@ -16,7 +16,7 @@
 
 ## 3. Today
 
-- [ ] 3.1 Rebuild Today: greeting row, hero card ("Not sure *what* to *eat* next?" with a white Fix my day button), three rings (calories left, protein left, meals logged x of y) with the warning colour when over target, and meal slot cards with icons, totals, entries and empty states; verify render tests for the scenarios in the daily-summary spec (1560 kcal / 112.8 g left, 150 kcal over, protein met, 2 of 5 meals, grouped cards, hero opens Fix my day)
+- [x] 3.1 Rebuild Today: greeting row, hero card ("Not sure *what* to *eat* next?" with a white Fix my day button), three rings (calories left, protein left, meals logged x of y) with the warning colour when over target, and meal slot cards with icons, totals, entries and empty states; verify render tests for the scenarios in the daily-summary spec (1560 kcal / 112.8 g left, 150 kcal over, protein met, 2 of 5 meals, grouped cards, hero opens Fix my day)
 
 ## 4. Logging screens
 

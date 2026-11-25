@@ -9,7 +9,8 @@ export const MAX_NAME_LENGTH = 30;
 
 /** Trim a typed name; blank becomes no name, and it is cut at the length limit. */
 export function normalizeDisplayName(raw: string | null | undefined): string | null {
-  const t = (raw ?? '').trim().slice(0, MAX_NAME_LENGTH).trim();
+  // Stars are removed because headlines use them to mark italic words.
+  const t = (raw ?? '').replace(/\*/g, '').trim().slice(0, MAX_NAME_LENGTH).trim();
   return t === '' ? null : t;
 }
 

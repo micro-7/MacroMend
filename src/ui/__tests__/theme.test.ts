@@ -15,6 +15,7 @@ const PAIRS: [keyof typeof palette, keyof typeof palette, number][] = [
   ['text', 'bg', 4.5], ['text', 'card', 4.5], ['text', 'cardHigh', 4.5],
   ['muted', 'bg', 4.5], ['muted', 'card', 4.5], ['muted', 'cardHigh', 4.5],
   ['brandBright', 'bg', 4.5], ['brandBright', 'card', 4.5], ['brandBright', 'cardHigh', 4.5],
+  ['info', 'bg', 4.5], ['info', 'card', 4.5],
   ['warning', 'bg', 4.5], ['warning', 'card', 4.5],
   ['danger', 'bg', 4.5], ['danger', 'card', 4.5],
   ['onBrand', 'brand', 4.5],

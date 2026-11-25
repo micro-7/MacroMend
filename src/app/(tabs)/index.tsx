@@ -1,13 +1,18 @@
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { greeting } from '@/core/greeting';
 import { formatKcal, formatProtein } from '@/core/portions';
 import { summarize } from '@/core/summary';
 import { useDay } from '@/db/DayContext';
 import { useProfile } from '@/db/ProfileContext';
-import { Screen } from '@/ui/Screen';
+import { Card, EmptyState, HeroCard } from '@/ui/components';
 import { Button } from '@/ui/kit';
+import { Screen } from '@/ui/Screen';
+import { slotIcon } from '@/ui/slotIcon';
+import { fonts, palette, space } from '@/ui/theme';
+import { Title } from '@/ui/Title';
 import { WhatsLeftCard } from '@/ui/WhatsLeftCard';
-import { colors } from '@/ui/theme';
 
 const qtyText = (qty: number) => String(Math.round(qty * 100) / 100);
 
@@ -21,15 +26,24 @@ export default function TodayScreen() {
   const summary = summarize(logs, targets, profile.slots);
 
   return (
-    <Screen title="Today">
-      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+    <Screen title={greeting(new Date(), profile.name)}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <HeroCard style={styles.hero}>
+          <Title size="hero" style={{ color: palette.onBrand }}>Not sure *what* to *eat* next?</Title>
+          <Text style={styles.heroText}>We'll build the rest of your day from your usual foods, to fit what's left.</Text>
+          <View style={{ marginTop: space.lg }}>
+            <Button label="Fix my day" variant="light" onPress={() => router.push('/fix')} />
+          </View>
+        </HeroCard>
+
         <WhatsLeftCard summary={summary} targets={targets} />
-        <View style={{ marginBottom: 16 }}>
-          <Button label="Fix my day" onPress={() => router.push('/fix')} />
-        </View>
+
         {summary.groups.map((g) => (
-          <View key={g.slotId} style={styles.group}>
+          <Card key={g.slotId} style={styles.group}>
             <View style={styles.groupHead}>
+              <View style={styles.iconWrap}>
+                <Feather name={slotIcon(g.name)} size={18} color={palette.brandBright} />
+              </View>
               <Text style={styles.groupName}>{g.name}</Text>
               {g.entries.length > 0 ? (
                 <Text style={styles.groupTotal}>
@@ -37,14 +51,20 @@ export default function TodayScreen() {
                 </Text>
               ) : null}
             </View>
-            {g.entries.length === 0 ? <Text style={styles.empty}>Nothing logged</Text> : null}
+            {g.entries.length === 0 ? (
+              <EmptyState message="Nothing logged yet">
+                <Pressable accessibilityRole="button" accessibilityLabel={`Add food to ${g.name}`} onPress={() => router.navigate('/log')} hitSlop={8}>
+                  <Text style={styles.addLink}>+ Add food</Text>
+                </Pressable>
+              </EmptyState>
+            ) : null}
             {g.entries.map((e) => (
               <Pressable
                 key={e.id}
                 accessibilityRole="button"
                 accessibilityLabel={`Edit ${e.foodName}`}
                 onPress={() => router.push({ pathname: '/entry', params: { logId: String(e.id) } })}
-                style={styles.entry}
+                style={({ pressed }) => [styles.entry, pressed && { opacity: 0.8 }]}
               >
                 <View style={{ flex: 1 }}>
                   <Text style={styles.entryName}>{e.foodName}</Text>
@@ -53,9 +73,10 @@ export default function TodayScreen() {
                     {e.estimated ? ' · est.' : ''}
                   </Text>
                 </View>
+                <Feather name="chevron-right" size={18} color={palette.muted} />
               </Pressable>
             ))}
-          </View>
+          </Card>
         ))}
       </ScrollView>
     </Screen>
@@ -63,12 +84,17 @@ export default function TodayScreen() {
 }
 
 const styles = StyleSheet.create({
-  group: { marginBottom: 14 },
-  groupHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
-  groupName: { fontSize: 17, fontWeight: '700', color: colors.text },
-  groupTotal: { color: colors.muted, fontSize: 13 },
-  empty: { color: colors.muted, fontSize: 14, paddingVertical: 6 },
-  entry: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
-  entryName: { fontSize: 16, color: colors.text },
-  entrySub: { fontSize: 13, color: colors.muted, marginTop: 2 },
+  // Extra bottom space so the floating tab bar never covers the last card.
+  content: { paddingBottom: 120, gap: space.md },
+  hero: { gap: space.sm },
+  heroText: { fontFamily: fonts.body, fontSize: 14, color: '#E3F0E7', lineHeight: 20 },
+  group: { gap: space.xs },
+  groupHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  iconWrap: { width: 32, height: 32, borderRadius: 16, backgroundColor: palette.cardHigh, alignItems: 'center', justifyContent: 'center' },
+  groupName: { flex: 1, fontFamily: fonts.semibold, fontSize: 17, color: palette.text },
+  groupTotal: { fontFamily: fonts.body, fontSize: 13, color: palette.muted },
+  addLink: { fontFamily: fonts.medium, fontSize: 14, color: palette.brandBright },
+  entry: { flexDirection: 'row', alignItems: 'center', paddingVertical: space.md, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: palette.border },
+  entryName: { fontFamily: fonts.medium, fontSize: 16, color: palette.text },
+  entrySub: { fontFamily: fonts.body, fontSize: 13, color: palette.muted, marginTop: 2 },
 });

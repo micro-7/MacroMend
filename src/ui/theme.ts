@@ -16,6 +16,8 @@ export const palette = {
   brandBright: '#7CC68F',
   /** The highlight colour: active tab and accents. */
   coral: '#F26B4F',
+  /** Third ring colour. */
+  info: '#8FB8FF',
   warning: '#F0A64A',
   danger: '#FF7B7B',
   onBrand: '#FFFFFF',

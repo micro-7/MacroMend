@@ -1,5 +1,5 @@
 import { DEFAULT_SLOTS } from '../slots';
-import { summarize } from '../summary';
+import { mealProgress, summarize } from '../summary';
 
 const log = (slot: string, kcal: number, proteinG: number) => ({ slot, kcal, proteinG });
 const targets = { kcal: 1800, proteinG: 120 };
@@ -52,5 +52,23 @@ describe('summarize', () => {
 
   it('has no Other group when every entry has a slot', () => {
     expect(summarize([log('lunch', 100, 1)], targets, DEFAULT_SLOTS).groups.some((g) => g.slotId === 'other')).toBe(false);
+  });
+});
+
+describe('mealProgress', () => {
+  it('counts slots with entries out of all slots, ignoring Other', () => {
+    const groups = [
+      { slotId: 'breakfast', entries: [1] },
+      { slotId: 'lunch', entries: [1, 2] },
+      { slotId: 'snack', entries: [] },
+      { slotId: 'dinner', entries: [] },
+      { slotId: 'workout', entries: [] },
+      { slotId: 'other', entries: [1] },
+    ];
+    expect(mealProgress(groups)).toEqual({ logged: 2, total: 5 });
+  });
+
+  it('is 0 of 0 with no slots', () => {
+    expect(mealProgress([])).toEqual({ logged: 0, total: 0 });
   });
 });

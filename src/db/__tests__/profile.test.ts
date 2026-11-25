@@ -100,6 +100,7 @@ describe('display name', () => {
     expect(normalizeDisplayName('   ')).toBeNull();
     expect(normalizeDisplayName('')).toBeNull();
     expect(normalizeDisplayName(null)).toBeNull();
+    expect(normalizeDisplayName('*Mi*hir*')).toBe('Mihir');
     expect(normalizeDisplayName('x'.repeat(50))).toBe('x'.repeat(MAX_NAME_LENGTH));
   });
 
