@@ -2,7 +2,7 @@
 
 **Read this first in a new session.** It says where MacroMend stands and what the owner still has to do. Update it at the end of every piece of work and commit it with the change.
 
-Last updated: 26 November 2026.
+Last updated: 26 November 2026. Open items: phone checks 1 to 3 and archiving `refresh-ui` (below).
 
 ## Where we are
 
@@ -19,7 +19,7 @@ Do these in order, with the newest APK:
 2. **Delete all my data** (Settings → About) and confirm. Check: onboarding starts in the new dark look; the first step asks "What should we call you? (optional)" and continues when it is left empty; Back keeps the typed name; AI providers are empty; the phone model is gone; searching "roti" on Log still finds it. After this the owner has to redo onboarding, add the AI key again and download the phone model again.
 3. Anything that looks wrong on the new screens (hard-to-read text, cut-off cards, tab bar covering content): send a screenshot.
 
-When these pass, archive `refresh-ui`: `openspec archive refresh-ui -y` (only when the owner says so).
+4. **Archive `refresh-ui`** (the last open OpenSpec change). Do this only after steps 1 to 3 pass and the owner says "archive it". Run `openspec archive refresh-ui -y` (it merges the change's requirements into `openspec/specs/` and moves it to `openspec/changes/archive/`), then `openspec validate --specs --strict`, update this file, commit as the owner and push to `main`. Never archive without the owner's say-so.
 
 ## Known limits
 
