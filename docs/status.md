@@ -9,6 +9,7 @@ Last updated: 26 November 2026. Open items: phone checks 1 to 3, archiving `refr
 - MacroMend is a working Android diet app (Expo + TypeScript), built entirely through OpenSpec changes.
 - All 8 original changes are built and **archived** (`openspec/changes/archive/`); their requirements are in `openspec/specs/` (18 specs).
 - **`refresh-ui`** (dark look, Today rings, floating tab bar, optional name) is **built and pushed but not archived yet**. The owner archives it after the phone checks, by saying "archive it".
+- `README.md` (repo front page) explains the app, privacy, installing the APK, running and building on a PC, project structure and workflows. Keep it in step when those change. No licence has been chosen yet (README says all rights reserved).
 - The owner tests only on an Android phone, using the APK from the "Android APK" GitHub Actions workflow (runs on every push to `main` that changes code; docs-only and OpenSpec-only pushes do not build).
 
 ## What the owner still has to do (phone checks)
