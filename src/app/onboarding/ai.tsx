@@ -7,6 +7,7 @@ import { completeOnboarding } from '@/db/profile';
 import { listProviders, type ProviderRow } from '@/db/providers';
 import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { formatBytes, isSupportedPhone, MODEL_SIZE_BYTES } from '@/phone/deviceSupport';
+import { startWithMobileDataPrompt } from '@/phone/startDownload';
 import { buildProfile, buildStaples } from '@/onboarding/buildProfile';
 import { useOnboardingDraft } from '@/onboarding/OnboardingDraft';
 import { ProviderEditor } from '@/ui/forms/ProviderEditor';
@@ -78,8 +79,7 @@ export default function AiStep() {
               variant="secondary"
               onPress={async () => {
                 setPhoneNote(null);
-                const r = await phone.start();
-                if (!r.started && 'check' in r) setPhoneNote(r.check.message);
+                setPhoneNote(await startWithMobileDataPrompt(phone.start));
               }}
             />
           ) : null}

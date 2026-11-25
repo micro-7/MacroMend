@@ -61,7 +61,8 @@ describe('starting', () => {
 
   it.each([
     ['not enough storage (2 GB free)', { freeStorageBytes: 2e9 }, 'low_storage'],
-    ['mobile data', { network: 'cellular' as const }, 'not_wifi'],
+    ['mobile data', { network: 'cellular' as const }, 'mobile_data'],
+    ['no connection', { network: 'none' as const }, 'no_connection'],
     ['a 6 GB phone', { totalMemoryBytes: 5.6 * GIB }, 'unsupported_phone'],
   ])('does not start with %s, and says why', async (_n, facts, reason) => {
     const { m, f } = setup(facts);
@@ -124,11 +125,12 @@ describe('interruptions and resuming', () => {
     expect(m.isReady()).toBe(true);
   });
 
-  it('resuming needs Wi-Fi again', async () => {
+  it('resuming on mobile data asks again, and starts once allowed', async () => {
     const store = memoryStore({ status: 'incomplete', progress: 0.5, files: [] });
     const { m } = setup({ network: 'cellular' }, store);
     await m.load();
-    expect(await m.start()).toMatchObject({ started: false, check: { reason: 'not_wifi' } });
+    expect(await m.start()).toMatchObject({ started: false, check: { reason: 'mobile_data' } });
+    expect(await m.start({ allowMobileData: true })).toEqual({ started: true });
   });
 
   it('treats a download that was running when the app closed as incomplete, with the Resume option', async () => {

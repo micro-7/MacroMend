@@ -5,6 +5,7 @@ import { useDb } from '@/db/DbContext';
 import { allProvidersOutOfQuota, listProviders } from '@/db/providers';
 import { usePhoneModel } from '@/phone/PhoneModelContext';
 import { formatBytes, isSupportedPhone, MODEL_SIZE_BYTES, NEEDED_STORAGE_BYTES, UNSUPPORTED_MESSAGE } from '@/phone/deviceSupport';
+import { startWithMobileDataPrompt } from '@/phone/startDownload';
 import { Button, ErrorText, Hint, SectionTitle } from '@/ui/kit';
 import { Screen } from '@/ui/Screen';
 import { colors } from '@/ui/theme';
@@ -35,8 +36,7 @@ export default function PhoneModelScreen() {
   const supported = facts ? isSupportedPhone(facts) : null;
   const download = async () => {
     setMessage(null);
-    const r = await phone.start();
-    if (!r.started && 'check' in r) setMessage(r.check.message);
+    setMessage(await startWithMobileDataPrompt(phone.start));
   };
 
   return (

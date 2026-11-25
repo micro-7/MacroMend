@@ -14,8 +14,8 @@ The app SHALL offer the phone model only when the phone reports about 8 GB of RA
 - **WHEN** the user opens Settings → Phone model
 - **THEN** the screen says the phone model is not supported and no download button is shown
 
-### Requirement: Optional download over Wi-Fi
-On supported phones the user SHALL be able to download Gemma 4 E2B in the app; the download SHALL require Wi-Fi, check that free storage is at least the model size plus 1 GB, show progress, and allow cancelling.
+### Requirement: Optional download
+On supported phones the user SHALL be able to download Gemma 4 E2B in the app; the download SHALL check that free storage is at least the model size plus 1 GB, show progress, and allow cancelling; on mobile data the app SHALL warn about the size and let the user choose to download anyway, and with no connection it SHALL not start.
 
 #### Scenario: Not enough storage
 - **GIVEN** the phone has 2 GB free
@@ -23,8 +23,12 @@ On supported phones the user SHALL be able to download Gemma 4 E2B in the app; t
 - **THEN** the app says how much space is needed and does not start the download
 
 #### Scenario: On mobile data
-- **WHEN** the user taps Download while not on Wi-Fi
-- **THEN** the app asks the user to connect to Wi-Fi and does not start
+- **WHEN** the user taps Download while on mobile data
+- **THEN** the app warns that the download is about 3 GB and may use their data plan, and starts only if the user chooses "Download anyway"
+
+#### Scenario: No connection
+- **WHEN** the user taps Download with no internet connection
+- **THEN** the app says there is no connection and does not start
 
 #### Scenario: Progress and cancel
 - **WHEN** a download is running

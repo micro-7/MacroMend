@@ -6,7 +6,7 @@ Cloud keys run out, networks drop and some users don't want their text leaving t
 
 ## What Changes
 
-- Optional in-app download of Gemma 4 E2B (about 2.4–3 GB) over Wi-Fi with progress, cancel, a free-storage check and a delete button. Not bundled in the APK.
+- Optional in-app download of Gemma 4 E2B (about 2.4–3 GB) with progress (a warning on mobile data), cancel, a free-storage check and a delete button. Not bundled in the APK.
 - Device check: the download is offered only on phones with about 8 GB RAM or more; others see "phone model not supported" and keep cloud keys plus manual pick.
 - The phone model joins the parsing chain after cloud providers: used when no cloud key is set, all cloud providers are out of quota for the day (cloud retried the next day), the phone is offline, or cloud requests time out.
 - "Always use phone model" privacy switch in Settings: no text is sent to cloud providers.

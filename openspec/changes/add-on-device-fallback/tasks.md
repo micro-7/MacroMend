@@ -3,7 +3,7 @@
 ## 1. Runtime setup
 
 - [x] 1.1 Check react-native-executorch's docs and changelog for the release supporting Expo SDK 58 / React Native 0.88 and the Gemma 4 E2B model constant; install it and its peers (`react-native-worklets`, `react-native-blob-util`) plus `expo-device` and `expo-file-system` with `npx expo install`; verify `npx expo-doctor` passes and the CI APK still builds. If unsupported, stop and report before continuing
-- [x] 1.2 Add `src/core/deviceSupport.ts` (RAM ≥ 7 GiB, free space ≥ model + 1 GB, Wi-Fi check) as pure functions over injected values; verify unit tests for 6 GB, 8 GB and low-storage cases
+- [x] 1.2 Add `src/core/deviceSupport.ts` (RAM ≥ 7 GiB, free space ≥ model + 1 GB, network check) as pure functions over injected values; verify unit tests for 6 GB, 8 GB and low-storage cases
 
 ## 2. Download and model management
 
@@ -25,9 +25,9 @@
 - [x] 5.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
 - [x] 5.2 Push to main and verify the GitHub Actions APK build succeeds
 
-Manual checks on your Android phone (install the new APK; you need about 4 GB free and Wi-Fi):
+Manual checks on your Android phone (install the new APK; you need about 4 GB free; Wi-Fi is best):
 1. Settings → Phone model. On a phone with less than 8 GB RAM it should say "not supported" — stop here and tell me. Otherwise it shows the download size.
-2. Turn Wi-Fi off and tap Download: it asks for Wi-Fi. Turn Wi-Fi on, tap Download: progress shows. Cancel it, then start again and let it finish (or turn Wi-Fi off midway and check Resume works).
+2. Turn Wi-Fi off (mobile data on) and tap Download: it warns that you are on mobile data and asks "Download anyway"; Cancel does nothing. Turn Wi-Fi on, tap Download: progress shows. Cancel it, then start again and let it finish (or turn Wi-Fi off midway and check Resume works).
 3. Run "Test phone model". Note the score (aim for most correct, e.g. 24/28 or better) and send me the failed sentences.
 4. Turn on airplane mode, type "do roti aur ek katori dal": the confirm list shows 2 roti and 1 katori dal and "Understood by: Phone model". Time how long it takes.
 5. Airplane mode off. Turn on "Always use phone model" and log something: it still says Phone model. Turn it off: the next log says your cloud provider.

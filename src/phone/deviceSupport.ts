@@ -22,7 +22,8 @@ export interface DeviceFacts {
   network: NetworkKind;
 }
 
-export type DownloadBlock = 'unsupported_phone' | 'low_storage' | 'not_wifi';
+/** `mobile_data` can be overridden by the user; the others cannot. */
+export type DownloadBlock = 'unsupported_phone' | 'low_storage' | 'no_connection' | 'mobile_data';
 
 export type DownloadCheck =
   | { ok: true }
@@ -48,7 +49,7 @@ export const UNSUPPORTED_MESSAGE = 'Phone model not supported on this phone';
 export const NEEDED_STORAGE_BYTES = MODEL_SIZE_BYTES + STORAGE_MARGIN_BYTES;
 
 /** Whether the download may start now, or what is in the way and how to fix it. */
-export function checkDownload(f: DeviceFacts): DownloadCheck {
+export function checkDownload(f: DeviceFacts, opts: { allowMobileData?: boolean } = {}): DownloadCheck {
   if (!isSupportedPhone(f)) return { ok: false, reason: 'unsupported_phone', message: UNSUPPORTED_MESSAGE };
   if (f.freeStorageBytes === null || f.freeStorageBytes < NEEDED_STORAGE_BYTES) {
     const have = f.freeStorageBytes === null ? 'unknown' : formatBytes(f.freeStorageBytes);
@@ -59,8 +60,15 @@ export function checkDownload(f: DeviceFacts): DownloadCheck {
       message: `Not enough free space. You need about ${formatBytes(NEEDED_STORAGE_BYTES)} free and have ${have}.`,
     };
   }
-  if (f.network !== 'wifi') {
-    return { ok: false, reason: 'not_wifi', message: `Connect to Wi-Fi to download the phone model (about ${formatBytes(MODEL_SIZE_BYTES)}).` };
+  if (f.network === 'none') {
+    return { ok: false, reason: 'no_connection', message: 'No internet connection. Connect to Wi-Fi or mobile data to download the phone model.' };
+  }
+  if (f.network === 'cellular' && !opts.allowMobileData) {
+    return {
+      ok: false,
+      reason: 'mobile_data',
+      message: `You are on mobile data. The phone model is about ${formatBytes(MODEL_SIZE_BYTES)} and may use a large part of your data plan. Download anyway?`,
+    };
   }
   return { ok: true };
 }

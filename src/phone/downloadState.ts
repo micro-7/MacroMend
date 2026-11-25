@@ -104,9 +104,9 @@ export class PhoneModelDownloads {
   }
 
   /** Start the download, or resume an interrupted one. Only starts when the phone supports it, has space and is on Wi-Fi. */
-  async start(): Promise<StartResult> {
+  async start(opts: { allowMobileData?: boolean } = {}): Promise<StartResult> {
     if (this.state.status === 'downloading') return { started: false, alreadyRunning: true };
-    const check = checkDownload(await this.deps.deviceFacts());
+    const check = checkDownload(await this.deps.deviceFacts(), opts);
     if (!check.ok) return { started: false, check };
 
     this.abort = new AbortController();

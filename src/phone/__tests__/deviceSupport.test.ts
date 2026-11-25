@@ -57,10 +57,19 @@ describe('checkDownload', () => {
     expect(checkDownload(phone({ freeStorageBytes: null }))).toMatchObject({ ok: false, reason: 'low_storage' });
   });
 
-  it.each(['cellular', 'other', 'none', 'unknown'] as const)('asks for Wi-Fi when on %s', (network) => {
-    const r = checkDownload(phone({ network }));
-    expect(r).toMatchObject({ ok: false, reason: 'not_wifi' });
-    expect(r.ok === false && r.message).toMatch(/Connect to Wi-Fi/);
+  it('warns about data use on mobile data, and goes ahead once the user agrees', () => {
+    const r = checkDownload(phone({ network: 'cellular' }));
+    expect(r).toMatchObject({ ok: false, reason: 'mobile_data' });
+    expect(r.ok === false && r.message).toMatch(/mobile data.*Download anyway\?/);
+    expect(checkDownload(phone({ network: 'cellular' }), { allowMobileData: true })).toEqual({ ok: true });
+  });
+
+  it('stops when there is no connection at all, even if mobile data was allowed', () => {
+    expect(checkDownload(phone({ network: 'none' }), { allowMobileData: true })).toMatchObject({ ok: false, reason: 'no_connection' });
+  });
+
+  it.each(['wifi', 'other', 'unknown'] as const)('does not ask anything on %s', (network) => {
+    expect(checkDownload(phone({ network }))).toEqual({ ok: true });
   });
 
   it('formats sizes for people', () => {

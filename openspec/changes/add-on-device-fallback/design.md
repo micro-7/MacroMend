@@ -26,7 +26,7 @@ Builds on the `Parser` interface, prompt with few-shot examples, zod schema, pro
 4. Otherwise cloud providers in order, then phone model, then manual pick.
 Cloud retries the next day happen automatically because quota skips expire at local midnight.
 
-**Device and download checks.** `expo-device` `totalMemory ≥ 7 GiB` (8 GB phones report roughly 7.2–7.6 GiB). `expo-file-system` free disk ≥ model size + 1 GB. `expo-network` type must be Wi-Fi. Download state (`none|downloading|incomplete|ready`) and bytes are stored in the `settings` table; the library's download API or `react-native-blob-util` provides progress and resume; files are verified by size before `ready`.
+**Device and download checks.** `expo-device` `totalMemory ≥ 7 GiB` (8 GB phones report roughly 7.2–7.6 GiB). `expo-file-system` free disk ≥ model size + 1 GB. `expo-network` type: on mobile data the user is warned and may choose to download anyway; with no connection it does not start. Download state (`none|downloading|incomplete|ready`) and bytes are stored in the `settings` table; the library's download API or `react-native-blob-util` provides progress and resume; files are verified by size before `ready`.
 
 **Self-test screen.** Settings → Phone model → "Test phone model" runs the shared fixture sentences sequentially, compares items by matched food id, quantity and unit, and shows the score and failures. This is how the spec's "20–30 real mixed sentences" check is done on the owner's phone.
 

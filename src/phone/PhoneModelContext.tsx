@@ -25,7 +25,7 @@ interface PhoneValue {
   /** "Always use phone model": nothing typed is sent to a cloud AI. */
   phoneOnly: boolean;
   setPhoneOnly: (on: boolean) => Promise<void>;
-  start: () => Promise<StartResult>;
+  start: (opts?: { allowMobileData?: boolean }) => Promise<StartResult>;
   cancel: () => Promise<void>;
   remove: () => Promise<void>;
   parser: PhoneParser;
@@ -109,9 +109,9 @@ export function PhoneModelProvider({ db, services = {}, children }: { db: Db; se
       refreshFacts,
       phoneOnly,
       setPhoneOnly,
-      start: async () => {
+      start: async (opts) => {
         await refreshFacts();
-        return downloads.start();
+        return downloads.start(opts);
       },
       cancel: () => downloads.cancel(),
       remove: async () => {
