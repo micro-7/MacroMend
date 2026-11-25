@@ -25,8 +25,3 @@ The first reading after the phone model has been idle takes about a minute becau
 
 - Idea: show "Loading the phone model, the first reading can take about a minute" while it loads, and a "Load now" button in Settings → Phone model.
 - Idea: try the Vulkan (graphics chip) version of the model if the normal one is too slow on some phones.
-
-## Other ideas
-
-- IFCT 2017 values for Indian foods, only after written permission from the National Institute of Nutrition (see `docs/food-data-sources.md`).
-- Closer check of curry and street-food values, which have no USDA match.
