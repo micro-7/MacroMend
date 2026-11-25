@@ -21,7 +21,7 @@
 ## 4. Test this phase
 
 - [x] 4.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 4.2 Push to main and verify the GitHub Actions APK build succeeds
+- [x] 4.2 Push to main and verify the GitHub Actions APK build succeeds
 
 Manual checks on your Android phone (install the new APK; get a free key from Google AI Studio or console.groq.com first):
 1. Settings → AI providers → add Groq (or Gemini), paste the key, tap Test: it says OK. Reopen it: the key is masked except the last 4 characters, and the privacy note is shown.
