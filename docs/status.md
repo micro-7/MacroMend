@@ -22,6 +22,10 @@ Do these in order, with the newest APK:
 
 4. **Archive `refresh-ui`** (the last open OpenSpec change). Do this only after steps 1 to 3 pass and the owner says "archive it". Run `openspec archive refresh-ui -y` (it merges the change's requirements into `openspec/specs/` and moves it to `openspec/changes/archive/`), then `openspec validate --specs --strict`, update this file, commit as the owner and push to `main`. Never archive without the owner's say-so.
 
+### If something breaks after the lint clean-up
+
+Commit `0cfb8b3` ("Add MIT licence, package.json details and ESLint; fix lint findings") changed how a few screens reset themselves (no behaviour change intended): Today/profile loading at start, the database "Try again" button, the food picker on the confirm screen, "Search online" starting fresh each time, and clearing a Fix my day swap after a log or shuffle. The owner did a quick check and saw no issue. If one of these misbehaves, look at that commit first; each fix is small and can be reverted on its own.
+
 ### Earlier checks the owner may not have confirmed (do them if not done yet)
 
 - **Online food lookup:** save the AI-estimated butter chicken, then Settings → My foods → edit it, tick "values checked", save; a new log of it should no longer show "est.". Settings → Food lookup → switch off: an unknown food must not search online. Airplane mode + unknown food: "online search needs internet".
