@@ -90,6 +90,10 @@ export const MIGRATIONS: string[] = [
     value TEXT NOT NULL
   );
   `,
+  // v4: an optional display name, used for the greeting on Today.
+  `
+  ALTER TABLE profile ADD COLUMN name TEXT;
+  `,
 ];
 
 /**

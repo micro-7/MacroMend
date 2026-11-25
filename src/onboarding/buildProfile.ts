@@ -4,7 +4,7 @@ import { validateUsualQty } from '../core/staples';
 import type { Goal } from '../core/targets';
 import { resolveTargets, type TargetsDraft } from '../core/targetsDraft';
 import type { FoodRow } from '../db/foods';
-import type { Profile } from '../db/profile';
+import { normalizeDisplayName, type Profile } from '../db/profile';
 import type { StapleInput } from '../db/staples';
 
 /** A ticked staple while it is being edited; quantity is still text. */
@@ -16,6 +16,8 @@ export interface StapleDraft {
 export type BuildResult<T> = { ok: true; value: T } | { ok: false; error: string };
 
 export interface ProfileDraft {
+  /** What to call the user; may be empty. */
+  name?: string;
   goal: Goal | null;
   targets: TargetsDraft;
   dietType: DietType | null;
@@ -46,6 +48,7 @@ export function buildProfile(d: ProfileDraft): BuildResult<Omit<Profile, 'onboar
   return {
     ok: true,
     value: {
+      name: normalizeDisplayName(d.name),
       goal: d.goal,
       dietType: d.dietType,
       weightKg: haveBody ? weight : null,

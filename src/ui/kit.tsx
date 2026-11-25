@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from './theme';
+import { Title } from './Title';
+import { fonts, palette, radius, space } from './theme';
 
 export function Button({
   label,
@@ -11,7 +12,8 @@ export function Button({
 }: {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
+  /** `light` is the white pill used on the green hero card. */
+  variant?: 'primary' | 'secondary' | 'danger' | 'light';
   disabled?: boolean;
 }) {
   return (
@@ -20,9 +22,9 @@ export function Button({
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
-      style={[styles.button, styles[variant], disabled && styles.disabled]}
+      style={({ pressed }) => [styles.button, styles[variant], pressed && styles.pressed, disabled && styles.disabled]}
     >
-      <Text style={[styles.buttonText, variant === 'secondary' && { color: colors.primary }, variant === 'danger' && { color: colors.danger }]}>
+      <Text style={[styles.buttonText, variant === 'secondary' && { color: palette.brandBright }, variant === 'danger' && { color: palette.danger }, variant === 'light' && { color: palette.bg }]}>
         {label}
       </Text>
     </Pressable>
@@ -45,7 +47,7 @@ export function OptionRow({
       accessibilityRole="radio"
       accessibilityState={{ selected }}
       onPress={onPress}
-      style={[styles.option, selected && styles.optionSelected]}
+      style={({ pressed }) => [styles.option, selected && styles.optionSelected, pressed && styles.pressed]}
     >
       <View style={[styles.radio, selected && styles.radioOn]} />
       <View style={{ flex: 1 }}>
@@ -67,8 +69,8 @@ export function Field({
       <Text style={styles.fieldLabel}>{label}</Text>
       <View style={styles.inputWrap}>
         <TextInput
-          placeholderTextColor={colors.muted}
-          style={[styles.input, error ? { borderColor: colors.danger } : null]}
+          placeholderTextColor={palette.muted}
+          style={[styles.input, error ? { borderColor: palette.danger } : null]}
           {...input}
         />
         {suffix ? <Text style={styles.suffix}>{suffix}</Text> : null}
@@ -115,7 +117,7 @@ export function StepScreen({
   const body = (
     <>
       {step ? <Text style={styles.step}>{step}</Text> : null}
-      <Text style={styles.title}>{title}</Text>
+      <Title style={styles.title}>{title}</Title>
       {children}
     </>
   );
@@ -146,50 +148,54 @@ export function StepScreen({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
-  scroll: { padding: 20, paddingBottom: 12 },
-  step: { color: colors.muted, fontSize: 13, marginBottom: 4 },
-  title: { fontSize: 26, fontWeight: '700', color: colors.text, marginBottom: 16 },
-  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border, gap: 8 },
-  footerRow: { flexDirection: 'row', gap: 12 },
-  button: { paddingVertical: 13, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  primary: { backgroundColor: colors.primary },
-  secondary: { backgroundColor: colors.surface },
-  danger: { backgroundColor: colors.surface },
+  safe: { flex: 1, backgroundColor: palette.bg },
+  scroll: { padding: space.xl, paddingBottom: space.md },
+  step: { color: palette.muted, fontFamily: fonts.medium, fontSize: 13, marginBottom: space.xs },
+  title: { marginBottom: space.lg },
+  footer: { padding: space.lg, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: palette.border, gap: space.sm, backgroundColor: palette.bg },
+  footerRow: { flexDirection: 'row', gap: space.md },
+  button: { paddingVertical: 14, paddingHorizontal: space.lg, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
+  primary: { backgroundColor: palette.brand },
+  secondary: { backgroundColor: palette.cardHigh },
+  danger: { backgroundColor: palette.cardHigh },
+  light: { backgroundColor: '#FFFFFF' },
+  pressed: { opacity: 0.85, transform: [{ scale: 0.98 }] },
   disabled: { opacity: 0.4 },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+  buttonText: { color: palette.onBrand, fontFamily: fonts.semibold, fontSize: 16 },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: space.md,
     padding: 14,
-    borderRadius: 12,
+    borderRadius: radius.card,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: palette.border,
+    backgroundColor: palette.card,
     marginBottom: 10,
   },
-  optionSelected: { borderColor: colors.primary, backgroundColor: '#EEF6EE' },
-  radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: colors.muted },
-  radioOn: { borderColor: colors.primary, backgroundColor: colors.primary },
-  optionLabel: { fontSize: 16, fontWeight: '600', color: colors.text },
-  optionDesc: { fontSize: 13, color: colors.muted, marginTop: 2 },
-  fieldLabel: { fontSize: 14, color: colors.muted, marginBottom: 6 },
-  inputWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  optionSelected: { borderColor: palette.brandBright, backgroundColor: palette.cardHigh },
+  radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: palette.muted },
+  radioOn: { borderColor: palette.brandBright, backgroundColor: palette.brandBright },
+  optionLabel: { fontSize: 16, fontFamily: fonts.semibold, color: palette.text },
+  optionDesc: { fontSize: 13, fontFamily: fonts.body, color: palette.muted, marginTop: 2 },
+  fieldLabel: { fontSize: 14, fontFamily: fonts.medium, color: palette.muted, marginBottom: 6 },
+  inputWrap: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderColor: palette.border,
+    borderRadius: radius.input,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 16,
-    color: colors.text,
-    backgroundColor: '#fff',
+    fontFamily: fonts.body,
+    color: palette.text,
+    backgroundColor: palette.card,
   },
-  suffix: { color: colors.muted, fontSize: 15, minWidth: 28 },
-  error: { color: colors.danger, fontSize: 13, marginTop: 4 },
-  hint: { color: colors.muted, fontSize: 13, marginBottom: 12, lineHeight: 18 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 8, marginBottom: 8 },
+  suffix: { color: palette.muted, fontFamily: fonts.body, fontSize: 15, minWidth: 28 },
+  error: { color: palette.danger, fontFamily: fonts.body, fontSize: 13, marginTop: 4 },
+  hint: { color: palette.muted, fontFamily: fonts.body, fontSize: 13, marginBottom: space.md, lineHeight: 19 },
+  sectionTitle: { fontSize: 16, fontFamily: fonts.semibold, color: palette.text, marginTop: space.sm, marginBottom: space.sm },
 });
 
 export function Chip({ label, hint, selected, onPress }: { label: string; hint?: string; selected: boolean; onPress: () => void }) {
@@ -198,17 +204,17 @@ export function Chip({ label, hint, selected, onPress }: { label: string; hint?:
       accessibilityRole="radio"
       accessibilityState={{ selected }}
       onPress={onPress}
-      style={[chipStyles.chip, selected && chipStyles.on]}
+      style={({ pressed }) => [chipStyles.chip, selected && chipStyles.on, pressed && styles.pressed]}
     >
-      <Text style={[chipStyles.text, selected && { color: '#fff' }]}>{label}</Text>
+      <Text style={[chipStyles.text, selected && { color: palette.onBrand }]}>{label}</Text>
       {hint ? <Text style={[chipStyles.hint, selected && { color: '#E6F2E6' }]}>{hint}</Text> : null}
     </Pressable>
   );
 }
 
 const chipStyles = StyleSheet.create({
-  chip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 18, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  on: { backgroundColor: colors.primary, borderColor: colors.primary },
-  text: { color: colors.text, fontSize: 14 },
-  hint: { color: colors.muted, fontSize: 11 },
+  chip: { paddingHorizontal: 14, paddingVertical: 9, borderRadius: radius.pill, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.border },
+  on: { backgroundColor: palette.brand, borderColor: palette.brand },
+  text: { color: palette.text, fontFamily: fonts.medium, fontSize: 14 },
+  hint: { color: palette.muted, fontFamily: fonts.body, fontSize: 11 },
 });

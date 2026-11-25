@@ -23,10 +23,12 @@ describe('migration v2', () => {
     const db = createTestDb();
     await migrate(db, MIGRATIONS.slice(0, 1));
     await seedCatalog(db);
-    await completeOnboarding(db, {
-      goal: 'cut', dietType: 'veg', weightKg: null, heightCm: null, age: null, sex: null, activity: null,
-      kcalTarget: 1800, proteinTargetG: 120, slots: DEFAULT_SLOTS,
-    }, [{ foodId: 'in-roti', usualQty: 2, usualUnit: 'piece' }]);
+    // Written with plain SQL: this is a v1 database, which has no name column yet.
+    await db.run(
+      "INSERT INTO profile (id, goal, diet_type, kcal_target, protein_target_g, slots, onboarded_at) VALUES (1, 'cut', 'veg', 1800, 120, ?, '2026-11-25T10:00:00.000Z')",
+      [JSON.stringify(DEFAULT_SLOTS)],
+    );
+    await db.run("INSERT INTO staples (food_id, usual_qty, usual_unit) VALUES ('in-roti', 2, 'piece')");
     await db.run("INSERT INTO logs (date, slot, food_id, qty, unit, grams, kcal, protein_g, estimated, created_at) VALUES ('2026-11-25','lunch','in-roti',2,'piece',80,238,7.8,0,'x')");
     await migrate(db);
     expect((await getProfile(db))?.kcalTarget).toBe(1800);

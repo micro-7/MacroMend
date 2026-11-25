@@ -7,6 +7,8 @@ import type { StapleDraft } from './buildProfile';
 
 /** Everything the user has chosen so far. Kept in memory only; saved in one go on the last step. */
 export interface OnboardingDraft {
+  /** What to call the user (optional). */
+  name: string;
   goal: Goal | null;
   targets: TargetsDraft;
   dietType: DietType | null;
@@ -15,6 +17,7 @@ export interface OnboardingDraft {
 }
 
 const INITIAL: OnboardingDraft = {
+  name: '',
   goal: null,
   targets: EMPTY_TARGETS_DRAFT,
   dietType: null,

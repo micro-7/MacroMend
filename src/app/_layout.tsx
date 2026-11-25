@@ -1,3 +1,5 @@
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, View } from 'react-native';
@@ -7,6 +9,7 @@ import { DbProvider } from '@/db/DbContext';
 import { ProfileProvider, useProfile } from '@/db/ProfileContext';
 import { PhoneModelProvider } from '@/phone/PhoneModelContext';
 import { useAppDatabase } from '@/db/useAppDatabase';
+import { useAppFonts } from '@/ui/useAppFonts';
 import { ErrorScreen } from '@/ui/ErrorScreen';
 import { colors } from '@/ui/theme';
 
@@ -29,8 +32,16 @@ function Routes() {
   );
 }
 
+// Keep the splash screen up until the fonts are ready, so headings never flash in the wrong font.
+SplashScreen.preventAutoHideAsync().catch(() => undefined);
+
 export default function RootLayout() {
   const { state, retry } = useAppDatabase();
+  const fontsReady = useAppFonts();
+  useEffect(() => {
+    if (fontsReady) SplashScreen.hideAsync().catch(() => undefined);
+  }, [fontsReady]);
+  if (!fontsReady) return null;
 
   if (state.status === 'error') return <ErrorScreen message={state.message} onRetry={retry} />;
   if (state.status === 'loading') {
@@ -47,7 +58,7 @@ export default function RootLayout() {
         <DayProvider db={state.db}>
           <PhoneModelProvider db={state.db}>
             <ParseSessionProvider>
-              <StatusBar style="dark" />
+              <StatusBar style="light" />
               <Routes />
             </ParseSessionProvider>
           </PhoneModelProvider>

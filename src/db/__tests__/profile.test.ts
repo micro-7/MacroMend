@@ -1,7 +1,10 @@
 import { DEFAULT_SLOTS } from '../../core/slots';
 import { seedCatalog } from '../foods';
 import { migrate } from '../migrations';
-import { completeOnboarding, getProfile, needsOnboarding, saveProfile, type Profile } from '../profile';
+import { MAX_NAME_LENGTH, completeOnboarding, getProfile, needsOnboarding, normalizeDisplayName, saveProfile, type Profile } from '../profile';
+import { MIGRATIONS } from '../migrations';
+import { memoryKeyStore } from '../../ai/keyStore';
+import { wipeAllData } from '../wipe';
 import { listStaples } from '../staples';
 import { createTestDb } from '../testDb';
 
@@ -50,7 +53,7 @@ describe('profile storage', () => {
       new Date('2026-11-25T10:00:00.000Z'),
     );
     const p = await getProfile(db);
-    expect(p).toEqual({ ...base, onboardedAt: '2026-11-25T10:00:00.000Z' });
+    expect(p).toEqual({ ...base, name: null, onboardedAt: '2026-11-25T10:00:00.000Z' });
     expect(needsOnboarding(p)).toBe(false);
     const staples = await listStaples(db);
     expect(staples.map((s) => [s.foodId, s.usualQty, s.usualUnit])).toEqual([
@@ -88,5 +91,45 @@ describe('profile storage', () => {
     expect(after?.dietType).toBe('non-veg');
     expect(after?.weightKg).toBe(72);
     expect(after?.onboardedAt).toBe('2026-11-25T10:00:00.000Z');
+  });
+});
+
+describe('display name', () => {
+  it('trims, turns blank into no name, and cuts at the length limit', () => {
+    expect(normalizeDisplayName('  Mihir  ')).toBe('Mihir');
+    expect(normalizeDisplayName('   ')).toBeNull();
+    expect(normalizeDisplayName('')).toBeNull();
+    expect(normalizeDisplayName(null)).toBeNull();
+    expect(normalizeDisplayName('x'.repeat(50))).toBe('x'.repeat(MAX_NAME_LENGTH));
+  });
+
+  it('is saved with the profile and can be changed or cleared later', async () => {
+    const db = await freshDb();
+    await completeOnboarding(db, { ...base, name: ' Mihir ' }, [], new Date('2026-11-25T10:00:00.000Z'));
+    expect((await getProfile(db))?.name).toBe('Mihir');
+    await saveProfile(db, { ...(await getProfile(db))!, name: 'Mihir T' });
+    expect((await getProfile(db))?.name).toBe('Mihir T');
+    await saveProfile(db, { ...(await getProfile(db))!, name: '   ' });
+    expect((await getProfile(db))?.name).toBeNull();
+  });
+
+  it('upgrades a v3 database and keeps the profile, with no name', async () => {
+    const db = createTestDb();
+    await migrate(db, MIGRATIONS.slice(0, 3));
+    await db.run(
+      "INSERT INTO profile (id, goal, diet_type, kcal_target, protein_target_g, slots, onboarded_at) VALUES (1, 'cut', 'veg', 1800, 120, ?, '2026-11-25T10:00:00.000Z')",
+      [JSON.stringify(DEFAULT_SLOTS)],
+    );
+    await migrate(db);
+    const p = await getProfile(db);
+    expect(p).toMatchObject({ kcalTarget: 1800, goal: 'cut', name: null });
+    expect((await db.getFirst<{ user_version: number }>('PRAGMA user_version'))?.user_version).toBe(MIGRATIONS.length);
+  });
+
+  it('is removed with everything else by "Delete all my data"', async () => {
+    const db = await freshDb();
+    await completeOnboarding(db, { ...base, name: 'Mihir' }, []);
+    await wipeAllData(db, { keys: memoryKeyStore(), deleteModel: async () => {} });
+    expect(await getProfile(db)).toBeNull();
   });
 });

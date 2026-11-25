@@ -5,12 +5,12 @@ import type { Goal } from '@/core/targets';
 import type { DietType } from '@/core/diet';
 import { useDb } from '@/db/DbContext';
 import { useProfile } from '@/db/ProfileContext';
-import { saveProfile, type Profile } from '@/db/profile';
+import { MAX_NAME_LENGTH, saveProfile, type Profile } from '@/db/profile';
 import { buildProfile } from '@/onboarding/buildProfile';
 import { DietForm } from '@/ui/forms/DietForm';
 import { GoalForm } from '@/ui/forms/GoalForm';
 import { TargetsForm } from '@/ui/forms/TargetsForm';
-import { SectionTitle, StepScreen } from '@/ui/kit';
+import { Field, SectionTitle, StepScreen } from '@/ui/kit';
 
 /** Start the form from what is saved: calculating if body details exist, otherwise typing. */
 function toTargetsDraft(p: Profile): TargetsDraft {
@@ -31,6 +31,7 @@ export default function ProfileSettings() {
   const router = useRouter();
   const db = useDb();
   const { profile, reload } = useProfile();
+  const [name, setName] = useState(profile?.name ?? '');
   const [goal, setGoal] = useState<Goal | null>(profile?.goal ?? null);
   const [dietType, setDietType] = useState<DietType | null>(profile?.dietType ?? null);
   const [targets, setTargets] = useState<TargetsDraft | null>(profile ? toTargetsDraft(profile) : null);
@@ -42,7 +43,7 @@ export default function ProfileSettings() {
   const result = resolveTargets(targets, goal ?? profile.goal);
 
   const save = async () => {
-    const built = buildProfile({ goal, dietType, targets, slots: profile.slots });
+    const built = buildProfile({ name, goal, dietType, targets, slots: profile.slots });
     if (!built.ok) {
       setShowErrors(true);
       return setError(built.error);
@@ -61,6 +62,16 @@ export default function ProfileSettings() {
 
   return (
     <StepScreen title="Profile & targets" onNext={save} nextLabel={saving ? 'Saving…' : 'Save'} nextDisabled={saving} error={error}>
+      <Field
+        label="Your name (optional)"
+        value={name}
+        onChangeText={setName}
+        placeholder="What should we call you?"
+        maxLength={MAX_NAME_LENGTH}
+        autoCapitalize="words"
+        autoCorrect={false}
+        accessibilityLabel="Your name (optional)"
+      />
       <SectionTitle>Goal</SectionTitle>
       <GoalForm value={goal} onChange={setGoal} />
       <SectionTitle>Daily targets</SectionTitle>

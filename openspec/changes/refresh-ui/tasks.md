@@ -2,17 +2,17 @@
 
 ## 1. Foundations
 
-- [ ] 1.1 Install `react-native-svg`, `@expo/vector-icons`, `expo-font`, `expo-haptics`, `@expo-google-fonts/instrument-serif` and `@expo-google-fonts/inter` at Expo SDK 58 versions; verify `npx expo-doctor` passes and `npx expo export --platform android` bundles
-- [ ] 1.2 Replace `src/ui/theme.ts` with design tokens (colour roles, spacing, radii, type scale) keeping the old names as aliases; verify a unit test checks every text/background pair has at least 4.5:1 contrast (3:1 for large headings)
-- [ ] 1.3 Load the fonts in the root layout behind the splash screen with a fallback timeout; set `userInterfaceStyle: "dark"`, a dark splash background and light status bar; verify the app starts offline in a test render and `npx expo config --type public` shows the dark settings
-- [ ] 1.4 Build shared components (Screen, Title with `*italic*` words, Card, HeroCard, Button variants, Chip, Field, SectionHeader, EmptyState, ProgressBar, ProgressRing with animation, press feedback) and a `logHaptic()` helper that never throws; verify render tests for Title italics, ProgressRing values (0%, 50%, over 100%) and Button press states
-- [ ] 1.5 Replace the tab bar with the floating pill bar (line icons, labels, animated coral circle on the active tab, same accessibility labels); verify a render test that the active tab is marked and tapping switches tabs
+- [x] 1.1 Install `react-native-svg`, `@expo/vector-icons`, `expo-font`, `expo-haptics`, `@expo-google-fonts/instrument-serif` and `@expo-google-fonts/inter` at Expo SDK 58 versions; verify `npx expo-doctor` passes and `npx expo export --platform android` bundles
+- [x] 1.2 Replace `src/ui/theme.ts` with design tokens (colour roles, spacing, radii, type scale) keeping the old names as aliases; verify a unit test checks every text/background pair has at least 4.5:1 contrast (3:1 for large headings)
+- [x] 1.3 Load the fonts in the root layout behind the splash screen with a fallback timeout; set `userInterfaceStyle: "dark"`, a dark splash background and light status bar; verify the app starts offline in a test render and `npx expo config --type public` shows the dark settings
+- [x] 1.4 Build shared components (Screen, Title with `*italic*` words, Card, HeroCard, Button variants, Chip, Field, SectionHeader, EmptyState, ProgressBar, ProgressRing with animation, press feedback) and a `logHaptic()` helper that never throws; verify render tests for Title italics, ProgressRing values (0%, 50%, over 100%) and Button press states
+- [x] 1.5 Replace the tab bar with the floating pill bar (line icons, labels, animated coral circle on the active tab, same accessibility labels); verify a render test that the active tab is marked and tapping switches tabs
 
 ## 2. Name and greeting
 
-- [ ] 2.1 Add migration v4 (`profile.name`), `Profile.name` (trimmed, max 30, blank → null) and save/load; verify tests for upgrade from v3 with data kept, blank-to-null, the 30-character limit, and that `wipeAllData` clears it
-- [ ] 2.2 Add `greeting(date, name)` (morning before 12:00, afternoon before 17:00, evening otherwise); verify unit tests at 09:00, 13:00 and 19:30 with and without a name
-- [ ] 2.3 Add the optional "What should we call you?" field to the onboarding goal step and to Settings → Profile & targets; verify onboarding tests that an empty name does not block Next and that Back keeps the name
+- [x] 2.1 Add migration v4 (`profile.name`), `Profile.name` (trimmed, max 30, blank → null) and save/load; verify tests for upgrade from v3 with data kept, blank-to-null, the 30-character limit, and that `wipeAllData` clears it
+- [x] 2.2 Add `greeting(date, name)` (morning before 12:00, afternoon before 17:00, evening otherwise); verify unit tests at 09:00, 13:00 and 19:30 with and without a name
+- [x] 2.3 Add the optional "What should we call you?" field to the onboarding goal step and to Settings → Profile & targets; verify onboarding tests that an empty name does not block Next and that Back keeps the name
 
 ## 3. Today
 

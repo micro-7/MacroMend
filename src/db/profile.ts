@@ -4,7 +4,18 @@ import type { Activity, Goal, Sex } from '../core/targets';
 import type { Db } from './db';
 import { writeStaples, type StapleInput } from './staples';
 
+/** The longest display name kept. */
+export const MAX_NAME_LENGTH = 30;
+
+/** Trim a typed name; blank becomes no name, and it is cut at the length limit. */
+export function normalizeDisplayName(raw: string | null | undefined): string | null {
+  const t = (raw ?? '').trim().slice(0, MAX_NAME_LENGTH).trim();
+  return t === '' ? null : t;
+}
+
 export interface Profile {
+  /** What to call the user in the greeting; stays on the phone. */
+  name?: string | null;
   goal: Goal;
   dietType: DietType;
   weightKg: number | null;
@@ -20,6 +31,7 @@ export interface Profile {
 }
 
 interface ProfileRow {
+  name: string | null;
   goal: Goal;
   diet_type: DietType;
   weight_kg: number | null;
@@ -37,6 +49,7 @@ export async function getProfile(db: Db): Promise<Profile | null> {
   const r = await db.getFirst<ProfileRow>('SELECT * FROM profile WHERE id = 1');
   if (!r) return null;
   return {
+    name: r.name,
     goal: r.goal,
     dietType: r.diet_type,
     weightKg: r.weight_kg,
@@ -59,14 +72,14 @@ export function needsOnboarding(profile: Profile | null): boolean {
 /** Insert or replace the single profile row. */
 export async function saveProfile(db: Db, p: Profile): Promise<void> {
   await db.run(
-    `INSERT INTO profile (id, goal, diet_type, weight_kg, height_cm, age, sex, activity, kcal_target, protein_target_g, slots, onboarded_at)
-     VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `INSERT INTO profile (id, name, goal, diet_type, weight_kg, height_cm, age, sex, activity, kcal_target, protein_target_g, slots, onboarded_at)
+     VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT(id) DO UPDATE SET
-       goal = excluded.goal, diet_type = excluded.diet_type, weight_kg = excluded.weight_kg,
+       name = excluded.name, goal = excluded.goal, diet_type = excluded.diet_type, weight_kg = excluded.weight_kg,
        height_cm = excluded.height_cm, age = excluded.age, sex = excluded.sex, activity = excluded.activity,
        kcal_target = excluded.kcal_target, protein_target_g = excluded.protein_target_g,
        slots = excluded.slots, onboarded_at = excluded.onboarded_at`,
-    [p.goal, p.dietType, p.weightKg, p.heightCm, p.age, p.sex, p.activity, p.kcalTarget, p.proteinTargetG, JSON.stringify(p.slots), p.onboardedAt],
+    [normalizeDisplayName(p.name), p.goal, p.dietType, p.weightKg, p.heightCm, p.age, p.sex, p.activity, p.kcalTarget, p.proteinTargetG, JSON.stringify(p.slots), p.onboardedAt],
   );
 }
 

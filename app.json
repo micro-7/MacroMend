@@ -32,10 +32,12 @@
           "image": "./assets/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#FFFFFF"
+          "backgroundColor": "#121212"
         }
       ],
       "./plugins/withReleaseSigning"
-    ]
+    ],
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#121212"
   }
 }

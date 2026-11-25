@@ -1,18 +1,12 @@
-import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
-import { colors } from '@/ui/theme';
-
-const icon = (glyph: string) =>
-  function TabIcon() {
-    return <Text style={{ fontSize: 20 }}>{glyph}</Text>;
-  };
+import { Tabs } from 'expo-router/js-tabs';
+import { FloatingTabBar } from '@/ui/FloatingTabBar';
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: colors.primary }}>
-      <Tabs.Screen name="index" options={{ title: 'Today', tabBarIcon: icon('🏠') }} />
-      <Tabs.Screen name="log" options={{ title: 'Log', tabBarIcon: icon('📝') }} />
-      <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: icon('⚙️') }} />
+    <Tabs tabBar={(props) => <FloatingTabBar {...props} />} screenOptions={{ headerShown: false }}>
+      <Tabs.Screen name="index" options={{ title: 'Today' }} />
+      <Tabs.Screen name="log" options={{ title: 'Log' }} />
+      <Tabs.Screen name="settings" options={{ title: 'Settings' }} />
     </Tabs>
   );
 }

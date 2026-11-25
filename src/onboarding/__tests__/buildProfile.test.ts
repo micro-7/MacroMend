@@ -21,10 +21,16 @@ describe('buildProfile', () => {
     expect(r).toEqual({
       ok: true,
       value: {
-        goal: 'cut', dietType: 'veg', weightKg: 75, heightCm: 175, age: 30, sex: 'male', activity: 'moderate',
+        name: null, goal: 'cut', dietType: 'veg', weightKg: 75, heightCm: 175, age: 30, sex: 'male', activity: 'moderate',
         kcalTarget: 2110, proteinTargetG: 150, slots: DEFAULT_SLOTS,
       },
     });
+  });
+
+  it('keeps a trimmed name, and no name when it is blank', () => {
+    expect(buildProfile({ ...calculating, name: '  Mihir ' })).toMatchObject({ ok: true, value: { name: 'Mihir' } });
+    expect(buildProfile({ ...calculating, name: '   ' })).toMatchObject({ ok: true, value: { name: null } });
+    expect(buildProfile({ ...calculating, name: 'x'.repeat(40) })).toMatchObject({ ok: true, value: { name: 'x'.repeat(30) } });
   });
 
   it('uses typed targets and stores null body details when none were given', () => {
