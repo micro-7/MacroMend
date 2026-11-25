@@ -60,6 +60,8 @@ IFCT**, and none was changed to match IFCT. The About screen does not credit IFC
 wants IFCT-based values, write to NIN (contact on the book's copyright page: nin@ap.nic.in) and get a written
 yes first.
 
+**Owner decision (2026-11-25): the USDA-only check is accepted; IFCT permission is not being sought for now.**
+
 **What was checked instead.** All 155 rows in `indian.ts` and all 72 rows in `global.ts` were reviewed against
 the real USDA FoodData Central rows in `usda.ts` (public domain) and standard USDA reference values for the same
 or the closest food (cooked rice, cooked lentils and beans, chicken, fish, eggs, dairy, oils, flours, fruit,
