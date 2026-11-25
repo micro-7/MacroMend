@@ -30,7 +30,7 @@
 ## 5. Test this phase
 
 - [x] 5.1 Run `npx tsc --noEmit`, `npm test` and `npx expo-doctor`; verify all pass
-- [ ] 5.2 Push to main and verify the "Android APK" GitHub Actions run succeeds and uploads `macromend-apk`
+- [x] 5.2 Push to main and verify the "Android APK" GitHub Actions run succeeds and uploads `macromend-apk`
 
 Manual checks on your Android phone (install the APK from the GitHub Actions run):
 1. Turn on airplane mode, then install and open the APK. The app opens with no sign-in and no error.
