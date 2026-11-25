@@ -5,6 +5,8 @@ import { useDb } from '@/db/DbContext';
 import { useProfile } from '@/db/ProfileContext';
 import { completeOnboarding } from '@/db/profile';
 import { listProviders, type ProviderRow } from '@/db/providers';
+import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
+import { formatBytes, isSupportedPhone, MODEL_SIZE_BYTES } from '@/phone/deviceSupport';
 import { buildProfile, buildStaples } from '@/onboarding/buildProfile';
 import { useOnboardingDraft } from '@/onboarding/OnboardingDraft';
 import { ProviderEditor } from '@/ui/forms/ProviderEditor';
@@ -21,6 +23,9 @@ export default function AiStep() {
   const [adding, setAdding] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const phone = usePhoneModelOptional();
+  const phoneSupported = !!phone?.facts && isSupportedPhone(phone.facts);
+  const [phoneNote, setPhoneNote] = useState<string | null>(null);
 
   const load = useCallback(async () => setProviders(await listProviders(db)), [db]);
   useEffect(() => {
@@ -58,6 +63,30 @@ export default function AiStep() {
         stays on this phone. You can skip this and add it later in Settings; searching and picking foods always works.
       </Hint>
 
+      {phone && phoneSupported ? (
+        <View style={styles.phoneBox}>
+          <Text style={styles.name}>Phone model (no internet or key)</Text>
+          <Text style={styles.model}>
+            Your phone can run an AI model itself. It is a one-time download of about {formatBytes(MODEL_SIZE_BYTES)} on Wi-Fi; you can also do it later in
+            Settings.
+          </Text>
+          {phone.state.status === 'downloading' ? <Text style={styles.model}>Downloading… {Math.round(phone.state.progress * 100)}%. It keeps going after you finish; keep the app open.</Text> : null}
+          {phone.state.status === 'ready' ? <Text style={styles.model}>Downloaded and ready.</Text> : null}
+          {phone.state.status === 'none' || phone.state.status === 'incomplete' ? (
+            <Button
+              label={phone.state.status === 'incomplete' ? 'Resume download' : 'Download phone model'}
+              variant="secondary"
+              onPress={async () => {
+                setPhoneNote(null);
+                const r = await phone.start();
+                if (!r.started && 'check' in r) setPhoneNote(r.check.message);
+              }}
+            />
+          ) : null}
+          {phoneNote ? <Text style={styles.note}>{phoneNote}</Text> : null}
+        </View>
+      ) : null}
+
       {providers.map((p) => (
         <View key={p.id} style={styles.row}>
           <Text style={styles.name}>{p.label}</Text>
@@ -85,4 +114,6 @@ const styles = StyleSheet.create({
   row: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   name: { fontSize: 16, color: colors.text, fontWeight: '600' },
   model: { fontSize: 13, color: colors.muted },
+  phoneBox: { paddingVertical: 12, marginBottom: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+  note: { fontSize: 13, color: colors.danger, marginTop: 6 },
 });

@@ -111,3 +111,23 @@ describe('eval:parse script runner', () => {
     expect(await runEvalFromEnv({ EVAL_API_KEY: 'k', EVAL_PROVIDER: 'custom' }, undefined, () => {})).toBe(1);
   });
 });
+
+describe('evaluate progress and stopping', () => {
+  it('reports progress after each sentence', async () => {
+    const seen: string[] = [];
+    await evaluate(SENTENCES.slice(0, 3), recordedParse, index, foods, DEFAULT_SLOTS, { onProgress: (d, t) => seen.push(`${d}/${t}`) });
+    expect(seen).toEqual(['1/3', '2/3', '3/3']);
+  });
+
+  it('can be stopped, scoring only what ran', async () => {
+    const stop = new AbortController();
+    const r = await evaluate(SENTENCES.slice(0, 5), recordedParse, index, foods, DEFAULT_SLOTS, {
+      signal: stop.signal,
+      onProgress: (d) => {
+        if (d === 2) stop.abort();
+      },
+    });
+    expect(r.total).toBe(2);
+    expect(r.correct).toBe(2);
+  });
+});

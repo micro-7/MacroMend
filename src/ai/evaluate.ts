@@ -44,17 +44,27 @@ function sameItems(expected: ExpectedItem[], actual: ActualItem[]): boolean {
  * Run test sentences through a parser and the app's own matching and quantity rules, then compare with the
  * expected foods, amounts and units. Works for any parser (a cloud provider now, the phone model later).
  */
+export interface EvalOptions {
+  /** Called after each sentence with how many are done and the total. */
+  onProgress?: (done: number, total: number) => void;
+  /** Stop early (the score then covers only the sentences that ran). */
+  signal?: AbortSignal;
+}
+
 export async function evaluate(
   sentences: Sentence[],
   parse: ParseFn,
   index: MatchIndex,
   foods: ReadonlyMap<string, { unit: string }>,
   slots: ParseSlot[],
+  options: EvalOptions = {},
 ): Promise<EvalResult> {
   void slots;
   const scores: SentenceScore[] = [];
   for (const s of sentences) {
+    if (options.signal?.aborted) break;
     const r = await parse(s.text);
+    options.onProgress?.(scores.length + 1, sentences.length);
     if (!r.ok) {
       scores.push({ text: s.text, ok: false, expected: s.expected, actual: [], error: `${r.error}${r.message ? `: ${r.message}` : ''}` });
       continue;

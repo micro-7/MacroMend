@@ -134,3 +134,9 @@ export function providerStatus(p: ProviderRow, now: Date = new Date()): Provider
 export function isSkipped(p: ProviderRow, now: Date = new Date()): boolean {
   return !!p.skipUntil && new Date(p.skipUntil) > now;
 }
+
+/** True when every switched-on provider has used up its daily limit (Settings then says the phone model is used until tomorrow). */
+export function allProvidersOutOfQuota(providers: ProviderRow[], now: Date = new Date()): boolean {
+  const on = providers.filter((p) => p.enabled);
+  return on.length > 0 && on.every((p) => isSkipped(p, now) && p.skipReason === 'quota');
+}

@@ -76,13 +76,14 @@ export function parseEstimate(text: string, foodName: string): ParsedEstimate {
 
 export type EstimateResult =
   | { ok: true; estimate: FoodEstimate; label: string }
-  | { ok: false; reason: 'no_providers' | 'offline' | 'all_failed' | 'rejected'; message: string };
+  | { ok: false; reason: 'no_providers' | 'offline' | 'all_failed' | 'rejected' | 'phone_only'; message: string };
 
 const MESSAGES = {
   no_providers: 'No AI is set up, so you can enter the values yourself.',
   offline: "You're offline, so the AI can't make an estimate. You can enter the values yourself.",
   all_failed: "None of your AI providers could make an estimate. You can enter the values yourself.",
   rejected: 'The AI gave numbers that cannot be right, so they were thrown away. Please enter the values yourself.',
+  phone_only: '"Always use phone model" is on, so nothing is sent to an AI service. Enter the values yourself.',
 } as const;
 
 /**
@@ -90,6 +91,8 @@ const MESSAGES = {
  * numbers, so every reply is range-checked, and the result is always shown to the user before it is saved.
  */
 export async function estimateFood(deps: ChainDeps, foodName: string): Promise<EstimateResult> {
+  // Estimates go to cloud providers only, so "Always use phone model" means no estimate at all.
+  if (await deps.phoneOnly?.()) return { ok: false, reason: 'phone_only', message: MESSAGES.phone_only };
   let rejected = false;
   const r = await runProviders<FoodEstimate>(deps, async (row, apiKey) => {
     const chat = await callChat({ id: row.id, label: row.label, baseUrl: row.baseUrl, model: row.model, apiKey }, buildEstimateMessages(foodName), deps.call);

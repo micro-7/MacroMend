@@ -15,7 +15,7 @@ export interface LookupServices {
   estimate(foodName: string): Promise<EstimateResult>;
 }
 
-export function realServices(db: Db, appVersion: string, keys: KeyStore = secureKeyStore): LookupServices {
+export function realServices(db: Db, appVersion: string, keys: KeyStore = secureKeyStore, phoneOnly?: () => boolean): LookupServices {
   return {
     async search(query) {
       return searchOnline(query, {
@@ -26,7 +26,7 @@ export function realServices(db: Db, appVersion: string, keys: KeyStore = secure
       });
     },
     estimate(foodName) {
-      return estimateFood({ db, keys, isOnline }, foodName);
+      return estimateFood({ db, keys, isOnline, phoneOnly }, foodName);
     },
   };
 }

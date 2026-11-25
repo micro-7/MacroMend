@@ -9,6 +9,8 @@ import { useProfile } from '@/db/ProfileContext';
 import { listProviders } from '@/db/providers';
 import { isOnlineLookupEnabled } from '@/db/settings';
 import { listSavedFoods } from '@/db/userFoods';
+import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
+import { isSupportedPhone } from '@/phone/deviceSupport';
 import { Screen } from '@/ui/Screen';
 import { SectionTitle } from '@/ui/kit';
 import { colors } from '@/ui/theme';
@@ -37,6 +39,8 @@ export default function SettingsScreen() {
   const [providerCount, setProviderCount] = useState<number | null>(null);
   const [savedFoods, setSavedFoods] = useState<number | null>(null);
   const [lookupOn, setLookupOn] = useState<boolean | null>(null);
+  const phone = usePhoneModelOptional();
+  const phoneValue = !phone || !phone.facts ? undefined : !isSupportedPhone(phone.facts) ? 'Not supported' : phone.state.status === 'ready' ? (phone.phoneOnly ? 'Always on' : 'Ready') : phone.state.status === 'downloading' ? `${Math.round(phone.state.progress * 100)}%` : phone.state.status === 'incomplete' ? 'Paused' : 'Not downloaded';
 
   // Reload when the tab comes back into view, so counts reflect changes made in the screens it opened.
   useFocusEffect(
@@ -77,6 +81,7 @@ export default function SettingsScreen() {
           value={providerCount === null ? undefined : providerCount === 0 ? 'None' : `${providerCount} on`}
           onPress={() => router.push('/manage/providers')}
         />
+        <Row label="Phone model" value={phoneValue} onPress={() => router.push('/manage/phone')} />
         <Row label="My foods" value={savedFoods === null ? undefined : String(savedFoods)} onPress={() => router.push('/manage/foods')} />
         <Row
           label="Food lookup"

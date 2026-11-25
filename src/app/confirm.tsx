@@ -119,7 +119,7 @@ export default function ConfirmScreen() {
       nextDisabled={saving || ready.length === 0}
       error={error}
     >
-      <Hint>Understood by {session.understoodBy}. Nothing is saved until you tap Log. Calories and protein come from the food table.</Hint>
+      <Hint>Understood by: {session.understoodBy}. Nothing is saved until you tap Log. Calories and protein come from the food table.</Hint>
       {note ? <Text style={{ color: colors.primary, marginBottom: 10 }}>{note}</Text> : null}
       {items.length === 0 ? <Text style={{ color: colors.muted }}>Nothing left to log.</Text> : null}
       <ConfirmList

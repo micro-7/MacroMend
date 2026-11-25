@@ -15,6 +15,7 @@ import { useProfile } from '@/db/ProfileContext';
 import { listStaples, searchFoods } from '@/db/staples';
 import { Button } from '@/ui/kit';
 import { OnlineFoodFlow } from '@/ui/OnlineFoodFlow';
+import { usePhoneModelOptional } from '@/phone/PhoneModelContext';
 import { useLookupServices } from '@/lookup/useLookupServices';
 import { Screen } from '@/ui/Screen';
 import { colors } from '@/ui/theme';
@@ -30,6 +31,7 @@ export default function LogScreen() {
   const [busy, setBusy] = useState(false);
   const [online, setOnline] = useState(false);
   const services = useLookupServices();
+  const phone = usePhoneModelOptional();
   const [failure, setFailure] = useState<Extract<ChainResult, { ok: false }> | null>(null);
   const searching = query.trim() !== '';
 
@@ -61,7 +63,10 @@ export default function LogScreen() {
     setFailure(null);
     try {
       const slots = profile.slots.map((s) => ({ id: s.id, name: s.name }));
-      const result = await runChain({ db, keys: secureKeyStore, isOnline }, query.trim(), { slots });
+      const result = await runChain(
+        { db, keys: secureKeyStore, isOnline, phone: phone?.chainPhone, phoneOnly: phone?.getPhoneOnly },
+        query.trim(), { slots },
+      );
       if (!result.ok) return setFailure(result);
       const { index, units } = await loadMatchData(db);
       const items = toConfirmItems(resolveItems(result.items, index, units), defaultSlotFor(new Date(), profile.slots).id, slots.map((s) => s.id));
@@ -94,6 +99,11 @@ export default function LogScreen() {
       {failure ? (
         <View style={styles.failure} accessibilityLiveRegion="polite">
           <Text style={styles.failureText}>{explainFailure(failure)}</Text>
+          {failure.reason === 'phone_unavailable' ? (
+            <View style={{ marginTop: 8 }}>
+              <Button label="Phone model settings" variant="secondary" onPress={() => router.push('/manage/phone')} />
+            </View>
+          ) : null}
           {failure.reason === 'no_providers' ? (
             <View style={{ marginTop: 8 }}>
               <Button label="Set up AI" variant="secondary" onPress={() => router.push('/manage/providers')} />

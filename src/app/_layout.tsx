@@ -5,6 +5,7 @@ import { ParseSessionProvider } from '@/ai/ParseSession';
 import { DayProvider } from '@/db/DayContext';
 import { DbProvider } from '@/db/DbContext';
 import { ProfileProvider, useProfile } from '@/db/ProfileContext';
+import { PhoneModelProvider } from '@/phone/PhoneModelContext';
 import { useAppDatabase } from '@/db/useAppDatabase';
 import { ErrorScreen } from '@/ui/ErrorScreen';
 import { colors } from '@/ui/theme';
@@ -44,10 +45,12 @@ export default function RootLayout() {
     <DbProvider value={state.db}>
       <ProfileProvider db={state.db}>
         <DayProvider db={state.db}>
-          <ParseSessionProvider>
-            <StatusBar style="dark" />
-            <Routes />
-          </ParseSessionProvider>
+          <PhoneModelProvider db={state.db}>
+            <ParseSessionProvider>
+              <StatusBar style="dark" />
+              <Routes />
+            </ParseSessionProvider>
+          </PhoneModelProvider>
         </DayProvider>
       </ProfileProvider>
     </DbProvider>
