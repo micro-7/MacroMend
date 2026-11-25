@@ -4,9 +4,16 @@ import { ALL_FOODS, GLOBAL_FOODS, INDIAN_FOODS, USDA_FOODS } from '..';
 const CATEGORIES = ['veg', 'egg', 'non-veg', 'vegan'];
 
 describe('bundled food data', () => {
-  it('has at least 150 Indian and 150 global foods', () => {
+  it('has at least 150 Indian foods and 150 real USDA foods with FDC ids', () => {
     expect(INDIAN_FOODS.length).toBeGreaterThanOrEqual(150);
-    expect(USDA_FOODS.length + GLOBAL_FOODS.length).toBeGreaterThanOrEqual(150);
+    expect(USDA_FOODS.length).toBeGreaterThanOrEqual(150);
+    expect(USDA_FOODS.every((f) => /^fdc:\d+$/.test(f.externalId ?? ''))).toBe(true);
+    expect(USDA_FOODS.every((f) => f.source === 'usda')).toBe(true);
+  });
+
+  it('has no duplicate FDC ids', () => {
+    const ids = USDA_FOODS.map((f) => f.externalId);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('has unique ids', () => {

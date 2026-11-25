@@ -15,8 +15,8 @@
 ## 3. Food catalog
 
 - [x] 3.1 Add `src/core/text.ts` with `normalizeName()`; verify unit tests for case, spacing and punctuation
-- [ ] 3.2 Define the `FoodSeed` type and author `src/data/foods/indian.ts` with at least 150 Indian staples (English + Hindi/Hinglish aliases such as dahi/curd, chapati/roti, chawal/rice, anda/egg), default units and grams per unit; record each value's source in `docs/food-data-sources.md`; verify the data-validation test in 3.4 passes
-- [ ] 3.3 Author `src/data/foods/usda.ts` with at least 150 common global foods from USDA FoodData Central (chicken breast, eggs, oats, pasta, fish, milk, whey, tofu and more) with FDC ids; verify the data-validation test in 3.4 passes
+- [x] 3.2 Define the `FoodSeed` type and author `src/data/foods/indian.ts` with at least 150 Indian staples (English + Hindi/Hinglish aliases such as dahi/curd, chapati/roti, chawal/rice, anda/egg), default units and grams per unit; record each group's source and known caveats in `docs/food-data-sources.md` (the values are typical home-style values, not individually cited; checking them against IFCT/NIN is a pre-release task in `polish-and-release`); verify the data-validation test in 3.4 passes
+- [x] 3.3 Author `src/data/foods/usda.ts` with at least 150 real USDA FoodData Central Foundation Foods rows, each with its FDC id and kcal/protein exactly as FDC reports them (chicken breast, eggs, oats, pasta, fish, milk and more); common foods that FDC does not cover (for example tofu, cooked grains) go in `src/data/foods/global.ts` as typed reference values; verify the data-validation test in 3.4 passes
 - [x] 3.4 Add a data-validation test: unique ids, no alias shared by two foods after normalization, valid categories and sources, non-negative numbers, grams_per_unit > 0, protein × 4 ≤ kcal per 100 g (+5% tolerance); verify `npm test` passes
 - [x] 3.5 Implement `src/db/foods.ts` with `seedCatalog(db)` (upsert built-in/usda rows when `CATALOG_VERSION` is newer, never touching other sources), `countFoods`, `getFoodById` and `findFoodByExactName` (name or alias via `food_names`); verify tests: first seed loads ≥300 foods, re-seed keeps a `user` food unchanged, "dahi" and " Paneer  " resolve correctly
 
@@ -35,5 +35,5 @@
 Manual checks on your Android phone (install the APK from the GitHub Actions run):
 1. Turn on airplane mode, then install and open the APK. The app opens with no sign-in and no error.
 2. The Today tab is selected; tap Log, then Settings, and each screen appears.
-3. Settings shows a version number and "foods loaded" of at least 300.
+3. Settings shows a version number and "foods loaded" of 406.
 4. Force-close the app from Recents and open it again: it opens straight to Today with the same food count.

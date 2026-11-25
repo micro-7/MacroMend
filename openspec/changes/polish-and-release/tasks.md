@@ -19,6 +19,7 @@
 
 - [ ] 4.1 Write `docs/privacy-policy.md` and enable GitHub Pages for it; verify the page URL opens on the phone
 - [ ] 4.2 Write `docs/play-store-listing.md` (title, short and full description, data-safety answers, content rating notes, screenshot list, feature graphic spec, closed-testing requirement); verify every data-safety answer matches the About privacy summary
+- [ ] 4.3 Before publishing: compare the values in `src/data/foods/indian.ts` (and the hand-typed rows in `src/data/foods/global.ts`) with IFCT 2017 / NIN and USDA FoodData Central, correct any value that differs by more than about 10%, and confirm in writing that IFCT's licence allows bundling its numbers (otherwise keep USDA-derived or self-calculated values); update `docs/food-data-sources.md` and bump `CATALOG_VERSION`; verify the checked rows, the licence decision and the catalog test pass are recorded in `docs/food-data-sources.md`
 
 ## 5. Test this phase
 

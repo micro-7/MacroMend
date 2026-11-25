@@ -5,46 +5,59 @@ file says where the bundled rows come from and how far to trust them. Numbers
 are per 100 g. The bundled catalog version is `CATALOG_VERSION` in
 `src/data/foods/index.ts`; bump it whenever a row changes.
 
-## `src/data/foods/usda.ts` — 63 rows, source `usda`
+| File | Rows | Source value | Origin |
+| --- | --- | --- | --- |
+| `src/data/foods/usda.ts` | 179 | `usda` | Real USDA FoodData Central rows with FDC ids |
+| `src/data/foods/global.ts` | 72 | `built-in` | Typical reference values written by hand |
+| `src/data/foods/indian.ts` | 155 | `built-in` | Typical home-style values written by hand |
 
-Real rows from USDA FoodData Central, **Foundation Foods** (public domain,
-CC0 1.0), fetched on 2026-11-25. Each row keeps its FDC id (`externalId`,
-for example `fdc:748967` for whole egg). kcal (nutrient 208) and protein
-(nutrient 203) are exactly what FDC reports. The unit and grams-per-unit
-(piece, glass, slice and so on) are our own household-portion choices, not FDC
-values.
+Total: 406 foods.
 
-Only foods that FDC reports a plain kcal value for were usable (95 of 424
-Foundation foods); the rest report energy under a different nutrient number
-and were not fetched.
+## `usda.ts`: real USDA rows
 
-## `src/data/foods/global.ts` — 108 rows, source `built-in`
+Rows from USDA FoodData Central, **Foundation Foods** (public domain, CC0 1.0),
+fetched on 2026-11-25 (two fetches of all 424 Foundation foods; energy is
+nutrient 208, or the Atwater energy values 957/958 when 208 is absent, and
+protein is nutrient 203). Each row keeps its FDC id in `externalId`
+(for example `fdc:748967` for whole egg). kcal and protein are exactly what
+FDC reports; every row was cross-checked against the fetched data by a script.
 
-Common fruit, vegetables, grains, plant proteins, fish, meat, dairy extras and
-drinks. These are **typical reference values written by hand**, consistent
-with standard food-composition tables such as USDA, but they are **not
-downloaded rows and carry no FDC id**. Each one should be checked against
-FoodData Central before relying on it (the in-app "My foods" editor in a later
-change lets a user correct any value).
+Not everything in Foundation Foods is what people log. Many rows are **raw or
+dry** (for example dry lentils 360 kcal, raw rice 359 kcal, raw chicken breast
+106 kcal), so their names say "raw" or "dry" and cooked versions live in
+`indian.ts` or `global.ts`. The unit and grams-per-unit (piece, glass, slice
+and so on) are our own household-portion choices, not FDC values.
 
-## `src/data/foods/indian.ts` — 167 rows, source `built-in`
+## `global.ts`: typed reference values
+
+Foods that are not in Foundation Foods (papaya, jackfruit, quinoa and other
+cooked grains, cooked fish and meat, dairy extras, drinks, snacks). These are
+**typical reference values written by hand**, consistent with standard
+food-composition tables such as USDA, but they are **not downloaded rows and
+carry no FDC id**. They should be checked against FoodData Central before
+relying on them.
+
+## `indian.ts`: typed reference values
 
 Indian staples, dishes and snacks (rotis, rice dishes, dals, curries, street
-food, sweets, drinks, dry fruit). Values are **typical home-style reference
-values per 100 g of the food as eaten** (cooked where relevant). They are
-**not copied from IFCT 2017 (NIN) or any other licensed table**, and they are
-**not individually cited**. Dish values (curries, biryani, street food) vary
-a lot between recipes. The spec's open question about the source and licence
-for the Indian table is still open: before a public release, check these rows
-against IFCT 2017 and confirm whether its licence allows bundling the numbers.
+food, sweets, drinks). Values are **typical home-style values per 100 g of the
+food as eaten** (cooked where relevant). They are **not copied from IFCT 2017
+(NIN) or any other licensed table** and are **not individually cited**. Dish
+values (curries, biryani, street food) vary a lot between recipes.
+
+The spec's open question about the source and licence for the Indian table is
+still open. It is tracked as a pre-release check in the `polish-and-release`
+change: compare these rows with IFCT 2017 and confirm whether its licence
+allows bundling the numbers before a public release.
 
 ## Checks that run in `npm test`
 
 `src/data/foods/__tests__/catalog.test.ts` fails if any food has a duplicate
 id, a name or alias shared with another food, a missing field, a negative
 value, kcal above 900 or protein above 100 per 100 g, protein energy
-(protein × 4) above total kcal, or a `usda` row without an FDC id. These catch
-typos, not wrong-but-plausible numbers.
+(protein x 4) above total kcal, or a `usda` row without an FDC id; it also
+requires at least 150 Indian and at least 150 USDA rows. These catch typos,
+not wrong-but-plausible numbers.
 
 ## Licences
 

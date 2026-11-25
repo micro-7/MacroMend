@@ -29,4 +29,5 @@ All MVP changes are in place. The test APK workflow (`.github/workflows/android-
 
 - [Losing the upload keystore blocks updates] → Play App Signing allows an upload key reset; `docs/release.md` explains backing it up.
 - [New personal Play developer accounts must run a closed test with at least 12 testers for 14 days before production] → documented in `docs/release.md`; the owner plans testers early.
+- [Indian and other hand-typed food values are unverified and the IFCT/NIN licence is unconfirmed] → task 4.3 checks them against IFCT/NIN and USDA and settles the licence before anything is published; until then the app is for the owner's own testing.
 - [Data-safety answers must match behaviour] → answers in `docs/play-store-listing.md` are derived from the About screen's privacy summary.

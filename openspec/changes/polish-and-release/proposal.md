@@ -11,6 +11,7 @@ With the MVP features in place, MacroMend needs to look like a finished app and 
 - Settings → "Delete all my data": wipes profile, logs, staples, saved foods, provider keys and the phone model, then restarts onboarding.
 - Release signing with a private upload key kept in GitHub Actions secrets, and a workflow that builds a signed Android App Bundle (AAB) when a version tag is pushed. The debug-signed test APK workflow stays as is.
 - Version name/code scheme for releases.
+- Pre-release check of the bundled food values: verify the Indian and hand-typed rows against IFCT 2017 / NIN and USDA, and confirm the IFCT licence before anything is published.
 - Play Store listing material: short and full description, screenshots, feature graphic, privacy policy page, data-safety answers, content rating notes.
 
 ## Capabilities

@@ -32,17 +32,17 @@ The repo holds a blank Expo SDK 58 TypeScript scaffold (`App.tsx`, `index.ts`) a
 - `meta`: key/value (holds `catalog_version`).
 The spec's tables are kept; `food_names`, `meta`, `unit`/`usual_unit` and `external_id` are additions needed by later changes.
 
-**Food data as typed TS modules.** `src/data/foods/indian.ts` and `src/data/foods/usda.ts` export arrays of `FoodSeed` with stable ids (`in-paneer`, `usda-171287`). A `CATALOG_VERSION` constant bumps when data changes. Seeding upserts `built-in`/`usda` rows by id when the stored `catalog_version` is lower and never touches other sources.
+**Food data as typed TS modules.** `src/data/foods/indian.ts`, `src/data/foods/usda.ts` and `src/data/foods/global.ts` export arrays of `FoodSeed` with stable ids (`in-paneer`, `usda-egg`). A `CATALOG_VERSION` constant bumps when data changes. Seeding upserts `built-in`/`usda` rows by id when the stored `catalog_version` is lower and never touches other sources.
 
 **Name normalization.** `normalizeName()` in `src/core/text.ts`: lowercase, trim, collapse spaces, strip punctuation. Used for every name/alias write and lookup.
 
-**Food data sources.** USDA FoodData Central (SR Legacy / Foundation) is public domain and covers the global foods plus Indian items with close equivalents (paneer, plain yogurt, cooked lentils, rice). Values for other Indian staples are taken per item from a cited source and the source is recorded per row in `docs/food-data-sources.md`. IFCT 2017 (NIN) values are used only if its licence permits redistribution; until confirmed, prefer USDA equivalents plus home-recipe calculations from USDA ingredients.
+**Food data sources.** `usda.ts` holds real rows from USDA FoodData Central Foundation Foods (public domain), each with its FDC id; the values are exactly FDC's, and many are raw or dry foods, so names say so. `global.ts` holds common foods FDC Foundation does not cover, and `indian.ts` holds Indian staples and dishes, both as typed reference values with source `built-in` and no FDC id. Sources are recorded per group, with caveats, in `docs/food-data-sources.md`. IFCT 2017 (NIN) values are not used: its licence for redistribution is unconfirmed, and checking the Indian values against it is a pre-release task in `polish-and-release`.
 
 **Tests with `jest-expo`.** `npm test` runs Jest with the `jest-expo` preset. Pure modules and DB modules are tested; screens are checked on the phone.
 
 ## Risks / Trade-offs
 
-- [Indian food values may be inaccurate or under an unclear licence] → every row cites its source; a data-validation test checks ranges and that protein × 4 does not exceed kcal; the licence question is in the change list's open questions.
+- [Indian food values may be inaccurate or under an unclear licence] → `docs/food-data-sources.md` states each group's source and caveats; a data-validation test checks ranges and that protein × 4 does not exceed kcal; checking the Indian values against IFCT/NIN and the licence is a pre-release task in `polish-and-release`.
 - [`better-sqlite3` needs a native build in CI/Node] → dev dependency only, never bundled; if it fails to install, fall back to `sql.js` (pure WASM) behind the same interface.
 - [Expo Router adds dependencies early] → small and recommended; avoids a navigation rewrite later.
 - [Debug-signed APK is not a store build] → fine for testing; release signing is planned in `polish-and-release`.

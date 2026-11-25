@@ -4,7 +4,7 @@ import type { FoodSeed } from './types';
 import { USDA_FOODS } from './usda';
 
 /** Bump whenever any bundled food row changes so installs re-seed. */
-export const CATALOG_VERSION = 1;
+export const CATALOG_VERSION = 2;
 
 export const ALL_FOODS: FoodSeed[] = [...INDIAN_FOODS, ...USDA_FOODS, ...GLOBAL_FOODS];
 
