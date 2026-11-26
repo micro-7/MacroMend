@@ -37,3 +37,7 @@ The refresh made the app dark only. Colours are one table of named roles (`src/u
 ## Mascot on the Today hero card
 
 The reference design has a small friendly illustration on the green "Not sure what to eat next?" card. We kept the card clean. Could add one small bundled illustration (a smiling bowl or roti). Not started; the owner never decided.
+
+## Exercises and workouts (owner's idea, to discuss)
+
+A new feature that shows exercises, covering both gym workouts and home workouts (no equipment). Added on 26 November 2026 at the owner's request. Nothing is decided yet: scope, how it fits with the diet side, and whether workouts are only shown or also logged will be discussed first, then written up as an OpenSpec proposal.
