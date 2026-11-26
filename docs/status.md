@@ -2,7 +2,7 @@
 
 **Read this first in a new session.** It says where MacroMend stands and what the owner still has to do. Update it at the end of every piece of work and commit it with the change.
 
-Last updated: 26 November 2026. Open items: phone checks 1 to 3, archiving `refresh-ui`, the SonarCloud follow-up and the GitHub release (below).
+Last updated: 26 November 2026. Open items: phone checks 1 to 3, archiving `refresh-ui`, the "chole bhature" Not found decision, the SonarCloud follow-up and the GitHub release (below).
 
 ## Where we are
 
@@ -33,6 +33,12 @@ Commit `0cfb8b3` ("Add MIT licence, package.json details and ESLint; fix lint fi
 - **Phone model with mobile data:** with Wi-Fi off, Download shows the "You are on mobile data… Download anyway?" box (this was added after the first download test).
 
 ## Open follow-ups (not started)
+
+- **"chole bhature" shows Not found (found by the owner on 26 November 2026, not decided yet).** Typing "chole bhature" with Gemini or Groq gives one item "chole bhature" marked Not found. Cause (app, not the AI): the prompt tells every AI that "a dish named with two foods is ONE item" (added for curd rice / paneer paratha), but the food table has only the parts, `in-chole` (katori) and `in-bhatura` (piece), and no combined dish. Other combos would fail the same way (rajma chawal, dal chawal, idli sambar, puri sabzi); pav bhaji works because it is in the table. Options to decide with the owner:
+  1. Add common combo plates to the food table (for example chole bhature = 1 katori chole + 2 bhatura), values calculated from the parts already in the table.
+  2. Let the app split an unknown name into known foods ("chole" + "bhature") and show them as separate items to adjust.
+  3. Change the AI instruction back (not recommended: it would break curd rice and paneer paratha again).
+  - Claude's suggestion: 1 and 2 together, as a small OpenSpec change. Workaround until then: Pick food, or type "chole aur 2 bhature".
 
 - **SonarCloud red cross on `main`.** An outside scanner (SonarCloud / SonarQube Cloud) is connected to the repo and its Quality Gate fails: **C Security Rating** and **D Reliability Rating** on new code (checked 26 November 2026). Our own GitHub Actions runs are all green, so this does not affect the APK. To fix: open https://sonarcloud.io/dashboard?id=micro-7_MacroMend (needs the owner's login), list the open issues, fix the real ones as a small OpenSpec change, and ignore or mark the false positives. Alternative: if the owner did not mean to connect it, remove it in GitHub repo Settings → GitHub Apps.
 - **GitHub Release with the owner's own signing key (decided, not started). NEXT TO DO LATER: propose a new OpenSpec change named `add-github-release` (the owner will ask for it; do not start before then).** The owner wants to publish the APK on GitHub (not the Play Store yet), signed with their **own private key**, not the public Android debug key, so strangers cannot make fake updates. Plan, as a new OpenSpec change (suggested name `add-github-release`):
